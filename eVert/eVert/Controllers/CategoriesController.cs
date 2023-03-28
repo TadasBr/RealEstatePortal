@@ -1,13 +1,13 @@
 ﻿using eVert.Data.Dtos.Categories;
 using eVert.Data.Entities;
-using eVert.Data.Repositories;
+using eVert.Data.Repositories.Categories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eVert.Controllers
 {
     [ApiController]
     [Route("api/categories")]
-    public class CategoriesController
+    public class CategoriesController : ControllerBase
     {
         private ICategoriesRepository _categoriesRepository;
 
@@ -30,7 +30,7 @@ namespace eVert.Controllers
         {
             var category = await _categoriesRepository.GetAsync(categoryId);
 
-            if(category == null)
+            if (category == null)
             {
                 return new NotFoundResult();
             }

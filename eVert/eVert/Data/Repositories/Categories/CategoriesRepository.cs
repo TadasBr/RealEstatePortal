@@ -1,7 +1,7 @@
 ﻿using eVert.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace eVert.Data.Repositories
+namespace eVert.Data.Repositories.Categories
 {
     public class CategoriesRepository : ICategoriesRepository
     {

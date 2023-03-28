@@ -1,6 +1,6 @@
 ﻿using eVert.Data.Entities;
 
-namespace eVert.Data.Repositories
+namespace eVert.Data.Repositories.Categories
 {
     public interface ICategoriesRepository
     {

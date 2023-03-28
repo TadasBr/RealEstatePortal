@@ -85,3 +85,9 @@ C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\obj\Debug\net6.0\re
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\obj\Debug\net6.0\eVert.pdb
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\obj\Debug\net6.0\eVert.genruntimeconfig.cache
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\obj\Debug\net6.0\ref\eVert.dll
+C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll

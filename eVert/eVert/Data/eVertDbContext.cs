@@ -1,9 +1,11 @@
-﻿using eVert.Data.Entities;
+﻿using eVert.Auth.Model;
+using eVert.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace eVert.Data
 {
-    public class eVertDbContext : DbContext
+    public class eVertDbContext : IdentityDbContext<eVertUser>
     {
         public DbSet<Advertisement> Advertisements { get; set; }
         public DbSet<Category> Categories { get; set; }
