@@ -46,9 +46,20 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy(PolicyNames.ResourceOwner, policy => policy.Requirements.Add(new ResourceOwnerRequirement()));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("default", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 app.UseRouting();
+app.UseCors("default");
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,0 +1,17 @@
+.registerMain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  height: 100vh;
+  background-color: #f1f1f1;
+}
+
+.registerBox {
+  width: 30%;
+  height: 50%;
+  background-color: aqua;
+  color: aqua;
+  background: aqua;
+  border: #f1f1f1;
+}

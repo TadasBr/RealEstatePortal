@@ -1,0 +1,13 @@
+.appBar {
+  position: absolute;
+}
+
+.logo {
+  margin-right: 8px;
+}
+
+.signInText {
+  color: white;
+  text-decoration: none;
+  float: right;
+}
