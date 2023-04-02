@@ -11,3 +11,8 @@
   text-decoration: none;
   float: right;
 }
+
+.hamburgerMenu{
+  background-color: transparent;
+  box-shadow: none;;
+}

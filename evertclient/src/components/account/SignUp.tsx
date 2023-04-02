@@ -12,10 +12,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from '../main/Header';
 import { Api_Url } from '../Constants';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
@@ -31,6 +33,7 @@ export default function SignUp() {
       body: JSON.stringify(data)
     })
       .then(response => {
+        navigate('/login');
         console.log(response.json());
       })
       .then(data => {

@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { ReactComponent as Logo } from '../../images/evert.svg';
 import './main.css';
+import { slide as Menu } from 'react-burger-menu'
+import HamburgerMenu from './HamburgerMenu'
 
 
 const Header: React.FC = () => {
@@ -14,8 +16,8 @@ const Header: React.FC = () => {
         <Link to="/">
           <Logo width={64} height={64} className='logo' />
         </Link>
-        <div style={{ width: '90%' }}></div>
-
+        <div style={{ width: '80%' }}></div>
+        <HamburgerMenu/>
         <Typography variant="h6" component="div">
           <Link to="/login" className='signInText'>
             Sign in
