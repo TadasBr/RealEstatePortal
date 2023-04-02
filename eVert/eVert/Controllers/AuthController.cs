@@ -40,7 +40,7 @@ namespace eVert.Controllers
 
             await _userManager.AddToRoleAsync(newUser, eVertRoles.eVertUser);
 
-            return CreatedAtAction(nameof(Register), new UserDto(newUser.Id, newUser.UserName, newUser.Email));
+                return CreatedAtAction(nameof(Register), new UserDto(newUser.Id, newUser.UserName, newUser.Email));
         }
 
         [HttpPost]

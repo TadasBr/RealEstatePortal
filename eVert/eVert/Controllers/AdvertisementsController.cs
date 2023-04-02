@@ -28,7 +28,7 @@ namespace eVert.Controllers
         {
             var advertisements = await _advertisementsRepository.GetManyAsync();
 
-            return advertisements.Select(o => new GetAdvertisementDto(o.Title, o.Description, o.City, o.Address, o.District, o.Price, o.CreatedDate, o.UpdatedDate)).ToList();
+            return advertisements.Select(o => new GetAdvertisementDto(o.Id, o.Description, o.Title, o.City, o.Address, o.District, o.Price, o.CreatedDate, o.UpdatedDate)).ToList();
         }
 
         [HttpGet]
@@ -42,7 +42,7 @@ namespace eVert.Controllers
                 return new NotFoundResult();
             }
 
-            return new GetAdvertisementDto(advertisement.Title, advertisement.Description, advertisement.City, advertisement.Address,
+            return new GetAdvertisementDto(advertisement.Id, advertisement.Title, advertisement.Description, advertisement.City, advertisement.Address,
                 advertisement.District, advertisement.Price, advertisement.CreatedDate, advertisement.UpdatedDate);
         }
 

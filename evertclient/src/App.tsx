@@ -5,6 +5,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SignIn from './components/account/SignIn';
 import SignUp from './components/account/SignUp';
 import Home from './components/main/Home';
+import AdvertisimentList from './components/advertisements/AdvertisementList';
+import Advertisement from './components/advertisements/Advertisement';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
           <Route path='/' Component={Home}/>
           <Route path='/register' Component={SignUp}/>
           <Route path='/login' Component={SignIn}/>
+          <Route path='/advertisements' Component={AdvertisimentList}/>
+          <Route path='/advertisements/1' Component={Advertisement}/>
         </Routes>
       </BrowserRouter>
     </div>
