@@ -59,7 +59,7 @@ namespace eVert.Controllers
             var roles = await _userManager.GetRolesAsync(user);
             var accessToken = _jwtTokenService.CreateAccessToken(user.UserName, user.Id, roles);
 
-            return Ok(new SuccessfulLoginDto(accessToken));
+            return Ok(new SuccessfulLoginDto(accessToken, user.UserName));
         }
     }
 }

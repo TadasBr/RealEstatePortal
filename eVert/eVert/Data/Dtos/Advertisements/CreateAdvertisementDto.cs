@@ -10,7 +10,7 @@
         public int Price { get; set; }
         public int CategoryId { get; set; }
 
-        public CreateAdvertisementDto(string title, string description, string city, string address, string district, int price)
+        public CreateAdvertisementDto(string title, string description, string city, string address, string district, int price, int categoryId)
         {
             Title = title;
             Description = description;
@@ -18,6 +18,7 @@
             Address = address;
             District = district;
             Price = price;
+            CategoryId = categoryId;
         }
     }
 }

@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from "react"
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Api_Url } from "../Constants";
 import Header from "../main/Header";
-import './advertisiments.css';
 
-const Advertisement: React.FC = (id) => {
-  const [item, setItem] = useState<any>();
+const Advertisement: React.FC = () => {
+  const params = useParams();
+  const [data, setData] = useState<any>();
 
   useEffect(() => {
-    debugger;
-    fetch('http://localhost:5064/api/advertisements/2')
-      .then(response => response.json())
-      .then(data => setItem(data));
-  }, []);
+    fetch(`${Api_Url}/advertisements/${params.id}`)
+      .then((response) => response.json())
+      .then((data) => setData(data));
+  }, [params.id]);
+
+  if (!data) {
+    return <div>Loading data...</div>;
+  }
 
   return (
     <div className="main">
       <Header />
       <div className="listBox">
         <div className="listItem">
-          <div className="photo">
-          </div>
+          <div className="photos"></div>
           <div className="descriptionBox">
-            <div className="title">
-              {item.title}
-            </div>
+            <div className="title">{data.title}</div>
             <div>
-              {item.city}, {item.district}, {item.address}
+              {data.city}, {data.district}, {data.address}
             </div>
-            <div>
-              {item.price}€
-            </div>
+            <div>{data.price}€</div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Advertisement;

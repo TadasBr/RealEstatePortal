@@ -26,8 +26,11 @@ const HamburgerMenu: React.FC = () => {
       <ListItem button onClick={() => navigate('/advertisements')}>
         <ListItemText primary="Advertisements" />
       </ListItem>
-      <ListItem button onClick={() => alert('Contact clicked')}>
-        <ListItemText primary="Contact" />
+      <ListItem button onClick={() => navigate('/advertisements/create')}>
+        <ListItemText primary="Create advertisement" />
+      </ListItem>
+      <ListItem button onClick={() => navigate('/categories/create')}>
+        <ListItemText primary="Create category" />
       </ListItem>
     </List>
   );

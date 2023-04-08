@@ -67,7 +67,7 @@ namespace eVert.Controllers
             await _advertisementsRepository.CreateAsync(advertisement);
 
             return new CreatedResult("", new CreateAdvertisementDto(advertisement.Title, advertisement.Description, advertisement.City, advertisement.Address,
-                advertisement.District, advertisement.Price));
+                advertisement.District, advertisement.Price, advertisement.CategoryId));
         }
 
         [HttpPut]

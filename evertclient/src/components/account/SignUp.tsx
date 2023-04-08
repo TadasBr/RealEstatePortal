@@ -1,18 +1,18 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Header from '../main/Header';
-import { Api_Url } from '../Constants';
-import { useNavigate } from 'react-router-dom';
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Header from "../main/Header";
+import { Api_Url } from "../Constants";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
@@ -22,18 +22,18 @@ export default function SignUp() {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
     const data = {
-      UserName: getData.get('userName'),
-      EmailAddress: getData.get('email'),
-      Password: getData.get('password')
+      UserName: getData.get("userName"),
+      EmailAddress: getData.get("email"),
+      Password: getData.get("password")
     };
 
-    fetch(Api_Url + '/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    fetch(Api_Url + "/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
       .then(response => {
-        navigate('/login');
+        navigate("/login");
         console.log(response.json());
       })
       .then(data => {
@@ -47,17 +47,17 @@ export default function SignUp() {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <Container component="main" maxWidth="xs" style={{ marginTop: '100px' }}>
+      <Container component="main" maxWidth="xs" style={{ marginTop: "100px" }}>
         <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: '#022d3d' }}>
+          <Avatar sx={{ m: 1, bgcolor: "#022d3d" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
