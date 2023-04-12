@@ -18,18 +18,21 @@ export default function CreateAdvertisement() {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
     const data = {
-      Title: getData.get("userName"),
-      Description: getData.get("password"),
-      City: getData.get("password"),
-      Address: getData.get("password"),
-      District: getData.get("password"),
-      Price: getData.get("password"),
-      CategoryId: getData.get("password"),
+      Title: getData.get("Title"),
+      Description: getData.get("Description"),
+      City: getData.get("City"),
+      Address: getData.get("Address"),
+      District: getData.get("District"),
+      Price: getData.get("Price"),
+      CategoryId: getData.get("Category"),
     };
     debugger;
     fetch(Api_Url + "/advertisements", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      },
       body: JSON.stringify(data),
     })
       .then((response) => {

@@ -32,6 +32,16 @@ namespace eVert.Controllers
         }
 
         [HttpGet]
+        [Route("categories/{categoryId}")]
+        public async Task<IReadOnlyList<GetAdvertisementDto>> GetMany(int categoryId)
+        {
+            var advertisements = await _advertisementsRepository.GetManyAsync();
+            var filteredAdvertisiments = advertisements.Where(advertisiment => advertisiment.CategoryId == categoryId).ToList();
+
+            return filteredAdvertisiments.Select(o => new GetAdvertisementDto(o.Id, o.Description, o.Title, o.City, o.Address, o.District, o.Price, o.CreatedDate, o.UpdatedDate)).ToList();
+        }
+
+        [HttpGet]
         [Route("{advertisementId}")]
         public async Task<ActionResult<GetAdvertisementDto>> GetById(int advertisementId)
         {

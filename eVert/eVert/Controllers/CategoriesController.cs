@@ -21,7 +21,7 @@ namespace eVert.Controllers
         {
             var categories = await _categoriesRepository.GetManyAsync();
 
-            return categories.Select(o => new GetCategoryDto(o.Name)).ToList();
+            return categories.Select(o => new GetCategoryDto(o.Name, o.Id)).ToList();
         }
 
         [HttpGet]
@@ -35,7 +35,7 @@ namespace eVert.Controllers
                 return new NotFoundResult();
             }
 
-            return new GetCategoryDto(category.Name);
+            return new GetCategoryDto(category.Name, category.Id);
         }
 
         [HttpPost]

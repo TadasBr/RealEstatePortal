@@ -1,0 +1,27 @@
+.categoryBox{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 50px;    
+}
+
+.categoryListItem{
+    width: 80px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.category{
+    opacity: 0.6;
+    transition: opacity 0.2s ease-in-out;
+    color: #022d3d;
+    text-align: center;
+    font-size: 25px;
+}
+
+.category:hover{
+    opacity: 1;
+}

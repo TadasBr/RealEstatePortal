@@ -21,7 +21,7 @@ const Advertisement: React.FC = () => {
     <div className="main">
       <Header />
       <div className="listBox">
-        <div className="listItem">
+        <div className="advertisement">
           <div className="photos"></div>
           <div className="descriptionBox">
             <div className="title">{data.title}</div>
@@ -29,6 +29,7 @@ const Advertisement: React.FC = () => {
               {data.city}, {data.district}, {data.address}
             </div>
             <div>{data.price}€</div>
+            <div>{data.description}</div>
           </div>
         </div>
       </div>
