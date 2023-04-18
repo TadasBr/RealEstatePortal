@@ -2,6 +2,7 @@ using eVert.Auth;
 using eVert.Auth.Model;
 using eVert.Data;
 using eVert.Data.Repositories.Advertisements;
+using eVert.Data.Repositories.BuyAdvertisiments;
 using eVert.Data.Repositories.Categories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -37,6 +38,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddDbContext<eVertDbContext>();
 builder.Services.AddTransient<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddTransient<IAdvertisementsRepository, AdvertisementsRepository>();
+builder.Services.AddTransient<IBuyAdvertisementsRepository, BuyAdvertisementsRepository>();
 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<AuthDbSeeder>();
 builder.Services.AddSingleton<IAuthorizationHandler, ResourceOwnerAuthorizationHandler>();

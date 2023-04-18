@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 const theme = createTheme();
 
@@ -24,7 +25,8 @@ export default function SignUp() {
     const data = {
       UserName: getData.get("userName"),
       EmailAddress: getData.get("email"),
-      Password: getData.get("password")
+      Password: getData.get("password"),
+      IsSeller: getData.get("isSeller") === "on" ? true : false,
     };
 
     fetch(Api_Url + "/register", {
@@ -96,6 +98,12 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox color="primary" name="isSeller" id="isSeller" />}
+                  label="I am a seller"
+                />
+              </Grid>
             </Grid>
             <Button
               type="submit"
@@ -116,5 +124,5 @@ export default function SignUp() {
         </Box>
       </Container>
     </ThemeProvider>
-  );
+  );  
 }

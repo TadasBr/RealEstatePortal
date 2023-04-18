@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const HamburgerMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,8 +9,8 @@ const HamburgerMenu: React.FC = () => {
   
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+      event.type === "keydown" &&
+      ((event as React.KeyboardEvent).key === "Tab" || (event as React.KeyboardEvent).key === "Shift")
     ) {
       return;
     }
@@ -20,16 +20,18 @@ const HamburgerMenu: React.FC = () => {
 
   const menuItems = (
     <List>
-      <ListItem button onClick={() => navigate('/')}>
+      <ListItem button onClick={() => navigate("/")}>
         <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button onClick={() => navigate('/advertisements')}>
+      <ListItem button onClick={() => navigate("/advertisements")}>
         <ListItemText primary="Advertisements" />
       </ListItem>
-      <ListItem button onClick={() => navigate('/advertisements/create')}>
+      <ListItem button onClick={() => {sessionStorage.getItem("isSeller") === "true" 
+      ? navigate("/sell-advertisements/create") 
+      : navigate("/buy-advertisements/create")}}>
         <ListItemText primary="Create advertisement" />
       </ListItem>
-      <ListItem button onClick={() => navigate('/categories/create')}>
+      <ListItem button onClick={() => navigate("/categories/create")}>
         <ListItemText primary="Create category" />
       </ListItem>
     </List>
@@ -52,9 +54,9 @@ const HamburgerMenu: React.FC = () => {
         sx={{
           width: 250,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: 250,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           },
         }}
         role="presentation"

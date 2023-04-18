@@ -4,6 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../../images/evert.svg";
+import { AccountCircle, Logout } from "@mui/icons-material";
 import "./main.css";
 import HamburgerMenu from "./HamburgerMenu";
 import { isLoggedIn } from "../Constants";
@@ -16,21 +17,26 @@ const Header: React.FC = () => {
         <Link to="/">
           <Logo width={64} height={64} className="logo" />
         </Link>
-        <div style={{ width: "80%" }}></div>
+        <div style={{ flex: 1 }} />
         <HamburgerMenu />
         {isLoggedIn() ? (
-          <Typography variant="h6" component="div">
-            <div
-              onClick={(e) => {
-                e.preventDefault();
-                sessionStorage.clear();
-                navigate("/");
-              }}
-              className="signInText"
-            >
-              Log out
+          <>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <AccountCircle sx={{ fontSize: 28 }} />
+              <Typography variant="h6" component="div">
+                <Link to="/profile" className="signInText" style={{ marginLeft: "10px", marginRight: "20px" }}>
+                  {sessionStorage.getItem("userName")}
+                </Link>
+              </Typography>
+              <Typography>
+                <Logout sx={{ fontSize: 28 }} onClick={(e) => {
+                  e.preventDefault();
+                  sessionStorage.clear();
+                  navigate("/");
+                }} className="signInText" />
+              </Typography>
             </div>
-          </Typography>
+          </>
         ) : (
           <Typography variant="h6" component="div">
             <div

@@ -12,8 +12,8 @@ using eVert.Data;
 namespace eVert.Migrations
 {
     [DbContext(typeof(eVertDbContext))]
-    [Migration("20230328113232_Identity")]
-    partial class Identity
+    [Migration("20230417161845_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,7 +158,7 @@ namespace eVert.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("eVert.Auth.eVertUser", b =>
+            modelBuilder.Entity("eVert.Auth.Model.eVertUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -175,6 +175,9 @@ namespace eVert.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSeller")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -277,6 +280,74 @@ namespace eVert.Migrations
                     b.ToTable("Advertisements");
                 });
 
+            modelBuilder.Entity("eVert.Data.Entities.BuyAdvertisement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("District")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasParking")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxArea")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxPrice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxRoomsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinArea")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinPrice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinRoomsCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SoldDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BuyAdvertisements");
+                });
+
             modelBuilder.Entity("eVert.Data.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -305,7 +376,7 @@ namespace eVert.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("eVert.Auth.eVertUser", null)
+                    b.HasOne("eVert.Auth.Model.eVertUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -314,7 +385,7 @@ namespace eVert.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("eVert.Auth.eVertUser", null)
+                    b.HasOne("eVert.Auth.Model.eVertUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -329,7 +400,7 @@ namespace eVert.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("eVert.Auth.eVertUser", null)
+                    b.HasOne("eVert.Auth.Model.eVertUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -338,7 +409,7 @@ namespace eVert.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("eVert.Auth.eVertUser", null)
+                    b.HasOne("eVert.Auth.Model.eVertUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -347,7 +418,18 @@ namespace eVert.Migrations
 
             modelBuilder.Entity("eVert.Data.Entities.Advertisement", b =>
                 {
-                    b.HasOne("eVert.Auth.eVertUser", "User")
+                    b.HasOne("eVert.Auth.Model.eVertUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("eVert.Data.Entities.BuyAdvertisement", b =>
+                {
+                    b.HasOne("eVert.Auth.Model.eVertUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

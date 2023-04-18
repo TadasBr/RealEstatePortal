@@ -10,9 +10,28 @@
   color: white;
   text-decoration: none;
   float: right;
+  cursor: pointer;
 }
 
-.hamburgerMenu{
+.hamburgerMenu {
   background-color: transparent;
-  box-shadow: none;;
+  box-shadow: none;
+}
+
+.mainProfile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  min-height: 100vh;
+  height: 100%;
+  background-color: #f1f1f1;
+}
+
+.mainDiv {
+  width: 50%;
+  height: 100%;
+  flex-direction: column;
+  display: flex;
+  margin-top: 100px;
 }

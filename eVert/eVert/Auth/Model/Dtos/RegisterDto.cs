@@ -12,5 +12,8 @@ namespace eVert.Auth.Model.Dtos
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        public bool IsSeller { get; set; }
     }
 }

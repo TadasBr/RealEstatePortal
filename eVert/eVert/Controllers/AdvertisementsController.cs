@@ -11,7 +11,7 @@ using System.Security.Claims;
 namespace eVert.Controllers
 {
     [ApiController]
-    [Route("api/advertisements")]
+    [Route("api/sell-advertisements")]
     public class AdvertisementsController : ControllerBase
     {
         private IAdvertisementsRepository _advertisementsRepository;
@@ -104,6 +104,7 @@ namespace eVert.Controllers
             advertisement.Address= updateAdvertisementDto.Address;
             advertisement.District= updateAdvertisementDto.District;
             advertisement.Price= updateAdvertisementDto.Price;
+            advertisement.UpdatedDate = DateTime.Now;
             await _advertisementsRepository.UpdateAsync(advertisement);
 
             return new OkObjectResult(new UpdateAdvertisementDto(advertisement.Title, advertisement.Description, advertisement.City, advertisement.Address,
@@ -112,6 +113,7 @@ namespace eVert.Controllers
 
         [HttpDelete]
         [Route("{advertisementId}")]
+        [Authorize(Roles = eVertRoles.eVertUser)]
         public async Task<IActionResult> Delete(int advertisementId)
         {
             var advertisement = await _advertisementsRepository.GetAsync(advertisementId);
@@ -119,6 +121,12 @@ namespace eVert.Controllers
             if (advertisement == null)
             {
                 return new NotFoundResult();
+            }
+
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, advertisement, PolicyNames.ResourceOwner);
+            if (!authorizationResult.Succeeded)
+            {
+                return new ForbidResult();
             }
 
             await _advertisementsRepository.DeleteAsync(advertisement);

@@ -8,12 +8,29 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
 import { Api_Url } from "../Constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 
 const theme = createTheme();
 
-export default function CreateAdvertisement() {
+export default function EditSellAdvertisement() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [advertisement, setAdvertisement] = useState<any>();
+
+  React.useEffect(() => {
+    fetch(Api_Url + "/advertisements/" + id, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setAdvertisement(data))
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [id]);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
@@ -24,11 +41,10 @@ export default function CreateAdvertisement() {
       Address: getData.get("Address"),
       District: getData.get("District"),
       Price: getData.get("Price"),
-      CategoryId: getData.get("Category"),
     };
     debugger;
-    fetch(Api_Url + "/sell-advertisements", {
-      method: "POST",
+    fetch(Api_Url + "/sell-advertisements/" + id, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
@@ -47,6 +63,10 @@ export default function CreateAdvertisement() {
       });
   };
 
+  if (!advertisement) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -61,7 +81,7 @@ export default function CreateAdvertisement() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Create advertisiment
+            Edit advertisement
           </Typography>
           <Box
             component="form"
@@ -76,6 +96,7 @@ export default function CreateAdvertisement() {
               id="Title"
               label="Title"
               name="Title"
+              defaultValue={advertisement.title}
             />
             <TextField
               margin="normal"
@@ -84,6 +105,7 @@ export default function CreateAdvertisement() {
               name="Description"
               label="Description"
               id="Description"
+              defaultValue={advertisement.description}
             />
             <TextField
               margin="normal"
@@ -92,6 +114,7 @@ export default function CreateAdvertisement() {
               name="City"
               label="City"
               id="City"
+              defaultValue={advertisement.city}
             />
             <TextField
               margin="normal"
@@ -100,6 +123,7 @@ export default function CreateAdvertisement() {
               name="Address"
               label="Address"
               id="Address"
+              defaultValue={advertisement.address}
             />
             <TextField
               margin="normal"
@@ -108,6 +132,7 @@ export default function CreateAdvertisement() {
               name="District"
               label="District"
               id="District"
+              defaultValue={advertisement.district}
             />
             <TextField
               margin="normal"
@@ -116,14 +141,7 @@ export default function CreateAdvertisement() {
               name="Price"
               label="Price"
               id="Price"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="Category"
-              label="Category"
-              id="Category"
+              defaultValue={advertisement.price}
             />
             <Button
               type="submit"
@@ -131,7 +149,7 @@ export default function CreateAdvertisement() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Create
+              Update
             </Button>
           </Box>
         </Box>

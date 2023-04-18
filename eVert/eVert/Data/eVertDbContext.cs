@@ -8,6 +8,7 @@ namespace eVert.Data
     public class eVertDbContext : IdentityDbContext<eVertUser>
     {
         public DbSet<Advertisement> Advertisements { get; set; }
+        public DbSet<BuyAdvertisement> BuyAdvertisements { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<eVertUser> Users { get; set; }
 

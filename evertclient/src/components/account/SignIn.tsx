@@ -38,6 +38,7 @@ export default function SignIn() {
       console.log(data);
       sessionStorage.setItem("accessToken", data.accessToken);
       sessionStorage.setItem("userName", data.userName);
+      sessionStorage.setItem("isSeller", data.isSeller);
       navigate("/");
     })
     .catch(error => {

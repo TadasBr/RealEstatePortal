@@ -8,7 +8,7 @@ const Advertisement: React.FC = () => {
   const [data, setData] = useState<any>();
 
   useEffect(() => {
-    fetch(`${Api_Url}/advertisements/${params.id}`)
+    fetch(`${Api_Url}/sell-advertisements/${params.id}`)
       .then((response) => response.json())
       .then((data) => setData(data));
   }, [params.id]);
@@ -20,16 +20,19 @@ const Advertisement: React.FC = () => {
   return (
     <div className="main">
       <Header />
-      <div className="listBox">
-        <div className="advertisement">
-          <div className="photos"></div>
-          <div className="descriptionBox">
-            <div className="title">{data.title}</div>
-            <div>
-              {data.city}, {data.district}, {data.address}
+      <div className="mainDiv">
+        <div className="listBox">
+          <div className="advertisement">
+            <div className="photos"></div>
+            <div className="descriptionBox">
+              <div className="title">{data.title}</div>
+              <div className="address">
+                <i className="fas fa-map-marker-alt"></i>
+                {data.city}, {data.district}, {data.address}
+              </div>
+              <div className="price">{data.price}€</div>
+              <div className="description">{data.description}</div>
             </div>
-            <div>{data.price}€</div>
-            <div>{data.description}</div>
           </div>
         </div>
       </div>

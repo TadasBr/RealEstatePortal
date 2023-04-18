@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
-export default function CreateAdvertisement() {
+export default function CreateBuyAdvertisement() {
   const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -21,13 +21,18 @@ export default function CreateAdvertisement() {
       Title: getData.get("Title"),
       Description: getData.get("Description"),
       City: getData.get("City"),
-      Address: getData.get("Address"),
       District: getData.get("District"),
-      Price: getData.get("Price"),
-      CategoryId: getData.get("Category"),
+      MinPrice: getData.get("MinPrice"),
+      MaxPrice: getData.get("MaxPrice"),
+      MinArea: getData.get("MinArea"),
+      MaxArea: getData.get("MaxArea"),
+      MinRoomsCount: getData.get("MinRoomsCount"),
+      MaxRoomsCount: getData.get("MaxRoomsCount"),
+      HasParking: getData.get("HasParking") === "true",
+      CategoryId: getData.get("CategoryId"),
     };
     debugger;
-    fetch(Api_Url + "/sell-advertisements", {
+    fetch(Api_Url + "/buy-advertisements", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +66,7 @@ export default function CreateAdvertisement() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Create advertisiment
+            Create advertisement
           </Typography>
           <Box
             component="form"
@@ -97,14 +102,6 @@ export default function CreateAdvertisement() {
               margin="normal"
               required
               fullWidth
-              name="Address"
-              label="Address"
-              id="Address"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
               name="District"
               label="District"
               id="District"
@@ -113,17 +110,73 @@ export default function CreateAdvertisement() {
               margin="normal"
               required
               fullWidth
-              name="Price"
-              label="Price"
-              id="Price"
+              name="MinPrice"
+              label="Min Price"
+              type="number"
+              id="MinPrice"
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="Category"
-              label="Category"
-              id="Category"
+              name="MaxPrice"
+              label="Max Price"
+              type="number"
+              id="MaxPrice"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MinArea"
+              label="Min Area"
+              type="number"
+              id="MinArea"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MaxArea"
+              label="Max Area"
+              type="number"
+              id="MaxArea"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MinRoomsCount"
+              label="Min Rooms Count"
+              type="number"
+              id="MinRoomsCount"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MaxRoomsCount"
+              label="Max Rooms Count"
+              type="number"
+              id="MaxRoomsCount"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="HasParking"
+              label="Has Parking"
+              type="checkbox"
+              id="HasParking"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="CategoryId"
+              label="Category Id"
+              type="number"
+              id="CategoryId"
             />
             <Button
               type="submit"
