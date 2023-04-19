@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Api_Url } from "../Constants";
 import Header from "../main/Header";
+import Map from "../main/Map";
 
 const Advertisement: React.FC = () => {
   const params = useParams();
@@ -32,6 +33,7 @@ const Advertisement: React.FC = () => {
               </div>
               <div className="price">{data.price}€</div>
               <div className="description">{data.description}</div>
+              <Map address= {data.city + data.address}/>
             </div>
           </div>
         </div>

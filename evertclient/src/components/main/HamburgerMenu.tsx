@@ -26,6 +26,9 @@ const HamburgerMenu: React.FC = () => {
       <ListItem button onClick={() => navigate("/advertisements")}>
         <ListItemText primary="Advertisements" />
       </ListItem>
+      <ListItem button onClick={() => navigate("/my-advertisements")}>
+        <ListItemText primary="My advertisements" />
+      </ListItem>
       <ListItem button onClick={() => {sessionStorage.getItem("isSeller") === "true" 
       ? navigate("/sell-advertisements/create") 
       : navigate("/buy-advertisements/create")}}>

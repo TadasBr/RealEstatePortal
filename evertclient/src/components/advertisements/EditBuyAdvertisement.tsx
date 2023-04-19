@@ -19,7 +19,7 @@ export default function EditSellAdvertisement() {
   const [advertisement, setAdvertisement] = useState<any>();
 
   React.useEffect(() => {
-    fetch(Api_Url + "/sell-advertisements/" + id, {
+    fetch(Api_Url + "/buy-advertisements/" + id, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       },
@@ -38,12 +38,18 @@ export default function EditSellAdvertisement() {
       Title: getData.get("Title"),
       Description: getData.get("Description"),
       City: getData.get("City"),
-      Address: getData.get("Address"),
       District: getData.get("District"),
-      Price: getData.get("Price"),
+      MinPrice: getData.get("MinPrice"),
+      MaxPrice: getData.get("MaxPrice"),
+      MinArea: getData.get("MinArea"),
+      MaxArea: getData.get("MaxArea"),
+      MinRoomsCount: getData.get("MinRoomsCount"),
+      MaxRoomsCount: getData.get("MaxRoomsCount"),
+      HasParking: getData.get("HasParking"),
+      CategoryId: getData.get("CategoryId"),
     };
     debugger;
-    fetch(Api_Url + "/sell-advertisements/" + id, {
+    fetch(Api_Url + "/buy-advertisements/" + id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -66,7 +72,6 @@ export default function EditSellAdvertisement() {
   if (!advertisement) {
     return <div>Loading...</div>;
   }
-
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -120,15 +125,6 @@ export default function EditSellAdvertisement() {
               margin="normal"
               required
               fullWidth
-              name="Address"
-              label="Address"
-              id="Address"
-              defaultValue={advertisement.address}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
               name="District"
               label="District"
               id="District"
@@ -138,10 +134,81 @@ export default function EditSellAdvertisement() {
               margin="normal"
               required
               fullWidth
-              name="Price"
-              label="Price"
-              id="Price"
-              defaultValue={advertisement.price}
+              name="MinPrice"
+              label="Minimum Price"
+              id="MinPrice"
+              type="number"
+              defaultValue={advertisement.minPrice}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MaxPrice"
+              label="Maximum Price"
+              id="MaxPrice"
+              type="number"
+              defaultValue={advertisement.maxPrice}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MinArea"
+              label="Minimum Area"
+              id="MinArea"
+              type="number"
+              defaultValue={advertisement.minArea}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MaxArea"
+              label="Maximum Area"
+              id="MaxArea"
+              type="number"
+              defaultValue={advertisement.maxArea}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MinRoomsCount"
+              label="Minimum Rooms Count"
+              id="MinRoomsCount"
+              type="number"
+              defaultValue={advertisement.minRoomsCount}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="MaxRoomsCount"
+              label="Maximum Rooms Count"
+              id="MaxRoomsCount"
+              type="number"
+              defaultValue={advertisement.maxRoomsCount}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="HasParking"
+              label="Has Parking"
+              id="HasParking"
+              type="checkbox"
+              defaultChecked={advertisement.hasParking}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="CategoryId"
+              label="Category Id"
+              id="CategoryId"
+              type="number"
+              defaultValue={advertisement.categoryId}
             />
             <Button
               type="submit"

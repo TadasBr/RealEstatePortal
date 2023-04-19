@@ -12,6 +12,9 @@ import CreateCategory from "./components/categories/CreateCategory";
 import Profile from "./components/main/Profile";
 import CreateBuyAdvertisement from "./components/advertisements/CreateBuyAdvertisement";
 import BuyAdvertisement from "./components/advertisements/BuyAdvertisement";
+import MyAdvertisements from "./components/advertisements/MyAdvertisiments";
+import EditSellAdvertisement from "./components/advertisements/EditSellAdvertisement";
+import EditBuyAdvertisement from "./components/advertisements/EditBuyAdvertisement";
 
 function App() {
   return (
@@ -25,8 +28,11 @@ function App() {
           <Route path="/sell-advertisements/create" Component={CreateAdvertisiment}/>
           <Route path="/sell-advertisements/:id" element={<Advertisement />} />
           <Route path="/buy-advertisements/:id" element={<BuyAdvertisement />} />
+          <Route path="/edit-sell-advertisements/:id" element={<EditSellAdvertisement />} />
+          <Route path="/edit-buy-advertisements/:id" element={<EditBuyAdvertisement />} />
           <Route path="/buy-advertisements/create" Component={CreateBuyAdvertisement}/>
           <Route path="/categories/create" Component={CreateCategory}/>
+          <Route path="/my-advertisements" Component={MyAdvertisements}/> 
           <Route path="/profile" Component={Profile}/>
         </Routes>
       </BrowserRouter>

@@ -3,6 +3,7 @@ using eVert.Data.Dtos.Advertisements;
 using eVert.Data.Entities;
 using eVert.Data.Repositories.Advertisements;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Data;
@@ -16,11 +17,13 @@ namespace eVert.Controllers
     {
         private IAdvertisementsRepository _advertisementsRepository;
         private IAuthorizationService _authorizationService;
+        private readonly UserManager<eVertUser> _userManager;
 
-        public AdvertisementsController(IAdvertisementsRepository advertisementsRepository, IAuthorizationService authorizationService)
+        public AdvertisementsController(IAdvertisementsRepository advertisementsRepository, IAuthorizationService authorizationService, UserManager<eVertUser> userManager)
         {
             _advertisementsRepository = advertisementsRepository;
             _authorizationService = authorizationService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -29,6 +32,28 @@ namespace eVert.Controllers
             var advertisements = await _advertisementsRepository.GetManyAsync();
 
             return advertisements.Select(o => new GetAdvertisementDto(o.Id, o.Description, o.Title, o.City, o.Address, o.District, o.Price, o.CreatedDate, o.UpdatedDate)).ToList();
+        }
+
+        [HttpGet]
+        [Route("my-advertisements")]
+        [Authorize(Roles = eVertRoles.eVertUser)]
+        public async Task<IReadOnlyList<GetAdvertisementDto>> GetAdvertisementsByUser()
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+
+            if (userName != null)
+            {
+                var user = await _userManager.FindByNameAsync(userName);
+                if (user != null)
+                {
+                    var advertisements = await _advertisementsRepository.GetManyAsync();
+                    var filteredAdvertisements = advertisements.Where(o => o.UserId == user.Id).ToList();
+
+                    return filteredAdvertisements.Select(o => new GetAdvertisementDto(o.Id, o.Description, o.Title, o.City, o.Address, o.District, o.Price, o.CreatedDate, o.UpdatedDate)).ToList();
+                }
+            }
+
+            return Array.Empty<GetAdvertisementDto>();
         }
 
         [HttpGet]
@@ -92,18 +117,18 @@ namespace eVert.Controllers
                 return new NotFoundResult();
             }
 
-            var authorizationResult =  await _authorizationService.AuthorizeAsync(User, advertisement, PolicyNames.ResourceOwner);
-            if(!authorizationResult.Succeeded)
+            var authorizationResult = await _authorizationService.AuthorizeAsync(User, advertisement, PolicyNames.ResourceOwner);
+            if (!authorizationResult.Succeeded)
             {
                 return new ForbidResult();
             }
 
             advertisement.Title = updateAdvertisementDto.Title;
-            advertisement.Description= updateAdvertisementDto.Description;
-            advertisement.City= updateAdvertisementDto.City;
-            advertisement.Address= updateAdvertisementDto.Address;
-            advertisement.District= updateAdvertisementDto.District;
-            advertisement.Price= updateAdvertisementDto.Price;
+            advertisement.Description = updateAdvertisementDto.Description;
+            advertisement.City = updateAdvertisementDto.City;
+            advertisement.Address = updateAdvertisementDto.Address;
+            advertisement.District = updateAdvertisementDto.District;
+            advertisement.Price = updateAdvertisementDto.Price;
             advertisement.UpdatedDate = DateTime.Now;
             await _advertisementsRepository.UpdateAsync(advertisement);
 
@@ -133,5 +158,7 @@ namespace eVert.Controllers
 
             return new NoContentResult();
         }
+
+
     }
 }

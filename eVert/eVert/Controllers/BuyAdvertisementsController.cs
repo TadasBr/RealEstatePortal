@@ -1,8 +1,10 @@
 ﻿using eVert.Auth.Model;
+using eVert.Data.Dtos.Advertisements;
 using eVert.Data.Dtos.BuyAdvertisiments;
 using eVert.Data.Entities;
 using eVert.Data.Repositories.BuyAdvertisiments;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,11 +18,13 @@ namespace eVert.Controllers
     {
         private IBuyAdvertisementsRepository _buyAdvertisementsRepository;
         private IAuthorizationService _authorizationService;
+        private readonly UserManager<eVertUser> _userManager;
 
-        public BuyAdvertisementsController(IBuyAdvertisementsRepository buyAdvertisementsRepository, IAuthorizationService authorizationService)
+        public BuyAdvertisementsController(IBuyAdvertisementsRepository buyAdvertisementsRepository, IAuthorizationService authorizationService, UserManager<eVertUser> userManager)
         {
             _buyAdvertisementsRepository = buyAdvertisementsRepository;
             _authorizationService = authorizationService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -41,6 +45,29 @@ namespace eVert.Controllers
 
             return filteredAdvertisiments.Select(o => new GetBuyAdvertisementDto(o.Id, o.Title, o.Description, o.City, o.District, o.MinPrice, o.MaxPrice, o.MinArea, o.MaxArea,
                 o.MinRoomsCount, o.MaxRoomsCount, o.HasParking, o.CreatedDate, o.UpdatedDate)).ToList();
+        }
+
+        [HttpGet]
+        [Route("my-advertisements")]
+        [Authorize(Roles = eVertRoles.eVertUser)]
+        public async Task<IReadOnlyList<GetBuyAdvertisementDto>> GetAdvertisementsByUser()
+        {
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+
+            if (userName != null)
+            {
+                var user = await _userManager.FindByNameAsync(userName);
+                if (user != null)
+                {
+                    var advertisements = await _buyAdvertisementsRepository.GetManyAsync();
+                    var filteredAdvertisements = advertisements.Where(o => o.UserId == user.Id).ToList();
+
+                    return filteredAdvertisements.Select(o => new GetBuyAdvertisementDto(o.Id, o.Title, o.Description, o.City, o.District, o.MinPrice, o.MaxPrice, o.MinArea, o.MaxArea,
+                        o.MinRoomsCount, o.MaxRoomsCount, o.HasParking, o.CreatedDate, o.UpdatedDate)).ToList();
+                }
+            }
+
+            return Array.Empty<GetBuyAdvertisementDto>();
         }
 
         [HttpGet]
@@ -130,6 +157,7 @@ namespace eVert.Controllers
 
         [HttpDelete]
         [Route("{buyAdvertisementId}")]
+        [Authorize(Roles = eVertRoles.eVertUser)]
         public async Task<IActionResult> Delete(int buyAdvertisementId)
         {
             var advertisement = await _buyAdvertisementsRepository.GetAsync(buyAdvertisementId);
