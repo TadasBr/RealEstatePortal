@@ -12,11 +12,14 @@ namespace eVert.Data.Entities
         public string Address { get; set; }
         public string District { get; set; }
         public int Price { get; set; }
-        //public bool HasParking { get; set; }
+        public int RoomsCount { get; set; }
+        public int Area { get; set; }
+        public bool HasParking { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime? SoldDate { get; set; }
         public int CategoryId { get; set; }
+        public int Views { get; set; }
 
         [Required]
         public string UserId { get; set; }

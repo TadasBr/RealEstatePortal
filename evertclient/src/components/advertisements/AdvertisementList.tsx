@@ -14,8 +14,16 @@ interface Advertisement {
   district: string;
   address: string;
   price: number;
-  categoryId: number;
+  photos: string[];
+  description: string;
+  roomsCount: number;
+  area: number;
+  hasParking: boolean;
+  views: number;
+  createdDate: Date;
+  updatedDate: Date;
 }
+
 
 interface BuyAdvertisement {
   id: number;

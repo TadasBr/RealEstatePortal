@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eVert.Data;
 
@@ -11,9 +12,11 @@ using eVert.Data;
 namespace eVert.Migrations
 {
     [DbContext(typeof(eVertDbContext))]
-    partial class eVertDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230427071737_addedSoldAdvertisements")]
+    partial class addedSoldAdvertisements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,9 +238,6 @@ namespace eVert.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Area")
-                        .HasColumnType("int");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -256,13 +256,7 @@ namespace eVert.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("HasParking")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoomsCount")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("SoldDate")
@@ -278,9 +272,6 @@ namespace eVert.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Views")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -372,26 +363,6 @@ namespace eVert.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("eVert.Data.Entities.Photo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AdvertisementId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Data")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("eVert.Data.Entities.SoldAdvertisement", b =>

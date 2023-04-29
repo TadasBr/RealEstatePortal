@@ -1,4 +1,8 @@
-﻿namespace eVert.Data.Dtos.Advertisements
+﻿using eVert.Data.Dtos.Photos;
+using System;
+using System.Collections.Generic;
+
+namespace eVert.Data.Dtos.Advertisements
 {
     public class GetAdvertisementDto
     {
@@ -9,10 +13,15 @@
         public string Address { get; set; }
         public string District { get; set; }
         public int Price { get; set; }
+        public int RoomsCount { get; set; }
+        public int Area { get; set; }
+        public bool HasParking { get; set; }
+        public int Views { get; set; }
+        public List<string> Photos { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
-        public GetAdvertisementDto(int id, string description, string title, string city, string address, string district, int price, DateTime createdDate, DateTime updatedDate)
+        public GetAdvertisementDto(int id, string description, string title, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int views, DateTime createdDate, DateTime updatedDate, List<string> photos)
         {
             Id = id;
             Description = description;
@@ -21,8 +30,13 @@
             Address = address;
             District = district;
             Price = price;
+            RoomsCount = roomsCount;
+            Area = area;
+            HasParking = hasParking;
+            Views = views;
             CreatedDate = createdDate;
             UpdatedDate = updatedDate;
+            Photos = photos;
         }
     }
 }

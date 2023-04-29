@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace eVert.Data.Dtos.Advertisements
+﻿namespace eVert.Data.Dtos.Advertisements
 {
-    public class CreateAdvertisementDto
+    public class CreateAdvertisementWithPhotosDto
     {
         public string Description { get; set; }
         public string Title { get; set; }
@@ -16,8 +12,9 @@ namespace eVert.Data.Dtos.Advertisements
         public int Area { get; set; }
         public bool HasParking { get; set; }
         public int CategoryId { get; set; }
+        public List<string?> Photos { get; set; }
 
-        public CreateAdvertisementDto(string title, string description, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int categoryId)
+        public CreateAdvertisementWithPhotosDto(string title, string description, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int categoryId, List<string?> photos)
         {
             Title = title;
             Description = description;
@@ -29,6 +26,7 @@ namespace eVert.Data.Dtos.Advertisements
             RoomsCount = roomsCount;
             Area = area;
             HasParking = hasParking;
+            Photos = photos;
         }
     }
 }

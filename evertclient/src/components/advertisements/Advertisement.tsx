@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Api_Url } from "../Constants";
 import Header from "../main/Header";
 import Map from "../main/Map";
+import Image from "./Image"
 
 const Advertisement: React.FC = () => {
   const params = useParams();
@@ -24,7 +25,9 @@ const Advertisement: React.FC = () => {
       <div className="mainDiv">
         <div className="listBox">
           <div className="advertisement">
-            <div className="photos"></div>
+            <div className="photos">
+              <Image base64String={data.photos}/>
+            </div>
             <div className="descriptionBox">
               <div className="title">{data.title}</div>
               <div className="address">

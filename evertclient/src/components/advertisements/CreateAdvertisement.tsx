@@ -17,34 +17,51 @@ export default function CreateAdvertisement() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
-    const data = {
-      Title: getData.get("Title"),
-      Description: getData.get("Description"),
-      City: getData.get("City"),
-      Address: getData.get("Address"),
-      District: getData.get("District"),
-      Price: getData.get("Price"),
-      CategoryId: getData.get("Category"),
-    };
-    debugger;
-    fetch(Api_Url + "/sell-advertisements", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        navigate("/");
-        console.log(response.json());
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
+
+    const reader = new FileReader();
+    const photos = Array.from(getData.getAll("Photo"));
+    const photoPromises = photos.map((photo) => {
+      return new Promise<string>((resolve) => {
+        reader.readAsDataURL(photo as File);
+        reader.onloadend = () => {
+          resolve(reader.result as string);
+        };
       });
+    });
+    Promise.all(photoPromises).then((photoBase64s) => {
+      const data = {
+        Title: getData.get("Title"),
+        Description: getData.get("Description"),
+        City: getData.get("City"),
+        Address: getData.get("Address"),
+        District: getData.get("District"),
+        Price: getData.get("Price"),
+        RoomsCount: getData.get("RoomsCount"),
+        Area: getData.get("Area"),
+        HasParking: getData.get("HasParking") === "true",
+        CategoryId: getData.get("CategoryId"),
+        Photos: photoBase64s,
+      };
+
+      fetch(Api_Url + "/sell-advertisements", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          navigate("/");
+          console.log(response.json());
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
   };
 
   return (
@@ -61,7 +78,7 @@ export default function CreateAdvertisement() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Create advertisiment
+            Create Advertisement
           </Typography>
           <Box
             component="form"
@@ -121,9 +138,42 @@ export default function CreateAdvertisement() {
               margin="normal"
               required
               fullWidth
-              name="Category"
-              label="Category"
-              id="Category"
+              name="RoomsCount"
+              label="Rooms Count"
+              id="RoomsCount"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="Area"
+              label="Area"
+              id="Area"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="HasParking"
+              label="Has Parking"
+              type="checkbox"
+              id="HasParking"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="CategoryId"
+              label="Category Id"
+              id="CategoryId"
+            />
+            <input
+              accept="image/*"
+              multiple
+              required
+              name="Photo"
+              id="Photo"
+              type="file"
             />
             <Button
               type="submit"
