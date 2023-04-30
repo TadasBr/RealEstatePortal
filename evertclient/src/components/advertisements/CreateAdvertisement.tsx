@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
-import { Api_Url } from "../Constants";
+import { Api_Url, phoneNumber } from "../Constants";
 import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
@@ -41,6 +41,7 @@ export default function CreateAdvertisement() {
         HasParking: getData.get("HasParking") === "true",
         CategoryId: getData.get("CategoryId"),
         Photos: photoBase64s,
+        PhoneNumber: phoneNumber
       };
 
       fetch(Api_Url + "/sell-advertisements", {

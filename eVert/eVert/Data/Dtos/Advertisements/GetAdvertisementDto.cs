@@ -18,10 +18,11 @@ namespace eVert.Data.Dtos.Advertisements
         public bool HasParking { get; set; }
         public int Views { get; set; }
         public List<string> Photos { get; set; }
+        public string PhoneNumber { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
-        public GetAdvertisementDto(int id, string description, string title, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int views, DateTime createdDate, DateTime updatedDate, List<string> photos)
+        public GetAdvertisementDto(int id, string description, string title, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int views, DateTime createdDate, DateTime updatedDate, List<string> photos, string phoneNumber)
         {
             Id = id;
             Description = description;
@@ -37,6 +38,7 @@ namespace eVert.Data.Dtos.Advertisements
             CreatedDate = createdDate;
             UpdatedDate = updatedDate;
             Photos = photos;
+            PhoneNumber = phoneNumber;
         }
     }
 }

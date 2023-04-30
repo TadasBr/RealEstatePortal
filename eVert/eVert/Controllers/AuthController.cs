@@ -35,7 +35,8 @@ namespace eVert.Controllers
             {
                 Email = registerUserDto.EmailAddress,
                 UserName = registerUserDto.UserName,
-                IsSeller = registerUserDto.IsSeller
+                IsSeller = registerUserDto.IsSeller,
+                PhoneNumber = registerUserDto.PhoneNumber
             };
             var createUserResult = await _userManager.CreateAsync(newUser, registerUserDto.Password);
             if (!createUserResult.Succeeded)
@@ -43,7 +44,7 @@ namespace eVert.Controllers
 
             await _userManager.AddToRoleAsync(newUser, eVertRoles.eVertUser);
 
-                return CreatedAtAction(nameof(Register), new UserDto(newUser.Id, newUser.UserName, newUser.Email, newUser.IsSeller));
+                return CreatedAtAction(nameof(Register), new UserDto(newUser.Id, newUser.UserName, newUser.Email, newUser.IsSeller, newUser.PhoneNumber));
         }
 
         [HttpPost]
@@ -62,7 +63,7 @@ namespace eVert.Controllers
             var roles = await _userManager.GetRolesAsync(user);
             var accessToken = _jwtTokenService.CreateAccessToken(user.UserName, user.Id, roles);
 
-            return Ok(new SuccessfulLoginDto(accessToken, user.UserName, user.IsSeller));
+            return Ok(new SuccessfulLoginDto(accessToken, user.UserName, user.IsSeller, user.PhoneNumber));
         }
 
         [HttpPut]

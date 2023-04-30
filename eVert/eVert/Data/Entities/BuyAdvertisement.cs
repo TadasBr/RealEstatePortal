@@ -21,6 +21,7 @@ namespace eVert.Data.Entities
         public DateTime UpdatedDate { get; set; }
         public DateTime? SoldDate { get; set; }
         public int CategoryId { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
         public string UserId { get; set; }

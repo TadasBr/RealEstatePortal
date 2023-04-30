@@ -1,13 +1,14 @@
 ﻿using eVert.Auth.Model;
-using eVert.Data.Dtos.Advertisements;
 using eVert.Data.Dtos.BuyAdvertisiments;
 using eVert.Data.Entities;
 using eVert.Data.Repositories.BuyAdvertisiments;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 
 namespace eVert.Controllers
@@ -33,7 +34,7 @@ namespace eVert.Controllers
             var advertisements = await _buyAdvertisementsRepository.GetManyAsync();
 
             return advertisements.Select(o => new GetBuyAdvertisementDto(o.Id, o.Title, o.Description, o.City, o.District, o.MinPrice, o.MaxPrice, o.MinArea, o.MaxArea,
-                o.MinRoomsCount, o.MaxRoomsCount, o.HasParking, o.CreatedDate, o.UpdatedDate)).ToList();
+                o.MinRoomsCount, o.MaxRoomsCount, o.HasParking, o.CreatedDate, o.UpdatedDate, o.PhoneNumber)).ToList();
         }
 
         [HttpGet]
@@ -44,7 +45,7 @@ namespace eVert.Controllers
             var filteredAdvertisiments = advertisements.Where(advertisiment => advertisiment.CategoryId == categoryId).ToList();
 
             return filteredAdvertisiments.Select(o => new GetBuyAdvertisementDto(o.Id, o.Title, o.Description, o.City, o.District, o.MinPrice, o.MaxPrice, o.MinArea, o.MaxArea,
-                o.MinRoomsCount, o.MaxRoomsCount, o.HasParking, o.CreatedDate, o.UpdatedDate)).ToList();
+                o.MinRoomsCount, o.MaxRoomsCount, o.HasParking, o.CreatedDate, o.UpdatedDate, o.PhoneNumber)).ToList();
         }
 
         [HttpGet]
@@ -63,7 +64,7 @@ namespace eVert.Controllers
                     var filteredAdvertisements = advertisements.Where(o => o.UserId == user.Id).ToList();
 
                     return filteredAdvertisements.Select(o => new GetBuyAdvertisementDto(o.Id, o.Title, o.Description, o.City, o.District, o.MinPrice, o.MaxPrice, o.MinArea, o.MaxArea,
-                        o.MinRoomsCount, o.MaxRoomsCount, o.HasParking, o.CreatedDate, o.UpdatedDate)).ToList();
+                        o.MinRoomsCount, o.MaxRoomsCount, o.HasParking, o.CreatedDate, o.UpdatedDate, o.PhoneNumber)).ToList();
                 }
             }
 
@@ -83,7 +84,7 @@ namespace eVert.Controllers
 
             return new GetBuyAdvertisementDto(advertisement.Id, advertisement.Title, advertisement.Description, advertisement.City, advertisement.District,
                 advertisement.MinPrice, advertisement.MaxPrice, advertisement.MinArea, advertisement.MaxArea, advertisement.MinRoomsCount, advertisement.MaxRoomsCount,
-                advertisement.HasParking, advertisement.CreatedDate, advertisement.UpdatedDate);
+                advertisement.HasParking, advertisement.CreatedDate, advertisement.UpdatedDate, advertisement.PhoneNumber);
         }
 
         [HttpPost]
@@ -106,14 +107,15 @@ namespace eVert.Controllers
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 CategoryId = createAdvertisementDto.CategoryId,
-                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
+                PhoneNumber = createAdvertisementDto.PhoneNumber
             };
 
             await _buyAdvertisementsRepository.CreateAsync(advertisement);
 
             return new CreatedResult("", new CreateBuyAdvertisementDto(advertisement.Title, advertisement.Description, advertisement.City, advertisement.District,
                 advertisement.MinPrice, advertisement.MaxPrice, advertisement.MinArea, advertisement.MaxArea, advertisement.MinRoomsCount, advertisement.MaxRoomsCount,
-                advertisement.HasParking, advertisement.CategoryId));
+                advertisement.HasParking, advertisement.CategoryId, advertisement.PhoneNumber));
         }
 
         [HttpPut]
@@ -177,5 +179,68 @@ namespace eVert.Controllers
 
             return new NoContentResult();
         }
+
+        [HttpPost]
+        [Route("scrape-kampas")]
+        public List<GetKampasDto> ScrapeAruodas(BuyAdvertisementForKampasScrapeDto buyAdvertisement)
+        {
+            string url = $"https://www.kampas.lt/butai-vilniuje?priceFrom={buyAdvertisement.MinPrice}&priceTo={buyAdvertisement.MaxPrice}&area_m2From={buyAdvertisement.MinArea}" +
+                $"&area_m2To={buyAdvertisement.MaxArea}&roomsFrom={buyAdvertisement.MinRoomsCount}&roomsTo={buyAdvertisement.MaxRoomsCount}";
+
+            var client = new WebClient();
+            var doc = new HtmlDocument();
+
+            string html = client.DownloadString(url);
+            doc.LoadHtml(html);
+
+            var pages = doc.DocumentNode.SelectNodes("//a[contains(@class, 'k-pagination-page-item') and @data-v-2794e8ca and @data-v-cedc939e]");
+            var pageCount = int.Parse(pages[pages.Count - 1].InnerText);
+
+            var scrapedList = new List<GetKampasDto>();
+
+            for(int i=1; i<=pageCount; i++)
+            {
+                if(i > 1)
+                {
+                    url = $"https://www.kampas.lt/butai-vilniuje?priceFrom={buyAdvertisement.MinPrice}&priceTo={buyAdvertisement.MaxPrice}&area_m2From={buyAdvertisement.MinArea}" +
+                        $"&area_m2To={buyAdvertisement.MaxArea}&roomsFrom={buyAdvertisement.MinRoomsCount}&roomsTo={buyAdvertisement.MaxRoomsCount}&page={i}";
+
+                    html = client.DownloadString(url);
+                    doc.LoadHtml(html);
+                }
+
+                var links = doc.DocumentNode.SelectNodes("//a[contains(@class, 'card-link')]");
+                foreach (HtmlNode link in links)
+                {
+                    try
+                    {
+                        var address = link.FirstChild.InnerText.Trim();
+                        var price = ExtractNumber(link.SelectSingleNode(".//p[@class='third-line line-bold']").InnerText.Trim());
+                        var area = ExtractNumber(link.SelectSingleNode(".//div[@class='k-attribute-icon']//div[@class='label']").InnerText.Trim());
+                        var rooms = ExtractNumber(link.SelectSingleNode(".//div[@class='k-attribute-icon' and i[@class='icon i i-room']]//div[@class='label']").InnerText.Trim());
+                        scrapedList.Add(new GetKampasDto(price, area, address, rooms));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error scraping link: {ex.Message}");
+                    }
+                }
+
+            }
+
+            return scrapedList;
+        }
+
+        public int ExtractNumber(string text)
+        {
+            string result = string.Empty;
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (Char.IsDigit(text[i]))
+                    result += text[i];
+            }
+            return int.Parse(result);
+        }
+
     }
 }

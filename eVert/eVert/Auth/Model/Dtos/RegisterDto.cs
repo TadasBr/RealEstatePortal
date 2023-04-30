@@ -15,5 +15,8 @@ namespace eVert.Auth.Model.Dtos
 
         [Required]
         public bool IsSeller { get; set; }
+
+        [Required]
+        public string PhoneNumber { get; set; }
     }
 }

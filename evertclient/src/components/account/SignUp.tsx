@@ -27,6 +27,7 @@ export default function SignUp() {
       EmailAddress: getData.get("email"),
       Password: getData.get("password"),
       IsSeller: getData.get("isSeller") === "on" ? true : false,
+      PhoneNumber: getData.get("phoneNumber")
     };
 
     fetch(Api_Url + "/register", {
@@ -85,6 +86,16 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="phoneNumber"
+                  label="Phone number"
+                  name="phoneNumber"
+                  autoComplete="phoneNumber"
                 />
               </Grid>
               <Grid item xs={12}>

@@ -22,6 +22,7 @@ interface Advertisement {
   views: number;
   createdDate: Date;
   updatedDate: Date;
+  phoneNumber: string;
 }
 
 

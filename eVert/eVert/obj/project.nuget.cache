@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "vxlIcVeiVOV034GulLn1n+j92GSdeub+xkgdFkHem7poE76oSnke/6aKGUaXCmfxytgH2ByFuhCRXgX41q5gJQ==",
+  "dgSpecHash": "RRSHkQvcqz5/wa2dVmCyrocyrLhNCLLOMGYnyY8LA96txUjYnDXaVGtJf18sQoQUhfuDtAsLtHymnQS+fdZlaA==",
   "success": true,
   "projectFilePath": "C:\\Users\\TadasBrazaitis\\Desktop\\RealEstatePortal\\eVert\\eVert\\eVert.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\htmlagilitypack\\1.11.46\\htmlagilitypack.1.11.46.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

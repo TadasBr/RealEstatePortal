@@ -10,7 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Data;
+using System.Net;
 using System.Security.Claims;
+using System.Net;
+using System.IO;
+using HtmlAgilityPack;
 
 namespace eVert.Controllers
 {
@@ -64,7 +68,8 @@ namespace eVert.Controllers
                     advertisement.Views,
                     advertisement.CreatedDate,
                     advertisement.UpdatedDate,
-                    photoDtos);
+                    photoDtos,
+                    advertisement.PhoneNumber);
 
                 advertisementDtos.Add(advertisementDto);
             }
@@ -112,7 +117,8 @@ namespace eVert.Controllers
                             advertisement.Views,
                             advertisement.CreatedDate,
                             advertisement.UpdatedDate,
-                            photoDtos);
+                            photoDtos,
+                            advertisement.PhoneNumber);
 
                         advertisementDtos.Add(advertisementDto);
                     }
@@ -157,7 +163,8 @@ namespace eVert.Controllers
                     advertisement.Views,
                     advertisement.CreatedDate,
                     advertisement.UpdatedDate,
-                    photoDtos);
+                    photoDtos,
+                    advertisement.PhoneNumber);
 
                 advertisementDtos.Add(advertisementDto);
             }
@@ -202,7 +209,8 @@ namespace eVert.Controllers
                 advertisement.Views,
                 advertisement.CreatedDate,
                 advertisement.UpdatedDate,
-                photoDtos);
+                photoDtos, 
+                advertisement.PhoneNumber);
 
             return advertisementDto;
         }
@@ -227,7 +235,8 @@ namespace eVert.Controllers
                 UpdatedDate = DateTime.Now,
                 CategoryId = createAdvertisementDto.CategoryId,
                 Views = 0,
-                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
+                PhoneNumber= createAdvertisementDto.PhoneNumber
             };
 
             await _advertisementsRepository.CreateAsync(advertisement);
@@ -247,7 +256,7 @@ namespace eVert.Controllers
             }
 
             return new CreatedResult("", new CreateAdvertisementDto(advertisement.Title, advertisement.Description, advertisement.City, advertisement.Address,
-                advertisement.District, advertisement.Price, advertisement.RoomsCount, advertisement.Area, advertisement.HasParking, advertisement.CategoryId));
+                advertisement.District, advertisement.Price, advertisement.RoomsCount, advertisement.Area, advertisement.HasParking, advertisement.CategoryId, advertisement.PhoneNumber));
         }
 
 
@@ -331,6 +340,8 @@ namespace eVert.Controllers
                 HasParking = advertisement.HasParking,
                 SellTime = DateTime.Now.Subtract(advertisement.UpdatedDate).Days,
                 CategoryId = advertisement.CategoryId,
+                RoomsCount= advertisement.RoomsCount,
+                Area = advertisement.Area
             };
 
             await _soldAdvertisementsRepository.CreateAsync(soldAdvertisement);

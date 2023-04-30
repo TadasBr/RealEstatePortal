@@ -5,5 +5,6 @@ namespace eVert.Auth.Model
     public class eVertUser : IdentityUser
     {
         public bool IsSeller { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

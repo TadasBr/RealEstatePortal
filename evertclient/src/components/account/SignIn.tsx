@@ -39,6 +39,7 @@ export default function SignIn() {
       sessionStorage.setItem("accessToken", data.accessToken);
       sessionStorage.setItem("userName", data.userName);
       sessionStorage.setItem("isSeller", data.isSeller);
+      sessionStorage.setItem("phoneNumber", data.phoneNumber)
       navigate("/");
     })
     .catch(error => {

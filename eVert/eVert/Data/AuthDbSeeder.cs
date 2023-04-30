@@ -25,7 +25,8 @@ namespace eVert.Data
             var newAdminUser = new eVertUser()
             {
                 UserName = "admin",
-                Email = "admin@admin.com"
+                Email = "admin@admin.com",
+                PhoneNumber = "9988"
             };
 
             var existingAdminUser = await _userManager.FindByNameAsync(newAdminUser.UserName);

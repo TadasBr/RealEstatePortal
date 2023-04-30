@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eVert.Data;
 
@@ -11,9 +12,11 @@ using eVert.Data;
 namespace eVert.Migrations
 {
     [DbContext(typeof(eVertDbContext))]
-    partial class eVertDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230429220400_PhoneNumber")]
+    partial class PhoneNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

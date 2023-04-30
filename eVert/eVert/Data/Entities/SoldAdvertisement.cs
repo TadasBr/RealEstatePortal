@@ -12,5 +12,7 @@ namespace eVert.Data.Entities
         public bool HasParking { get; set; }
         public int SellTime { get; set; }
         public int CategoryId { get; set; }
+        public int RoomsCount { get; set; }
+        public int Area { get; set; }
     }
 }

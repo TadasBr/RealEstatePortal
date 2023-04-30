@@ -16,9 +16,10 @@
         public bool HasParking { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public string PhoneNumber { get; set; }
 
         public GetBuyAdvertisementDto(int id, string title, string description, string city, string district, int minPrice, int maxPrice, int minArea, int maxArea, int minRoomsCount,
-            int maxRoomsCount, bool hasParking, DateTime createdDate, DateTime updatedDate)
+            int maxRoomsCount, bool hasParking, DateTime createdDate, DateTime updatedDate, string phoneNumber)
         {
             Id = id;
             Title = title;
@@ -34,6 +35,7 @@
             HasParking = hasParking;
             CreatedDate = createdDate;
             UpdatedDate = updatedDate;
+            PhoneNumber = phoneNumber;
         }
     }
 }

@@ -24,11 +24,11 @@ namespace eVert.Controllers
         }
 
         [HttpGet]
-        public async Task<IReadOnlyList<SoldAdvertisement>> GetMany()
+        public async Task<IReadOnlyList<GetSoldAdvertisementStatisticsDto>> GetMany()
         {
             var advertisements = await _soldAdvertisementsRepository.GetManyAsync();
 
-            return advertisements;
+            return advertisements.Select(o => new GetSoldAdvertisementStatisticsDto(o.City, o.District, o.Price, o.HasParking, o.SellTime, o.CategoryId, o.RoomsCount, o.Area)).ToList();
         }
 
         [HttpPost]
@@ -44,12 +44,14 @@ namespace eVert.Controllers
                 HasParking = true,
                 SellTime = sellTime,
                 CategoryId = advertisement.CategoryId,
+                RoomsCount = advertisement.RoomsCount,
+                Area = advertisement.Area
             };
 
             await _soldAdvertisementsRepository.CreateAsync(soldAdvertisement);
 
             return new CreatedResult("", new CreateSoldAdvertisementDto(soldAdvertisement.City, soldAdvertisement.District, soldAdvertisement.Price, soldAdvertisement.HasParking, 
-                soldAdvertisement.SellTime, soldAdvertisement.CategoryId));
+                soldAdvertisement.SellTime, soldAdvertisement.CategoryId, advertisement.RoomsCount, advertisement.Area));
         }
     }
 }

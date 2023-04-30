@@ -17,8 +17,10 @@ namespace eVert.Data.Dtos.BuyAdvertisiments
         public int MaxRoomsCount { get; set; }
         public bool HasParking { get; set; }
         public int CategoryId { get; set; }
+        public string PhoneNumber { get; set; }
 
-        public CreateBuyAdvertisementDto(string title, string description, string city, string district, int minPrice, int maxPrice, int minArea, int maxArea, int minRoomsCount, int maxRoomsCount, bool hasParking, int categoryId)
+
+        public CreateBuyAdvertisementDto(string title, string description, string city, string district, int minPrice, int maxPrice, int minArea, int maxArea, int minRoomsCount, int maxRoomsCount, bool hasParking, int categoryId, string phoneNumber)
         {
             Title = title;
             Description = description;
@@ -32,6 +34,7 @@ namespace eVert.Data.Dtos.BuyAdvertisiments
             MaxRoomsCount = maxRoomsCount;
             HasParking = hasParking;
             CategoryId = categoryId;
+            PhoneNumber = phoneNumber;
         }
     }
 }

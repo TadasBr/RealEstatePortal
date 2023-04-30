@@ -20,22 +20,22 @@ const Advertisement: React.FC = () => {
   }
 
   return (
-    <div className="main">
+    <div className="mainAdvertisement">
       <Header />
-      <div className="mainDiv">
-        <div className="listBox">
+      <div className="advertisementMainDiv">
+        <div className="listBoxAdvertisement">
           <div className="advertisement">
             <div className="photos">
               <Image base64String={data.photos}/>
             </div>
-            <div className="descriptionBox">
-              <div className="title">{data.title}</div>
-              <div className="address">
+            <div className="descriptionBoxAdvertisement">
+              <div className="titleAdvertisement">{data.title}</div>
+              <div className="addressAdvertisement">
                 <i className="fas fa-map-marker-alt"></i>
                 {data.city}, {data.district}, {data.address}
               </div>
-              <div className="price">{data.price}€</div>
-              <div className="description">{data.description}</div>
+              <div className="priceAdvertisement">{data.price}€</div>
+              <div className="descriptionAdvertisement">{data.description}</div>
               <Map address= {data.city + data.address}/>
             </div>
           </div>
