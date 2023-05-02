@@ -34,22 +34,27 @@ const Home: React.FC = () => {
     <div className="main">
       <Header />
       <div className="mainDiv">
+        <h1>Recommended advertisements</h1>
         <div className="recommendationListBox">
-          <div className="section"> Recommended advertisements</div>
-          {!isSeller() && myAdvertisements.length > 0 && (
+          {myAdvertisements.length > 0 ? (
             <>
-              <div className="section">
-                Kampas.lt Recommended advertisements
-              </div>
-              <div>
-                {myAdvertisements.map((ad) => (
-                  <div key={ad.city}>
-                    <div className="smallerSection">{ad.city} {ad.minPrice}€ - {ad.maxPrice}€</div>
-                    <KampasRecommendations myAdvertisement={ad} />
+              {isSeller() && <div className="section">eVert advertisements</div>}
+              {!isSeller() && (
+                <>
+                  <div className="section">Kampas.lt advertisements</div>
+                  <div>
+                    {myAdvertisements.map((ad) => (
+                      <div key={ad.city}>
+                        <div className="smallerSection">{ad.city} {ad.minPrice}€ - {ad.maxPrice}€</div>
+                        <KampasRecommendations myAdvertisement={ad} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </>
+              )}
             </>
+          ) : (
+            <div>You have no recommended advertisements</div>
           )}
         </div>
       </div>

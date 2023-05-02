@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 const theme = createTheme();
 
@@ -161,14 +162,9 @@ export default function CreateBuyAdvertisement() {
               type="number"
               id="MaxRoomsCount"
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="HasParking"
+            <FormControlLabel
+              control={<Checkbox id="HasParking" />}
               label="Has Parking"
-              type="checkbox"
-              id="HasParking"
             />
             <TextField
               margin="normal"

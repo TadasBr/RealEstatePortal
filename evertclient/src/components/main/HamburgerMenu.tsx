@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { isSeller } from "../Constants";
 
 const HamburgerMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,9 +24,9 @@ const HamburgerMenu: React.FC = () => {
       <ListItem button onClick={() => navigate("/")}>
         <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button onClick={() => navigate("/recommendations")}>
+      {!isSeller() && <ListItem button onClick={() => navigate("/recommendations")}>
         <ListItemText primary="Recommendations" />
-      </ListItem>
+      </ListItem>}
       <ListItem button onClick={() => navigate("/my-advertisements")}>
         <ListItemText primary="My advertisements" />
       </ListItem>

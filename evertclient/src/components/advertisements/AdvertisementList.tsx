@@ -73,6 +73,7 @@ const AdvertisementList: React.FC = () => {
     <div className="main">
       <Header />
       <div className="mainDiv">
+        <h1>Advertisements</h1>
         <div className="listBox">
           <div className="switchBox">
             <div

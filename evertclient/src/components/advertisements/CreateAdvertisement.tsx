@@ -172,17 +172,13 @@ export default function CreateAdvertisement() {
               required
               fullWidth
               name="CategoryId"
-              label="Category Id"
+              label="Category"
               id="CategoryId"
             />
-            <input
-              accept="image/*"
-              multiple
-              required
-              name="Photo"
-              id="Photo"
-              type="file"
-            />
+            <Button variant="contained" component="label">
+              Upload File
+              <input type="file" id="Photo" multiple hidden/>
+            </Button>
             <Button
               type="submit"
               fullWidth

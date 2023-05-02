@@ -20,7 +20,7 @@
   height: 100%;
   flex-direction: column;
   display: flex;
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .advertisementMainDiv {
@@ -277,9 +277,18 @@
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   align-items: 'center';
+  justify-content: space-between;
 }
 
 .views{
   float: right;
   color: gray;
+}
+
+.myMainDiv {
+  width: 40%;
+  height: 100%;
+  flex-direction: column;
+  display: flex;
+  margin-top: 100px;
 }

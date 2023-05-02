@@ -75,18 +75,19 @@ const MyAdvertisements: React.FC = () => {
   return (
     <div className="main">
       <Header />
-      <div className="mainDiv">
+      <div className="myMainDiv">
+        <h1>My advertisements</h1>
         <div className="listBox">
           {items.length > 0 ? items.map((item) => (
             <div key={item.id} className="myAdvertisementListItem">
-              <p style={{fontWeight: "bold", marginRight: 10}}>{item.title}</p>
-              <p>{item.description}</p>
-              <div>
-                <button onClick={() => handleEdit(item.id)} className="imageButton">Edit</button>
-                <button onClick={() => handleDelete(item.id)} className="imageButton redButton">Delete</button>
-                <button onClick={() => handleSold(item.id)} className="imageButton greenButton">Sold</button>
-              </div>
+            <p style={{fontWeight: "bold", marginRight: 10}}>{item.title}</p>
+            <div style={{display: "flex", justifyContent: "flex-end"}}>
+              <button onClick={() => handleEdit(item.id)} className="imageButton">Edit</button>
+              <button onClick={() => handleDelete(item.id)} className="imageButton redButton">Delete</button>
+
+              {isSeller() && <button onClick={() => handleSold(item.id)} className="imageButton greenButton">Sold</button>}
             </div>
+          </div>
           )) : "You have no advertisements"}
         </div>
       </div>
