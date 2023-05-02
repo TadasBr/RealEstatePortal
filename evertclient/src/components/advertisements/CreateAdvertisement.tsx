@@ -7,8 +7,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
-import { Api_Url, phoneNumber } from "../Constants";
+import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
+import { CheckBox } from "@mui/icons-material";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 const theme = createTheme();
 
@@ -18,17 +20,18 @@ export default function CreateAdvertisement() {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
 
-    const reader = new FileReader();
     const photos = Array.from(getData.getAll("Photo"));
-    const photoPromises = photos.map((photo) => {
-      return new Promise<string>((resolve) => {
-        reader.readAsDataURL(photo as File);
-        reader.onloadend = () => {
-          resolve(reader.result as string);
-        };
-      });
-    });
-    Promise.all(photoPromises).then((photoBase64s) => {
+    Promise.all(
+      photos.map((photo) => {
+        return new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(photo as File);
+          reader.onloadend = () => {
+            resolve(reader.result as string);
+          };
+        });
+      })
+    ).then((photoBase64s) => {
       const data = {
         Title: getData.get("Title"),
         Description: getData.get("Description"),
@@ -41,7 +44,8 @@ export default function CreateAdvertisement() {
         HasParking: getData.get("HasParking") === "true",
         CategoryId: getData.get("CategoryId"),
         Photos: photoBase64s,
-        PhoneNumber: phoneNumber
+        PhoneNumber: sessionStorage.getItem("phoneNumber"),
+        BuiltYear: getData.get("YearBuilt"),
       };
 
       fetch(Api_Url + "/sell-advertisements", {
@@ -139,6 +143,14 @@ export default function CreateAdvertisement() {
               margin="normal"
               required
               fullWidth
+              name="YearBuilt"
+              label="Year built"
+              id="YearBuilt"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
               name="RoomsCount"
               label="Rooms Count"
               id="RoomsCount"
@@ -151,14 +163,9 @@ export default function CreateAdvertisement() {
               label="Area"
               id="Area"
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="HasParking"
+            <FormControlLabel
+              control={<Checkbox id="HasParking" />}
               label="Has Parking"
-              type="checkbox"
-              id="HasParking"
             />
             <TextField
               margin="normal"

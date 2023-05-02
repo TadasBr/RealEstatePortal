@@ -21,6 +21,7 @@ namespace eVert.Data.Entities
         public int CategoryId { get; set; }
         public int Views { get; set; }
         public string PhoneNumber { get; set; }
+        public int BuiltYear { get; set; }
 
         [Required]
         public string UserId { get; set; }

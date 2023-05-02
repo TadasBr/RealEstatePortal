@@ -21,10 +21,10 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>  
-          <Route path="/" Component={Home}/>
+          <Route path="/" Component={AdvertisimentList}/>
           <Route path="/register" Component={SignUp}/>
           <Route path="/login" Component={SignIn}/>
-          <Route path="/advertisements" Component={AdvertisimentList}/>
+          <Route path="/recommendations" Component={Home}/>
           <Route path="/sell-advertisements/create" Component={CreateAdvertisiment}/>
           <Route path="/sell-advertisements/:id" element={<Advertisement />} />
           <Route path="/buy-advertisements/:id" element={<BuyAdvertisement />} />

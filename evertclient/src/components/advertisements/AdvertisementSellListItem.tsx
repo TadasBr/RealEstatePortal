@@ -18,6 +18,7 @@ interface Advertisement {
   createdDate: Date;
   updatedDate: Date;
   phoneNumber: string;
+  builtYear: number;
 }
 
 interface AdvertisementListItemProps {

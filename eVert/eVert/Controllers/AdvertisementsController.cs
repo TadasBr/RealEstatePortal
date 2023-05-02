@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Net;
 using System.IO;
 using HtmlAgilityPack;
+using eVert.Data.Dtos.BuyAdvertisiments;
 
 namespace eVert.Controllers
 {
@@ -69,7 +70,8 @@ namespace eVert.Controllers
                     advertisement.CreatedDate,
                     advertisement.UpdatedDate,
                     photoDtos,
-                    advertisement.PhoneNumber);
+                    advertisement.PhoneNumber,
+                    advertisement.BuiltYear);
 
                 advertisementDtos.Add(advertisementDto);
             }
@@ -118,7 +120,8 @@ namespace eVert.Controllers
                             advertisement.CreatedDate,
                             advertisement.UpdatedDate,
                             photoDtos,
-                            advertisement.PhoneNumber);
+                            advertisement.PhoneNumber,
+                            advertisement.BuiltYear);
 
                         advertisementDtos.Add(advertisementDto);
                     }
@@ -164,7 +167,8 @@ namespace eVert.Controllers
                     advertisement.CreatedDate,
                     advertisement.UpdatedDate,
                     photoDtos,
-                    advertisement.PhoneNumber);
+                    advertisement.PhoneNumber, 
+                    advertisement.BuiltYear);
 
                 advertisementDtos.Add(advertisementDto);
             }
@@ -209,10 +213,27 @@ namespace eVert.Controllers
                 advertisement.Views,
                 advertisement.CreatedDate,
                 advertisement.UpdatedDate,
-                photoDtos, 
-                advertisement.PhoneNumber);
+                photoDtos,
+                advertisement.PhoneNumber,
+                advertisement.BuiltYear);
 
             return advertisementDto;
+        }
+
+        [HttpPost]
+        [Route("get-recommendations")]
+        public async Task<IReadOnlyList<GetSimpleAdvertisementDto>> GetByBuyAdvertisement(BuyAdvertisementForKampasScrapeDto buyAdvertisementDto)
+        {
+            var advertisements = await _advertisementsRepository.GetManyAsync();
+            var filteredAdvertisements = advertisements.Where(ad => ad.Price >= buyAdvertisementDto.MinPrice && ad.Price <= buyAdvertisementDto.MaxPrice && ad.RoomsCount >= buyAdvertisementDto.MinRoomsCount
+                && ad.RoomsCount <= buyAdvertisementDto.MaxRoomsCount && ad.Area >= buyAdvertisementDto.MinArea && ad.Area <= buyAdvertisementDto.MaxArea && ad.City == buyAdvertisementDto.City);
+
+            if (filteredAdvertisements == null)
+            {
+                return new List<GetSimpleAdvertisementDto>();
+            }
+
+            return filteredAdvertisements.Select(ad => new GetSimpleAdvertisementDto(ad.Price, ad.Area, ad.City + ", " + ad.District + ", " + ad.Address, ad.RoomsCount, ad.Id.ToString())).ToList();
         }
 
 
@@ -236,12 +257,13 @@ namespace eVert.Controllers
                 CategoryId = createAdvertisementDto.CategoryId,
                 Views = 0,
                 UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
-                PhoneNumber= createAdvertisementDto.PhoneNumber
+                PhoneNumber = createAdvertisementDto.PhoneNumber,
+                BuiltYear = createAdvertisementDto.BuiltYear
             };
 
             await _advertisementsRepository.CreateAsync(advertisement);
 
-            if(createAdvertisementDto.Photos.Count > 0)
+            if (createAdvertisementDto.Photos.Count > 0)
             {
                 foreach (var photo in createAdvertisementDto.Photos)
                 {
@@ -256,7 +278,7 @@ namespace eVert.Controllers
             }
 
             return new CreatedResult("", new CreateAdvertisementDto(advertisement.Title, advertisement.Description, advertisement.City, advertisement.Address,
-                advertisement.District, advertisement.Price, advertisement.RoomsCount, advertisement.Area, advertisement.HasParking, advertisement.CategoryId, advertisement.PhoneNumber));
+                advertisement.District, advertisement.Price, advertisement.RoomsCount, advertisement.Area, advertisement.HasParking, advertisement.CategoryId, advertisement.PhoneNumber, advertisement.BuiltYear));
         }
 
 
@@ -340,7 +362,7 @@ namespace eVert.Controllers
                 HasParking = advertisement.HasParking,
                 SellTime = DateTime.Now.Subtract(advertisement.UpdatedDate).Days,
                 CategoryId = advertisement.CategoryId,
-                RoomsCount= advertisement.RoomsCount,
+                RoomsCount = advertisement.RoomsCount,
                 Area = advertisement.Area
             };
 

@@ -63,6 +63,14 @@ const MyAdvertisements: React.FC = () => {
     });
   };
   
+  const handleSold = (id: number) => {
+    fetch(`${Api_Url}/sell-advertisements/${id}/sell`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
+      }
+    });
+  };
 
   return (
     <div className="main">
@@ -70,12 +78,13 @@ const MyAdvertisements: React.FC = () => {
       <div className="mainDiv">
         <div className="listBox">
           {items.length > 0 ? items.map((item) => (
-            <div key={item.id} className="advertisement">
-              <h2>{item.title}</h2>
+            <div key={item.id} className="myAdvertisementListItem">
+              <p style={{fontWeight: "bold", marginRight: 10}}>{item.title}</p>
               <p>{item.description}</p>
-              <div className="buttons">
-                <button onClick={() => handleEdit(item.id)}>Edit</button>
-                <button onClick={() => handleDelete(item.id)}>Delete</button>
+              <div>
+                <button onClick={() => handleEdit(item.id)} className="imageButton">Edit</button>
+                <button onClick={() => handleDelete(item.id)} className="imageButton redButton">Delete</button>
+                <button onClick={() => handleSold(item.id)} className="imageButton greenButton">Sold</button>
               </div>
             </div>
           )) : "You have no advertisements"}

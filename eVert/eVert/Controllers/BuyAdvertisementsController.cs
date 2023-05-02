@@ -182,7 +182,7 @@ namespace eVert.Controllers
 
         [HttpPost]
         [Route("scrape-kampas")]
-        public List<GetKampasDto> ScrapeAruodas(BuyAdvertisementForKampasScrapeDto buyAdvertisement)
+        public List<GetSimpleAdvertisementDto> ScrapeAruodas(BuyAdvertisementForKampasScrapeDto buyAdvertisement)
         {
             string url = $"https://www.kampas.lt/butai-vilniuje?priceFrom={buyAdvertisement.MinPrice}&priceTo={buyAdvertisement.MaxPrice}&area_m2From={buyAdvertisement.MinArea}" +
                 $"&area_m2To={buyAdvertisement.MaxArea}&roomsFrom={buyAdvertisement.MinRoomsCount}&roomsTo={buyAdvertisement.MaxRoomsCount}";
@@ -194,9 +194,9 @@ namespace eVert.Controllers
             doc.LoadHtml(html);
 
             var pages = doc.DocumentNode.SelectNodes("//a[contains(@class, 'k-pagination-page-item') and @data-v-2794e8ca and @data-v-cedc939e]");
-            var pageCount = int.Parse(pages[pages.Count - 1].InnerText);
+            var pageCount = pages == null ? 1 : int.Parse(pages[pages.Count - 1].InnerText);
 
-            var scrapedList = new List<GetKampasDto>();
+            var scrapedList = new List<GetSimpleAdvertisementDto>();
 
             for(int i=1; i<=pageCount; i++)
             {
@@ -218,7 +218,8 @@ namespace eVert.Controllers
                         var price = ExtractNumber(link.SelectSingleNode(".//p[@class='third-line line-bold']").InnerText.Trim());
                         var area = ExtractNumber(link.SelectSingleNode(".//div[@class='k-attribute-icon']//div[@class='label']").InnerText.Trim());
                         var rooms = ExtractNumber(link.SelectSingleNode(".//div[@class='k-attribute-icon' and i[@class='icon i i-room']]//div[@class='label']").InnerText.Trim());
-                        scrapedList.Add(new GetKampasDto(price, area, address, rooms));
+                        var href = "https://www.kampas.lt" + link.Attributes["href"].Value;
+                        scrapedList.Add(new GetSimpleAdvertisementDto(price, area, address, rooms, href));
                     }
                     catch (Exception ex)
                     {

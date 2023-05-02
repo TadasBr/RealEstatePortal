@@ -14,8 +14,9 @@
         public int CategoryId { get; set; }
         public List<string?> Photos { get; set; }
         public string PhoneNumber { get; set; }
+        public int BuiltYear { get; set; }
 
-        public CreateAdvertisementWithPhotosDto(string title, string description, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int categoryId, List<string?> photos, string phoneNumber)
+        public CreateAdvertisementWithPhotosDto(string title, string description, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int categoryId, List<string?> photos, string phoneNumber, int builtYear)
         {
             Title = title;
             Description = description;
@@ -29,6 +30,7 @@
             HasParking = hasParking;
             Photos = photos;
             PhoneNumber = phoneNumber;
+            BuiltYear = builtYear;
         }
     }
 }

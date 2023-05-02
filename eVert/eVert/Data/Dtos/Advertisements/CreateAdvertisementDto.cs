@@ -17,8 +17,9 @@ namespace eVert.Data.Dtos.Advertisements
         public bool HasParking { get; set; }
         public int CategoryId { get; set; }
         public string PhoneNumber { get; set; }
+        public int BuiltYear { get; set; }
 
-        public CreateAdvertisementDto(string title, string description, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int categoryId, string phoneNumber)
+        public CreateAdvertisementDto(string title, string description, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int categoryId, string phoneNumber, int builtYear)
         {
             Title = title;
             Description = description;
@@ -31,6 +32,7 @@ namespace eVert.Data.Dtos.Advertisements
             Area = area;
             HasParking = hasParking;
             PhoneNumber = phoneNumber;
+            BuiltYear = builtYear;
         }
     }
 }

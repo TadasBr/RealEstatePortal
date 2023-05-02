@@ -45,8 +45,8 @@ export default function EditSellAdvertisement() {
       MaxArea: getData.get("MaxArea"),
       MinRoomsCount: getData.get("MinRoomsCount"),
       MaxRoomsCount: getData.get("MaxRoomsCount"),
-      HasParking: getData.get("HasParking"),
-      CategoryId: getData.get("CategoryId"),
+      HasParking: getData.get("HasParking") === "true",
+      CategoryId: getData.get("CategoryId")
     };
     debugger;
     fetch(Api_Url + "/buy-advertisements/" + id, {

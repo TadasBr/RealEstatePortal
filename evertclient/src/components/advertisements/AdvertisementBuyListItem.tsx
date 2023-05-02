@@ -32,7 +32,7 @@ const BuyAdvertisementListItem: React.FC<BuyAdvertisementListItemProps> = ({ ite
         <div>{item.minPrice}€ - {item.maxPrice}€</div>
         <div>{item.minArea}m² - {item.maxArea}m²</div>
         <div>{item.minRoomsCount} - {item.maxRoomsCount} Rooms</div>
-        <div>{item.hasParking ? "Has Parking" : "No Parking"}</div>
+        <div>{item.hasParking ? "Parking spot is mandatory" : "Parking spot is not mandatory"}</div>
       </div>
     </div>
   );

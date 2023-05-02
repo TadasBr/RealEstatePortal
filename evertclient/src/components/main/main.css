@@ -29,9 +29,47 @@
 }
 
 .mainDiv {
-  width: 50%;
+  width: 40%;
   height: 100%;
   flex-direction: column;
   display: flex;
   margin-top: 100px;
+}
+
+.recommendationListBox {
+  margin-top: 20px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: -1px 1px 2px 2px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+}
+
+.recommendationListItem {
+  border-radius: 5px;
+  padding: 3px;
+  margin-bottom: 5px;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  box-shadow: -1px 1px 1px 1px rgba(0, 0, 0, 0.3);
+  flex-direction: column;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  text-decoration: none;
+  color: black;
+}
+.recommendationListItem:hover {
+  transform: scale(1.01);
+}
+
+.section {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.smallerSection {
+  font-size: 18px;
+  font-weight: bold;
 }

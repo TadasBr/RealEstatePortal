@@ -55,7 +55,7 @@ const BuyAdvertisement: React.FC = () => {
                 </div>
                 <div>
                   <i className="fas fa-car"></i>
-                  {data.hasParking ? "Parking Available" : "No Parking"}
+                  {data.hasParking ? "Parking spot is mandatory" : "Parking spot is not mandatory"}
                 </div>
                 <div>
                   <i className="fas fa-expand"></i>

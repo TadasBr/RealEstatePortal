@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
-import { Api_Url, phoneNumber } from "../Constants";
+import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
@@ -30,7 +30,7 @@ export default function CreateBuyAdvertisement() {
       MaxRoomsCount: getData.get("MaxRoomsCount"),
       HasParking: getData.get("HasParking") === "true",
       CategoryId: getData.get("CategoryId"),
-      PhoneNumber: phoneNumber
+      PhoneNumber: sessionStorage.getItem("phoneNumber")
     };
     debugger;
     fetch(Api_Url + "/buy-advertisements", {

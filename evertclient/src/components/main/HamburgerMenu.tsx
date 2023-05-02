@@ -23,8 +23,8 @@ const HamburgerMenu: React.FC = () => {
       <ListItem button onClick={() => navigate("/")}>
         <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button onClick={() => navigate("/advertisements")}>
-        <ListItemText primary="Advertisements" />
+      <ListItem button onClick={() => navigate("/recommendations")}>
+        <ListItemText primary="Recommendations" />
       </ListItem>
       <ListItem button onClick={() => navigate("/my-advertisements")}>
         <ListItemText primary="My advertisements" />
@@ -34,9 +34,11 @@ const HamburgerMenu: React.FC = () => {
       : navigate("/buy-advertisements/create")}}>
         <ListItemText primary="Create advertisement" />
       </ListItem>
-      <ListItem button onClick={() => navigate("/categories/create")}>
-        <ListItemText primary="Create category" />
-      </ListItem>
+      {sessionStorage.getItem("username") === "admin" &&
+        <ListItem button onClick={() => navigate("/categories/create")}>
+          <ListItemText primary="Create category" />
+        </ListItem>
+      }
     </List>
   );
 
