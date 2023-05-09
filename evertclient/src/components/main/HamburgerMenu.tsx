@@ -24,17 +24,17 @@ const HamburgerMenu: React.FC = () => {
       <ListItem button onClick={() => navigate("/")}>
         <ListItemText primary="Home" />
       </ListItem>
-      {!isSeller() && <ListItem button onClick={() => navigate("/recommendations")}>
+      {!isSeller() && sessionStorage.getItem("userName") && <ListItem button onClick={() => navigate("/recommendations")}>
         <ListItemText primary="Recommendations" />
       </ListItem>}
-      <ListItem button onClick={() => navigate("/my-advertisements")}>
+      {sessionStorage.getItem("userName") && <ListItem button onClick={() => navigate("/my-advertisements")}>
         <ListItemText primary="My advertisements" />
-      </ListItem>
-      <ListItem button onClick={() => {sessionStorage.getItem("isSeller") === "true" 
+      </ListItem>}
+      { sessionStorage.getItem("userName") && <ListItem button onClick={() => {sessionStorage.getItem("isSeller") === "true" 
       ? navigate("/sell-advertisements/create") 
       : navigate("/buy-advertisements/create")}}>
         <ListItemText primary="Create advertisement" />
-      </ListItem>
+      </ListItem>}
       {sessionStorage.getItem("username") === "admin" &&
         <ListItem button onClick={() => navigate("/categories/create")}>
           <ListItemText primary="Create category" />

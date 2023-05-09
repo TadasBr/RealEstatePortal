@@ -3,6 +3,7 @@ import Header from "./Header";
 import "./main.css";
 import { Api_Url, isSeller } from "../Constants";
 import KampasRecommendations from "./KampasRecommendations";
+import MyAdvertisements from "../advertisements/MyAdvertisiments";
 
 interface MyAdvertisement {
   city: string;
@@ -41,7 +42,7 @@ const Home: React.FC = () => {
               {isSeller() && <div className="section">eVert advertisements</div>}
               {!isSeller() && (
                 <>
-                  <div className="section">Kampas.lt advertisements</div>
+                  <div className="section">Kampas.lt  </div>
                   <div>
                     {myAdvertisements.map((ad) => (
                       <div key={ad.city}>

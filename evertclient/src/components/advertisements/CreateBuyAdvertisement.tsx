@@ -9,12 +9,13 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Checkbox, FormControlLabel, Slider } from "@mui/material";
 
 const theme = createTheme();
 
 export default function CreateBuyAdvertisement() {
   const navigate = useNavigate();
+  const [priceRange, setPriceRange] = React.useState<Number[]>([20000, 500000]);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
@@ -31,7 +32,7 @@ export default function CreateBuyAdvertisement() {
       MaxRoomsCount: getData.get("MaxRoomsCount"),
       HasParking: getData.get("HasParking") === "true",
       CategoryId: getData.get("CategoryId"),
-      PhoneNumber: sessionStorage.getItem("phoneNumber")
+      PhoneNumber: sessionStorage.getItem("phoneNumber"),
     };
     debugger;
     fetch(Api_Url + "/buy-advertisements", {
@@ -83,6 +84,7 @@ export default function CreateBuyAdvertisement() {
               id="Title"
               label="Title"
               name="Title"
+              defaultValue="Modern apartament"
             />
             <TextField
               margin="normal"
@@ -91,6 +93,7 @@ export default function CreateBuyAdvertisement() {
               name="Description"
               label="Description"
               id="Description"
+              defaultValue="Modern apartament"
             />
             <TextField
               margin="normal"
@@ -99,6 +102,7 @@ export default function CreateBuyAdvertisement() {
               name="City"
               label="City"
               id="City"
+              defaultValue="Vilnius"
             />
             <TextField
               margin="normal"
@@ -107,6 +111,7 @@ export default function CreateBuyAdvertisement() {
               name="District"
               label="District"
               id="District"
+              defaultValue="antakalnis"
             />
             <TextField
               margin="normal"
@@ -114,17 +119,17 @@ export default function CreateBuyAdvertisement() {
               fullWidth
               name="MinPrice"
               label="Min Price"
-              type="number"
               id="MinPrice"
+              defaultValue="130000"
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="MaxPrice"
-              label="Max Price"
-              type="number"
+              label="Max price"
               id="MaxPrice"
+              defaultValue="150000"
             />
             <TextField
               margin="normal"
@@ -134,6 +139,7 @@ export default function CreateBuyAdvertisement() {
               label="Min Area"
               type="number"
               id="MinArea"
+              defaultValue="40"
             />
             <TextField
               margin="normal"
@@ -143,6 +149,7 @@ export default function CreateBuyAdvertisement() {
               label="Max Area"
               type="number"
               id="MaxArea"
+              defaultValue="50"
             />
             <TextField
               margin="normal"
@@ -152,6 +159,7 @@ export default function CreateBuyAdvertisement() {
               label="Min Rooms Count"
               type="number"
               id="MinRoomsCount"
+              defaultValue="3"
             />
             <TextField
               margin="normal"
@@ -161,6 +169,7 @@ export default function CreateBuyAdvertisement() {
               label="Max Rooms Count"
               type="number"
               id="MaxRoomsCount"
+              defaultValue="3"
             />
             <FormControlLabel
               control={<Checkbox id="HasParking" />}
@@ -174,6 +183,7 @@ export default function CreateBuyAdvertisement() {
               label="Category Id"
               type="number"
               id="CategoryId"
+              defaultValue="1"
             />
             <Button
               type="submit"

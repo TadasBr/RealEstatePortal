@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Maps from "./Maps";
 
 interface MyAdvertisement {
   city: string;
@@ -18,12 +19,19 @@ interface KampasAdvertisement {
   url: string;
 }
 
+interface Address {
+  location: string;
+  price: number;
+  url: string;
+}
+
 interface Props {
   myAdvertisement: MyAdvertisement;
 }
 
 const KampasRecommendations: React.FC<Props> = ({ myAdvertisement }) => {
   const [kampasAdvertisements, setKampasAdvertisements] = useState<KampasAdvertisement[]>([]);
+  const [addressList, setAddressesList] = useState<Address[]>([]);
 
   useEffect(() => {
     fetch(`http://localhost:5064/api/buy-advertisements/scrape-kampas`, {
@@ -44,6 +52,11 @@ const KampasRecommendations: React.FC<Props> = ({ myAdvertisement }) => {
       .then((response) => response.json())
       .then((data) => {
         setKampasAdvertisements(data);
+        setAddressesList(prevState => ([...prevState, ...data.map((ad: { location: any; price: any; url: any; }) => ({
+          location: ad.location,
+          price: ad.price,
+          url: ad.url,
+        }))]))
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -66,6 +79,7 @@ const KampasRecommendations: React.FC<Props> = ({ myAdvertisement }) => {
           </div>
         </a>
       ))}
+      {/* <Maps addresses={addressList} /> */}
     </div>
   );
 };

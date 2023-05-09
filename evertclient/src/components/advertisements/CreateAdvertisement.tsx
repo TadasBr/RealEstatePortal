@@ -177,7 +177,7 @@ export default function CreateAdvertisement() {
             />
             <Button variant="contained" component="label">
               Upload File
-              <input type="file" id="Photo" multiple hidden/>
+              <input type="file" id="Photo" name="Photo" multiple hidden/>
             </Button>
             <Button
               type="submit"

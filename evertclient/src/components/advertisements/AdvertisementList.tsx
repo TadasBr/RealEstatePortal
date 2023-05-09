@@ -26,7 +26,6 @@ interface Advertisement {
   builtYear: number;
 }
 
-
 interface BuyAdvertisement {
   id: number;
   title: string;
@@ -48,11 +47,13 @@ const AdvertisementList: React.FC = () => {
   const [buyItems, setBuyItems] = useState<BuyAdvertisement[]>([]);
   const [category, setCategory] = useState<number>(1);
   const [adType, setAdType] = useState<"sell" | "buy">("sell");
+  const [sortBy, setSortBy] = useState<"price" | "area" | "roomsCount">();
 
   useEffect(() => {
     const endpoint =
       adType === "sell" ? "sell-advertisements" : "buy-advertisements";
-    fetch(`${Api_Url}/${endpoint}/categories/${category}`)
+    const sortQueryParam = sortBy ? `&sortBy=${sortBy}` : "";
+    fetch(`${Api_Url}/${endpoint}/categories/${category}?${sortQueryParam}`)
       .then((response) => response.json())
       .then((data) => {
         if (adType === "sell") {
@@ -61,12 +62,16 @@ const AdvertisementList: React.FC = () => {
           setBuyItems(data);
         }
       });
-  }, [category, adType]);
+  }, [category, adType, sortBy]);
 
   const handleAdTypeChange = (newType: "sell" | "buy") => {
     setAdType(newType);
     setSellItems([]);
     setBuyItems([]);
+  };
+
+  const handleSortChange = (newSortBy: "price" | "area" | "roomsCount") => {
+    setSortBy(newSortBy);
   };
 
   return (
@@ -92,6 +97,32 @@ const AdvertisementList: React.FC = () => {
           <CategoryList
             setCategory={(category: number) => setCategory(category)}
           />
+          <div className="sortBox">
+            <div>Sort by:</div>
+            <button
+              onClick={() =>
+                setSellItems([...sellItems].sort((a, b) => a.price - b.price))
+              }
+            >
+              Price
+            </button>
+            <button
+              onClick={() =>
+                setSellItems([...sellItems].sort((a, b) => a.area - b.area))
+              }
+            >
+              Area
+            </button>
+            <button
+              onClick={() =>
+                setSellItems(
+                  [...sellItems].sort((a, b) => a.roomsCount - b.roomsCount)
+                )
+              }
+            >
+              Room Count
+            </button>
+          </div>
           {adType === "sell"
             ? sellItems.map((item) => (
                 <AdvertisementSellListItem

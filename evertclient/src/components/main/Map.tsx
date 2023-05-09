@@ -10,7 +10,6 @@ const Map: React.FC<MapProps> = ({ address }) => {
 
   useEffect(() => {
     const configValue = "AIzaSyB6iGoQrkXf1pI5xS6Hn3vxkra8UXjaqfI";
-    console.log("a" + configValue);
     const loader = new Loader({
       apiKey: configValue,
       version: "weekly",

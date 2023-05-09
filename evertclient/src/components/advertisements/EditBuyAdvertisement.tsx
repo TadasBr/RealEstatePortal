@@ -208,7 +208,7 @@ export default function EditSellAdvertisement() {
               label="Category Id"
               id="CategoryId"
               type="number"
-              defaultValue={advertisement.categoryId}
+              defaultValue="1"
             />
             <Button
               type="submit"
