@@ -41,7 +41,9 @@ const Map: React.FC<MapProps> = ({ address }) => {
     }
   }, [map, address]);
 
-  return <div id="map" style={{ height: "400px" }} />;
+  return (
+    <div id="map" className="h-[300px] w-full rounded-xl overflow-hidden" />
+  );
 };
 
 export default Map;

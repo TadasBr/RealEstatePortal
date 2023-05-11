@@ -1,6 +1,3 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./components/account/SignIn";
 import SignUp from "./components/account/SignUp";
@@ -20,20 +17,35 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        <Routes>  
-          <Route path="/" Component={AdvertisimentList}/>
-          <Route path="/register" Component={SignUp}/>
-          <Route path="/login" Component={SignIn}/>
-          <Route path="/recommendations" Component={Home}/>
-          <Route path="/sell-advertisements/create" Component={CreateAdvertisiment}/>
+        <Routes>
+          <Route path="/" Component={AdvertisimentList} />
+          <Route path="/register" Component={SignUp} />
+          <Route path="/login" Component={SignIn} />
+          <Route path="/recommendations" Component={Home} />
+          <Route
+            path="/sell-advertisements/create"
+            Component={CreateAdvertisiment}
+          />
           <Route path="/sell-advertisements/:id" element={<Advertisement />} />
-          <Route path="/buy-advertisements/:id" element={<BuyAdvertisement />} />
-          <Route path="/edit-sell-advertisements/:id" element={<EditSellAdvertisement />} />
-          <Route path="/edit-buy-advertisements/:id" element={<EditBuyAdvertisement />} />
-          <Route path="/buy-advertisements/create" Component={CreateBuyAdvertisement}/>
-          <Route path="/categories/create" Component={CreateCategory}/>
-          <Route path="/my-advertisements" Component={MyAdvertisements}/> 
-          <Route path="/profile" Component={Profile}/>
+          <Route
+            path="/buy-advertisements/:id"
+            element={<BuyAdvertisement />}
+          />
+          <Route
+            path="/edit-sell-advertisements/:id"
+            element={<EditSellAdvertisement />}
+          />
+          <Route
+            path="/edit-buy-advertisements/:id"
+            element={<EditBuyAdvertisement />}
+          />
+          <Route
+            path="/buy-advertisements/create"
+            Component={CreateBuyAdvertisement}
+          />
+          <Route path="/categories/create" Component={CreateCategory} />
+          <Route path="/my-advertisements" Component={MyAdvertisements} />
+          <Route path="/profile" Component={Profile} />
         </Routes>
       </BrowserRouter>
     </div>

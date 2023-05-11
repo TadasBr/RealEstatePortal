@@ -210,23 +210,25 @@ namespace eVert.Controllers
                 }
 
                 var links = doc.DocumentNode.SelectNodes("//a[contains(@class, 'card-link')]");
-                foreach (HtmlNode link in links)
+                if(links != null)
                 {
-                    try
+                    foreach (HtmlNode link in links)
                     {
-                        var address = link.FirstChild.InnerText.Trim();
-                        var price = ExtractNumber(link.SelectSingleNode(".//p[@class='third-line line-bold']").InnerText.Trim());
-                        var area = ExtractNumber(link.SelectSingleNode(".//div[@class='k-attribute-icon']//div[@class='label']").InnerText.Trim());
-                        var rooms = ExtractNumber(link.SelectSingleNode(".//div[@class='k-attribute-icon' and i[@class='icon i i-room']]//div[@class='label']").InnerText.Trim());
-                        var href = "https://www.kampas.lt" + link.Attributes["href"].Value;
-                        scrapedList.Add(new GetSimpleAdvertisementDto(price, area, address, rooms, href));
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error scraping link: {ex.Message}");
+                        try
+                        {
+                            var address = link.FirstChild.InnerText.Trim();
+                            var price = ExtractNumber(link.SelectSingleNode(".//p[@class='third-line line-bold']").InnerText.Trim());
+                            var area = ExtractNumber(link.SelectSingleNode(".//div[@class='k-attribute-icon']//div[@class='label']").InnerText.Trim());
+                            var rooms = ExtractNumber(link.SelectSingleNode(".//div[@class='k-attribute-icon' and i[@class='icon i i-room']]//div[@class='label']").InnerText.Trim());
+                            var href = "https://www.kampas.lt" + link.Attributes["href"].Value;
+                            scrapedList.Add(new GetSimpleAdvertisementDto(price, area, address, rooms, href));
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error scraping link: {ex.Message}");
+                        }
                     }
                 }
-
             }
 
             return scrapedList;

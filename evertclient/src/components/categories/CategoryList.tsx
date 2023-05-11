@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./categories.css";
 import { Api_Url } from "../Constants";
 
 interface CategoryListProps {
@@ -22,22 +21,25 @@ const CategoryList: React.FC<CategoryListProps> = ({ setCategory }) => {
   };
 
   return (
-    <div className="categoryBox">
-      {items.map((item) => (
-        <div
-          key={item.id}
-          className={`categoryListItem ${
-            activeCategory === item.id ? "active" : ""
-          }`}
-        >
+    <div className="my-8">
+      <h2 className="text-themeColor text-xl font-semibold">Categories</h2>
+      <div className="mt-2 flex gap-3 items-center">
+        {items.map((item) => (
           <div
-            className="category"
-            onClick={() => handleCategoryClick(item.id)}
+            key={item.id}
+            className={`flex flex-col gap-5 justify-start items-start mr-3`}
           >
-            {item.name}
+            <div
+              className={`text-base bg-white shadow-xl border border-themeColor px-2 py-[2px] rounded cursor-pointer text-center ${
+                activeCategory === item.id ? "bg-cyan-900 text-white" : ""
+              }`}
+              onClick={() => handleCategoryClick(item.id)}
+            >
+              {item.name}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

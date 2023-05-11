@@ -29,39 +29,46 @@ const BuyAdvertisement: React.FC = () => {
   }, [params.id]);
 
   if (!data) {
-    return <div>Loading data...</div>;
+    return (
+      <div className="text-3xl font-bold text-themeColor flex justify-center items-center h-screen w-full">
+        Loading data...
+      </div>
+    );
   }
 
   return (
-    <div className="main">
+    <div className="flex justify-center items-center min-h-screen my-0 mx-auto bg-[#f1f1f1]">
       <Header />
-      <div className="mainDiv">
-        <div className="listBox">
-          <div className="advertisement">
-            <div className="descriptionBox">
-              <div className="title">{data.title}</div>
-              <div className="address">
-                <i className="fas fa-map-marker-alt"></i>
-                {data.city}, {data.district}
-              </div>
-              <div className="price">
-                {data.minPrice}-{data.maxPrice}€
-              </div>
-              <div className="description">{data.description}</div>
-              <div className="details">
-                <div>
-                  <i className="fas fa-bed"></i>
-                  {data.minRoomsCount}-{data.maxRoomsCount} Rooms
-                </div>
-                <div>
-                  <i className="fas fa-car"></i>
-                  {data.hasParking ? "Parking spot is mandatory" : "Parking spot is not mandatory"}
-                </div>
-                <div>
-                  <i className="fas fa-expand"></i>
-                  {data.minArea}-{data.maxArea} m²
-                </div>
-              </div>
+      <div className="bg-white w-max p-10 pt-6 rounded-lg shadow-xl">
+        <div className="">
+          <h1 className="font-semibold text-themeColor my-2 text-2xl capitalize">
+            {data.title}
+          </h1>
+          <div className="text-gray-600 font-semibold mb-2">
+            <i className="fas fa-map-marker-alt"></i>
+            {data.city}, {data.district}
+          </div>
+          <h3 className="text-xl font-semibold text-themeColor mb-2">
+            <span className="text-gray-600 font-medium">Price (approx): </span>
+            {data.minPrice}-{data.maxPrice}€
+          </h3>
+          <div className="text-[17px] text-gray-600 leading-[1.5] mb-3">
+            {data.description}
+          </div>
+          <div className="flex gap-4 items-center mt-4">
+            <div className="text-themeColor font-semibold bg-[#f1f1f1] px-3 py-1 flex gap-1 items-center justify-center w-max shadow-lg rounded">
+              <i className="fas fa-bed"></i>
+              {data.minRoomsCount}-{data.maxRoomsCount} Rooms
+            </div>
+            <div className="text-themeColor font-semibold bg-[#f1f1f1] px-3 py-[2px] flex gap-1 items-center justify-center w-max shadow-lg rounded">
+              <i className="fas fa-car"></i>
+              {data.hasParking
+                ? "Parking spot is mandatory"
+                : "Parking spot is not mandatory"}
+            </div>
+            <div className="text-themeColor font-semibold bg-[#f1f1f1] px-3 py-[2px] flex gap-1 items-center justify-center w-max shadow-lg rounded">
+              <i className="fas fa-expand"></i>
+              {data.minArea}-{data.maxArea} m²
             </div>
           </div>
         </div>

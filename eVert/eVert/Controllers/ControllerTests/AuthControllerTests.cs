@@ -22,7 +22,7 @@ namespace eVert.Controllers.ControllerTests
             _mockUserManager = new Mock<UserManager<eVertUser>>(
                 Mock.Of<IUserStore<eVertUser>>(), null, null, null, null, null, null, null, null);
             _mockJwtTokenService = new Mock<IJwtTokenService>();
-            _controller = new AuthController(_mockUserManager.Object, _mockJwtTokenService.Object);
+            _controller = new AuthController(_mockUserManager.Object, _mockJwtTokenService.Object, null, null);
         }
 
         //[Test]

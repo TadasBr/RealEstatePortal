@@ -2,6 +2,8 @@
 using eVert.Auth.Model;
 using eVert.Auth.Model.Dtos;
 using eVert.Data.Dtos.Advertisements;
+using eVert.Data.Repositories.Advertisements;
+using eVert.Data.Repositories.BuyAdvertisiments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +18,16 @@ namespace eVert.Controllers
     {
         private readonly UserManager<eVertUser> _userManager;
         private readonly IJwtTokenService _jwtTokenService;
+        private IAdvertisementsRepository _advertisementsRepository;
+        private IBuyAdvertisementsRepository _buyAdvertisementsRepository;
 
-        public AuthController(UserManager<eVertUser> userManager, IJwtTokenService jwtTokenService)
+
+        public AuthController(UserManager<eVertUser> userManager, IJwtTokenService jwtTokenService, IAdvertisementsRepository advertisementsRepository, IBuyAdvertisementsRepository buyAdvertisementsRepository)
         {
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
+            _advertisementsRepository = advertisementsRepository;
+            _buyAdvertisementsRepository = buyAdvertisementsRepository;
         }
 
         [HttpPost]
@@ -79,13 +86,31 @@ namespace eVert.Controllers
 
                 if (user != null)
                 {
+                    if(user.IsSeller)
+                    {
+                        var advertisements = await _advertisementsRepository.GetManyAsync();
+                        var filteredAdvertisements = advertisements.Where(o => o.UserId == user.Id).ToList();
+                        if (filteredAdvertisements != null && filteredAdvertisements.Any())
+                        {
+                            return new BadRequestResult();
+                        }
+                    }
+                    else
+                    {
+                        var advertisements = await _buyAdvertisementsRepository.GetManyAsync();
+                        var filteredAdvertisements = advertisements.Where(o => o.UserId == user.Id).ToList();
+                        if (filteredAdvertisements != null && filteredAdvertisements.Any())
+                        {
+                            return new BadRequestResult();
+                        }
+                    }
                     user.IsSeller = !user.IsSeller;
                     await _userManager.UpdateAsync(user);
                     return new OkResult();
                 }
             }
 
-            return new NotFoundResult();
+            return new BadRequestResult();
         }
     }
 }

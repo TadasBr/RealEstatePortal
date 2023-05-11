@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Header from "../main/Header";
-import "./advertisiments.css";
 import { useNavigate } from "react-router-dom";
 import CategoryList from "../categories/CategoryList";
 import { Api_Url } from "../Constants";
@@ -75,20 +75,26 @@ const AdvertisementList: React.FC = () => {
   };
 
   return (
-    <div className="main">
+    <div className="flex justify-center items-center my-0 mx-auto min-h-screen h-full bg-[#f1f1f1]">
       <Header />
-      <div className="mainDiv">
-        <h1>Advertisements</h1>
-        <div className="listBox">
-          <div className="switchBox">
+      <div className="w-6/12 h-full flex flex-col mt-32 mb-16">
+        <h1 className="text-4xl font-bold text-themeColor relative text-center">
+          Advertisements
+        </h1>
+        <div className="mt-10 rounded-lg bg-white shadow-xl w-full h-full p-8 pb-0">
+          <div className="w-full flex justify-between items-center mb-6">
             <div
-              className={`switchButton ${adType === "sell" ? "active" : ""}`}
+              className={`${
+                adType === "sell" ? "bg-themeColor text-white" : ""
+              } border border-themeColor py-[6px] px-8 text-[17px] font-semibold rounded hover:text-white hover:bg-themeColor hover:translate-x-4 duration-300 cursor-pointer`}
               onClick={() => handleAdTypeChange("sell")}
             >
               Sell
             </div>
             <div
-              className={`switchButton ${adType === "buy" ? "active" : ""}`}
+              className={`${
+                adType === "buy" ? "bg-themeColor text-white" : ""
+              } border border-themeColor py-[6px] px-8 text-[17px] font-semibold rounded hover:text-white hover:bg-themeColor hover:-translate-x-4 duration-300 cursor-pointer`}
               onClick={() => handleAdTypeChange("buy")}
             >
               Buy
@@ -97,31 +103,36 @@ const AdvertisementList: React.FC = () => {
           <CategoryList
             setCategory={(category: number) => setCategory(category)}
           />
-          <div className="sortBox">
-            <div>Sort by:</div>
-            <button
-              onClick={() =>
-                setSellItems([...sellItems].sort((a, b) => a.price - b.price))
-              }
-            >
-              Price
-            </button>
-            <button
-              onClick={() =>
-                setSellItems([...sellItems].sort((a, b) => a.area - b.area))
-              }
-            >
-              Area
-            </button>
-            <button
-              onClick={() =>
-                setSellItems(
-                  [...sellItems].sort((a, b) => a.roomsCount - b.roomsCount)
-                )
-              }
-            >
-              Room Count
-            </button>
+          <div className="mb-8">
+            <h1 className="text-themeColor text-xl font-semibold">Sort by:</h1>
+            <div className="mt-2 flex items-center gap-4">
+              <button
+                onClick={() =>
+                  setSellItems([...sellItems].sort((a, b) => a.price - b.price))
+                }
+                className="bg-[#f1f1f1] text-themeColor px-4 text-sm py-1 shadow-xl rounded-sm hover:scale-110 overflow-hidden duration-300"
+              >
+                Price
+              </button>
+              <button
+                onClick={() =>
+                  setSellItems([...sellItems].sort((a, b) => a.area - b.area))
+                }
+                className="bg-[#f1f1f1] text-themeColor px-4 text-sm py-1 shadow-xl rounded-sm hover:scale-110 overflow-hidden duration-300"
+              >
+                Area
+              </button>
+              <button
+                onClick={() =>
+                  setSellItems(
+                    [...sellItems].sort((a, b) => a.roomsCount - b.roomsCount)
+                  )
+                }
+                className="bg-[#f1f1f1] text-themeColor px-4 text-sm py-1 shadow-xl rounded-sm hover:scale-110 overflow-hidden duration-300"
+              >
+                Room Count
+              </button>
+            </div>
           </div>
           {adType === "sell"
             ? sellItems.map((item) => (

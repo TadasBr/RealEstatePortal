@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import "./advertisiments.css";
-import Image from "./Image"
+import Image from "./Image";
 
 interface Advertisement {
   id: number;
@@ -34,18 +32,20 @@ const AdvertisementSellListItem: React.FC<AdvertisementListItemProps> = ({
 }) => {
   return (
     <div
-      className="listItem"
+      className="rounded-lg bg-white shadow-2xl w-full h-full flex gap-5 hover:scale-[102%] duration-300 overflow-hidden mb-12 cursor-pointer"
       onClick={() => navigate(`/${adType}-advertisements/${item.id}`)}
     >
-      <div className="photo">
-        <Image base64String={item.photos[0]}/>
+      <div className="h-[130px] max-w-[20%]">
+        <Image base64String={item.photos[0]} />
       </div>
-      <div className="descriptionBox">
-        <div className="title">{item.title}</div> 
-        <div>
+      <div className="flex flex-col gap-2 py-2">
+        <h2 className="text-xl font-semibold text-themeColor">{item.title}</h2>
+        <div className="text-sm font-semibold">
           {item.city}, {item.district}, {item.address}
         </div>
-        <div>{item.price}€</div>
+        <h6 className="text-lg font-semibold text-themeColor font-sans">
+          {item.price}€
+        </h6>
       </div>
     </div>
   );

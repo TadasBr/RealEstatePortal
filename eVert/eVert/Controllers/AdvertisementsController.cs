@@ -372,5 +372,17 @@ namespace eVert.Controllers
 
             return new NoContentResult();
         }
+
+        [HttpPost]
+        [Route("get-evert-recommendations")]
+        public async Task<List<GetSimpleAdvertisementDto>> GetRecommendationsAsync(BuyAdvertisementForKampasScrapeDto buyAdvertisement)
+        {
+            var advertisements = await _advertisementsRepository.GetManyAsync();
+            var filteredAdvertisements = advertisements.Where(ad => ad.City == buyAdvertisement.City && ad.Price >= buyAdvertisement.MinPrice && ad.Price <= buyAdvertisement.MaxPrice
+                && ad.Area >= buyAdvertisement.MinArea && ad.Area <= buyAdvertisement.MaxArea && ad.RoomsCount >= buyAdvertisement.MinRoomsCount && ad.RoomsCount <= buyAdvertisement.MaxRoomsCount)
+                .Select(ad => new GetSimpleAdvertisementDto(ad.Price, (double)ad.Area, ad.City + ", " + ad.District + ", " + ad.Address, ad.RoomsCount, ad.Id.ToString())).ToList();
+
+            return filteredAdvertisements;
+        }
     }
 }

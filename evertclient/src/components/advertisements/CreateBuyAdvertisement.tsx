@@ -58,144 +58,154 @@ export default function CreateBuyAdvertisement() {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <Container component="main" maxWidth="xs" style={{ marginTop: "100px" }}>
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Create advertisement
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="Title"
-              label="Title"
-              name="Title"
-              defaultValue="Modern apartament"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="Description"
-              label="Description"
-              id="Description"
-              defaultValue="Modern apartament"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="City"
-              label="City"
-              id="City"
-              defaultValue="Vilnius"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="District"
-              label="District"
-              id="District"
-              defaultValue="antakalnis"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="MinPrice"
-              label="Min Price"
-              id="MinPrice"
-              defaultValue="130000"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="MaxPrice"
-              label="Max price"
-              id="MaxPrice"
-              defaultValue="150000"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="MinArea"
-              label="Min Area"
-              type="number"
-              id="MinArea"
-              defaultValue="40"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="MaxArea"
-              label="Max Area"
-              type="number"
-              id="MaxArea"
-              defaultValue="50"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="MinRoomsCount"
-              label="Min Rooms Count"
-              type="number"
-              id="MinRoomsCount"
-              defaultValue="3"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="MaxRoomsCount"
-              label="Max Rooms Count"
-              type="number"
-              id="MaxRoomsCount"
-              defaultValue="3"
-            />
-            <FormControlLabel
-              control={<Checkbox id="HasParking" />}
-              label="Has Parking"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="CategoryId"
-              label="Category Id"
-              type="number"
-              id="CategoryId"
-              defaultValue="1"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+      <div className="w-full min-h-screen flex justify-center items-center mt-[13vh] mb-20">
+        <div className="bg-white w-max p-6 pt-0 rounded-lg shadow-2xl border-2 border-themeColor">
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
             >
-              Create
-            </Button>
-          </Box>
-        </Box>
-      </Container>
+              <Typography component="h1" variant="h5">
+                Create Advertisement
+              </Typography>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{ mt: 1 }}
+              >
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="Title"
+                  label="Title"
+                  name="Title"
+                  defaultValue="Modern apartament"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="Description"
+                  label="Description"
+                  id="Description"
+                  defaultValue="Modern apartament"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="City"
+                  label="City"
+                  id="City"
+                  defaultValue="Vilnius"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="District"
+                  label="District"
+                  id="District"
+                  defaultValue="antakalnis"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="MinPrice"
+                  label="Min Price"
+                  id="MinPrice"
+                  defaultValue="130000"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="MaxPrice"
+                  label="Max price"
+                  id="MaxPrice"
+                  defaultValue="150000"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="MinArea"
+                  label="Min Area"
+                  type="number"
+                  id="MinArea"
+                  defaultValue="40"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="MaxArea"
+                  label="Max Area"
+                  type="number"
+                  id="MaxArea"
+                  defaultValue="50"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="MinRoomsCount"
+                  label="Min Rooms Count"
+                  type="number"
+                  id="MinRoomsCount"
+                  defaultValue="3"
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="MaxRoomsCount"
+                  label="Max Rooms Count"
+                  type="number"
+                  id="MaxRoomsCount"
+                  defaultValue="3"
+                />
+                <FormControlLabel
+                  control={<Checkbox id="HasParking" />}
+                  label="Has Parking"
+                  style={{ color: "#022d3d" }}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="CategoryId"
+                  label="Category Id"
+                  type="number"
+                  id="CategoryId"
+                  defaultValue="1"
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  style={{
+                    background: "#022d3d",
+                    padding: "10px 0",
+                    fontWeight: "semibold",
+                  }}
+                >
+                  Create
+                </Button>
+              </Box>
+            </Box>
+          </Container>
+        </div>
+      </div>
     </ThemeProvider>
   );
 }

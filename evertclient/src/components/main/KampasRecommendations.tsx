@@ -31,13 +31,13 @@ interface Props {
 
 const KampasRecommendations: React.FC<Props> = ({ myAdvertisement }) => {
   const [kampasAdvertisements, setKampasAdvertisements] = useState<KampasAdvertisement[]>([]);
-  const [addressList, setAddressesList] = useState<Address[]>([]);
+  const [addressesList, setAddressesList] = useState<Address[]>([]);
 
   useEffect(() => {
     fetch(`http://localhost:5064/api/buy-advertisements/scrape-kampas`, {
       method: "POST",
       body: JSON.stringify({
-        City: "Vilnius",
+        City: myAdvertisement.city,
         MinPrice: myAdvertisement.minPrice,
         MaxPrice: myAdvertisement.maxPrice,
         MinArea: myAdvertisement.minArea,
@@ -65,21 +65,25 @@ const KampasRecommendations: React.FC<Props> = ({ myAdvertisement }) => {
 
   return (
     <div>
-      {kampasAdvertisements?.map((ad) => (
-        <a
-          href={ad.url}
-          rel="noreferrer"
-          target="_blank"
-          className="recommendationListItem"
-        >
-          <div>Location: {ad.location}</div>
-          <div>
-            Price: {ad.price}€, Area: {ad.area}m<sup>2</sup>, Rooms:{" "}
-            {ad.roomsCount}
-          </div>
-        </a>
-      ))}
-      {/* <Maps addresses={addressList} /> */}
+      {kampasAdvertisements && kampasAdvertisements.length > 0 ? (
+        kampasAdvertisements.map((ad) => (
+          <a
+            href={ad.url}
+            rel="noreferrer"
+            target="_blank"
+            className="rounded-lg bg-white shadow-md w-full h-full flex gap-3 hover:scale-[102%] duration-300 overflow-hidden mb-2 p-4 cursor-pointer flex flex-col"
+          >
+            <div className="text-sm font-semibold">Location: {ad.location}</div>
+            <div className="text-[17px] font-semibold">
+              Price: {ad.price}€, Area: {ad.area}m<sup>2</sup>, Rooms:{" "}
+              {ad.roomsCount}
+            </div>
+          </a>
+        ))
+      ) : (
+        <p className="text-[22px] font-semibold">No advertisements from kampas.lt</p>
+      )}
+      {/* <Maps addressList={addressesList} /> */}
     </div>
   );
 };
