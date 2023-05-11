@@ -363,7 +363,8 @@ namespace eVert.Controllers
                 SellTime = DateTime.Now.Subtract(advertisement.UpdatedDate).Days,
                 CategoryId = advertisement.CategoryId,
                 RoomsCount = advertisement.RoomsCount,
-                Area = advertisement.Area
+                Area = advertisement.Area,
+                BuiltYear = advertisement.BuiltYear
             };
 
             await _soldAdvertisementsRepository.CreateAsync(soldAdvertisement);

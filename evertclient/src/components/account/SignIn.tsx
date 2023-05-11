@@ -138,33 +138,6 @@ export default function SignIn() {
                     Don't have an account? Sign Up
                   </NavLink>
                 </div>
-                {/* 
-                <Grid container>
-                  <Grid item xs>
-                    <Link
-                      href="#"
-                      variant="body2"
-                      style={{
-                        color: "#022d3d",
-                        textDecoration: "none",
-                      }}
-                    >
-                     
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link
-                      href="/register"
-                      variant="body2"
-                      style={{
-                        color: "#022d3d",
-                        textDecoration: "none",
-                      }}
-                    >
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </Grid>
-                </Grid> */}
               </Box>
             </Box>
           </Container>

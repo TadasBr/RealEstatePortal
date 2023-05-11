@@ -14,5 +14,6 @@ namespace eVert.Data.Entities
         public int CategoryId { get; set; }
         public int RoomsCount { get; set; }
         public int Area { get; set; }
+        public int BuiltYear { get; set; }
     }
 }

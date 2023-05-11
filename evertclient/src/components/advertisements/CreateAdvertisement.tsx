@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Toast } from "react-toastify/dist/components";
 
 const theme = createTheme();
 

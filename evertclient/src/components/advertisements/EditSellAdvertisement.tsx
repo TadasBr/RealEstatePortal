@@ -10,6 +10,8 @@ import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const theme = createTheme();
 
@@ -34,6 +36,24 @@ export default function EditSellAdvertisement() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
+
+    if (
+      !getData.get("Title") ||
+      !getData.get("Description") ||
+      !getData.get("City") ||
+      !getData.get("Address") ||
+      !getData.get("District") ||
+      !getData.get("Price")
+      // !getData.get("RoomsCount") ||
+      // !getData.get("Area") ||
+      // !getData.get("CategoryId") ||
+      // !getData.get("phoneNumber") ||
+      // !getData.get("YearBuilt")
+    ) {
+      toast.error("Plase fill in all required fields.")
+      return;
+    }
+
     const data = {
       Title: getData.get("Title"),
       Description: getData.get("Description"),
@@ -55,12 +75,6 @@ export default function EditSellAdvertisement() {
         navigate("/");
         console.log(response.json());
       })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   };
 
   if (!advertisement) {
@@ -73,6 +87,7 @@ export default function EditSellAdvertisement() {
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer/>
       <Header />
       <div className="w-full min-h-screen flex justify-center items-center my-14">
         <div className="bg-white w-max p-6 pt-0 rounded-lg shadow-2xl border-2 border-themeColor">

@@ -28,7 +28,7 @@ namespace eVert.Controllers
         {
             var advertisements = await _soldAdvertisementsRepository.GetManyAsync();
 
-            return advertisements.Select(o => new GetSoldAdvertisementStatisticsDto(o.City, o.District, o.Price, o.HasParking, o.SellTime, o.CategoryId, o.RoomsCount, o.Area)).ToList();
+            return advertisements.Select(o => new GetSoldAdvertisementStatisticsDto(o.City, o.District, o.Price, o.HasParking, o.SellTime, o.CategoryId, o.RoomsCount, o.Area, o.BuiltYear)).ToList();
         }
 
         [HttpPost]
@@ -51,7 +51,7 @@ namespace eVert.Controllers
             await _soldAdvertisementsRepository.CreateAsync(soldAdvertisement);
 
             return new CreatedResult("", new CreateSoldAdvertisementDto(soldAdvertisement.City, soldAdvertisement.District, soldAdvertisement.Price, soldAdvertisement.HasParking, 
-                soldAdvertisement.SellTime, soldAdvertisement.CategoryId, advertisement.RoomsCount, advertisement.Area));
+                soldAdvertisement.SellTime, soldAdvertisement.CategoryId, advertisement.RoomsCount, advertisement.Area, advertisement.BuiltYear));
         }
     }
 }

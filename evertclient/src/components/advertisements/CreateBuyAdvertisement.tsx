@@ -10,15 +10,35 @@ import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
 import { Checkbox, FormControlLabel, Slider } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const theme = createTheme();
 
 export default function CreateBuyAdvertisement() {
   const navigate = useNavigate();
-  const [priceRange, setPriceRange] = React.useState<Number[]>([20000, 500000]);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
+
+    if (
+      !getData.get("Title") ||
+      !getData.get("Description") ||
+      !getData.get("City") ||
+      !getData.get("District") ||
+      !getData.get("MinPrice") ||
+      !getData.get("MaxPrice") ||
+      !getData.get("MinRoomsCount") ||
+      !getData.get("MaxRoomsCount") ||
+      !getData.get("MinArea") ||
+      !getData.get("MaxArea") ||
+      !getData.get("phoneNumber") ||
+      !getData.get("CategoryId")
+    ) {
+      toast.error("Plase fill in all required fields.")
+      return;
+    }
+
     const data = {
       Title: getData.get("Title"),
       Description: getData.get("Description"),
@@ -47,16 +67,11 @@ export default function CreateBuyAdvertisement() {
         navigate("/");
         console.log(response.json());
       })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer/>
       <Header />
       <div className="w-full min-h-screen flex justify-center items-center mt-[13vh] mb-20">
         <div className="bg-white w-max p-6 pt-0 rounded-lg shadow-2xl border-2 border-themeColor">

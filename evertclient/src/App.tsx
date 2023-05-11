@@ -12,6 +12,7 @@ import BuyAdvertisement from "./components/advertisements/BuyAdvertisement";
 import MyAdvertisements from "./components/advertisements/MyAdvertisiments";
 import EditSellAdvertisement from "./components/advertisements/EditSellAdvertisement";
 import EditBuyAdvertisement from "./components/advertisements/EditBuyAdvertisement";
+import Statistics from "./components/main/Statistics";
 
 function App() {
   return (
@@ -42,6 +43,10 @@ function App() {
           <Route
             path="/buy-advertisements/create"
             Component={CreateBuyAdvertisement}
+          />
+          <Route
+            path="/statistics"
+            Component={Statistics}
           />
           <Route path="/categories/create" Component={CreateCategory} />
           <Route path="/my-advertisements" Component={MyAdvertisements} />

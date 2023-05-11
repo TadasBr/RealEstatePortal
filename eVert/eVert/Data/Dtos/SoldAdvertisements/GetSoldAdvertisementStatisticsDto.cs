@@ -10,8 +10,9 @@
         public int CategoryId { get; set; }
         public int RoomsCount { get; set; }
         public int Area { get; set; }
+        public int BuiltYear { get; set; }
 
-        public GetSoldAdvertisementStatisticsDto(string city, string district, int price, bool hasParking, int sellTime, int categoryId, int roomsCount, int area)
+        public GetSoldAdvertisementStatisticsDto(string city, string district, int price, bool hasParking, int sellTime, int categoryId, int roomsCount, int area, int builtYear)
         {
             City = city;
             District = district;
@@ -21,6 +22,7 @@
             CategoryId = categoryId;
             RoomsCount = roomsCount;
             Area = area;
+            BuiltYear = builtYear;
         }
     }
 }

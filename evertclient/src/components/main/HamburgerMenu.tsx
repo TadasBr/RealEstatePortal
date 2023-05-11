@@ -60,6 +60,11 @@ const HamburgerMenu: React.FC = () => {
           <ListItemText primary="Create category" />
         </ListItem>
       )}
+      {sessionStorage.getItem("userName") && (
+        <ListItem button onClick={() => navigate("/statistics")}>
+          <ListItemText primary="Statistics" />
+        </ListItem>
+      )}
     </List>
   );
 
