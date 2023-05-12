@@ -3,6 +3,7 @@ import { Api_Url } from "../Constants";
 import Header from "./Header";
 import BarchartGraph from "./Charts/BarchartGraph";
 import ScatterPlotGraph from "./Charts/ScatterPlotGraph";
+import ScatterPlotGraphRoomsPrice from "./Charts/ScatterPlotGraphRoomsPrice";
 
 type Advertisement = {
   city: string;
@@ -31,7 +32,11 @@ const Statistics = () => {
   const [districtsData, setDistrictsData] = useState<BarChartData[]>([]);
   const [citiesData, setCitiesData] = useState<BarChartData[]>([]);
   const [showCitiesData, setShowCitiesData] = useState<boolean>(false);
-  const [priceSellTimeData, setPriceSellTimeData] = useState<ScatterPlotData[]>([]);
+  const [scatterPlotData, setScatterPlotData] =
+    useState<string>("priceAndTime");
+  const [priceSellTimeData, setPriceSellTimeData] = useState<ScatterPlotData[]>(
+    []
+  );
   const [priceRoomsData, setPriceRoomsData] = useState<ScatterPlotData[]>([]);
 
   useEffect(() => {
@@ -60,16 +65,20 @@ const Statistics = () => {
       }));
       setCitiesData(citiesData);
 
-      const scatterPlotDataPriceTime: ScatterPlotData[] = advertisements.map((ad) => ({
-        firstNumber: ad.price as number,
-        secondNumber: ad.sellTime as number,
-      }));
+      const scatterPlotDataPriceTime: ScatterPlotData[] = advertisements.map(
+        (ad) => ({
+          firstNumber: ad.price as number,
+          secondNumber: ad.sellTime as number,
+        })
+      );
       setPriceSellTimeData(scatterPlotDataPriceTime);
-      
-      const scatterPlotDataPriceRooms: ScatterPlotData[] = advertisements.map((ad) => ({
-        firstNumber: ad.price as number,
-        secondNumber: ad.roomsCount as number,
-      }));
+
+      const scatterPlotDataPriceRooms: ScatterPlotData[] = advertisements.map(
+        (ad) => ({
+          firstNumber: ad.price as number,
+          secondNumber: ad.roomsCount as number,
+        }) 
+      );
       setPriceRoomsData(scatterPlotDataPriceRooms);
     };
 
@@ -110,20 +119,34 @@ const Statistics = () => {
               barChartData={showCitiesData ? citiesData : districtsData}
             />
           </div>
-          <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
-            {/* <button
-              className="outline-none border-none w-4/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
-              onClick={handleToggleData}
+          <div className="flex-1"/>
+          {scatterPlotData === "priceAndTime" ? (
+            <div className="flex justify-center mt-8 mb-4 flex-col place-items-center float-left">
+              <button
+              className="outline-none border-none bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
+              onClick={() => setScatterPlotData("priceAndRoomsCount")}
             >
-              {showCitiesData ? "Show Districts Data" : "Show Cities Data"}
-            </button> */}
-            <h1 className="text-themeColor font-semibold text-center text-[22px]">
+              Price and rooms count
+            </button>
+              <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                Price and sell time
+              </h1>
+              <ScatterPlotGraph scatterPlotData={priceSellTimeData} />
+            </div>
+          ) : (
+            <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
+              <button
+              className="outline-none border-none bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
+              onClick={() => setScatterPlotData("priceAndTime")}
+            >
               Price and sell time
-            </h1>
-            <ScatterPlotGraph
-              scatterPlotData={priceSellTimeData}
-            />
-          </div>
+            </button>
+              <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                Price and rooms count
+              </h1>
+              <ScatterPlotGraphRoomsPrice scatterPlotData={priceRoomsData} />
+            </div>
+          )}
         </div>
         <div className="flex flex-row mx-5">
           <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
@@ -150,9 +173,7 @@ const Statistics = () => {
             <h1 className="text-themeColor font-semibold text-center text-[22px]">
               Price and sell time
             </h1>
-            <ScatterPlotGraph
-              scatterPlotData={priceSellTimeData}
-            />
+            <ScatterPlotGraph scatterPlotData={priceRoomsData} />
           </div>
         </div>
       </div>

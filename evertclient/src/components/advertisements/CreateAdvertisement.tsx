@@ -21,22 +21,22 @@ export default function CreateAdvertisement() {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
 
-    if (
-      !getData.get("Title") ||
-      !getData.get("Description") ||
-      !getData.get("City") ||
-      !getData.get("Address") ||
-      !getData.get("District") ||
-      !getData.get("Price") ||
-      !getData.get("RoomsCount") ||
-      !getData.get("Area") ||
-      !getData.get("CategoryId") ||
-      !getData.get("phoneNumber") ||
-      !getData.get("YearBuilt")
-    ) {
-      toast.error("Plase fill in all required fields.")
-      return;
-    }
+    // if (
+    //   !getData.get("Title") ||
+    //   !getData.get("Description") ||
+    //   !getData.get("City") ||
+    //   !getData.get("Address") ||
+    //   !getData.get("District") ||
+    //   !getData.get("Price") ||
+    //   !getData.get("RoomsCount") ||
+    //   !getData.get("Area") ||
+    //   !getData.get("CategoryId") ||
+    //   !getData.get("phoneNumber") ||
+    //   !getData.get("YearBuilt")
+    // ) {
+    //   toast.error("Plase fill in all required fields.")
+    //   return;
+    // }
 
     const photos = Array.from(getData.getAll("Photo"));
     Promise.all(

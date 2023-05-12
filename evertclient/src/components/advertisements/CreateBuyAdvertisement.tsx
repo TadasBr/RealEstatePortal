@@ -21,23 +21,23 @@ export default function CreateBuyAdvertisement() {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
 
-    if (
-      !getData.get("Title") ||
-      !getData.get("Description") ||
-      !getData.get("City") ||
-      !getData.get("District") ||
-      !getData.get("MinPrice") ||
-      !getData.get("MaxPrice") ||
-      !getData.get("MinRoomsCount") ||
-      !getData.get("MaxRoomsCount") ||
-      !getData.get("MinArea") ||
-      !getData.get("MaxArea") ||
-      !getData.get("phoneNumber") ||
-      !getData.get("CategoryId")
-    ) {
-      toast.error("Plase fill in all required fields.")
-      return;
-    }
+    // if (
+    //   !getData.get("Title") ||
+    //   !getData.get("Description") ||
+    //   !getData.get("City") ||
+    //   !getData.get("District") ||
+    //   !getData.get("MinPrice") ||
+    //   !getData.get("MaxPrice") ||
+    //   !getData.get("MinRoomsCount") ||
+    //   !getData.get("MaxRoomsCount") ||
+    //   !getData.get("MinArea") ||
+    //   !getData.get("MaxArea") ||
+    //   !getData.get("phoneNumber") ||
+    //   !getData.get("CategoryId")
+    // ) {
+    //   toast.error("Plase fill in all required fields.")
+    //   return;
+    // }
 
     const data = {
       Title: getData.get("Title"),

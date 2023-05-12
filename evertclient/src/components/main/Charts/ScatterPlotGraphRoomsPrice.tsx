@@ -33,7 +33,7 @@ const ScatterPlotGraphRoomsPrice: React.FC<Props> = ({ scatterPlotData }) => {
       >
         <CartesianGrid/>
         <XAxis type="number" dataKey="firstNumber" name="firstNumber" unit="price" />
-        <YAxis type="number" dataKey="secondNumber" name="secondNumber" unit="rooms" />
+        <YAxis type="number" dataKey="secondNumber" name="secondNumber" unit="rooms" ticks={[1, 2, 3, 4]}/>
         <Tooltip cursor={{ strokeDasharray: "3 3" }} />
         <Scatter data={scatterPlotData} fill="#8884d8" />
       </ScatterChart>

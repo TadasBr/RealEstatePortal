@@ -31,7 +31,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ setCategory }) => {
           >
             <div
               className={`text-base bg-white shadow-xl border border-themeColor px-2 py-[2px] rounded cursor-pointer text-center ${
-                activeCategory === item.id ? "bg-cyan-950 text-white" : ""
+                activeCategory === item.id ? "bg-cyan-900 text-white" : ""
               }`}
               onClick={() => handleCategoryClick(item.id)}
             >
