@@ -32,20 +32,19 @@ namespace eVert.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = eVertRoles.eVertUser)]
-        public async Task<ActionResult<CreateAdvertisementDto>> Create(Advertisement advertisement)
+        public async Task<ActionResult<CreateAdvertisementDto>> Create(CreateSoldAdvertisementDto advertisement)
         {
-            var sellTime = 60;
             var soldAdvertisement = new SoldAdvertisement
             {
                 City = advertisement.City,
                 District = advertisement.District,
                 Price = advertisement.Price,
                 HasParking = true,
-                SellTime = sellTime,
+                SellTime = advertisement.SellTime,
                 CategoryId = advertisement.CategoryId,
                 RoomsCount = advertisement.RoomsCount,
-                Area = advertisement.Area
+                Area = advertisement.Area,
+                BuiltYear = advertisement.BuiltYear
             };
 
             await _soldAdvertisementsRepository.CreateAsync(soldAdvertisement);
