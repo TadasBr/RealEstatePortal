@@ -74,7 +74,7 @@ const Home: React.FC = () => {
               )}
               {!isSeller() && (
                 <>
-                  <div className="text-4xl font-bold text-themeColor relative text-center">
+                  <div className="text-4xl font-bold text-themeColor relative text-center mt-[5vh]">
                     Kampas.lt advertisements{" "}
                   </div>
                   <div className="mt-8 text-center">

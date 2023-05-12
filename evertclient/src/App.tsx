@@ -13,6 +13,8 @@ import MyAdvertisements from "./components/advertisements/MyAdvertisiments";
 import EditSellAdvertisement from "./components/advertisements/EditSellAdvertisement";
 import EditBuyAdvertisement from "./components/advertisements/EditBuyAdvertisement";
 import Statistics from "./components/main/Statistics";
+import CatList from "./components/categories/CatList";
+import EditCategory from "./components/categories/EditCategory";
 
 function App() {
   return (
@@ -44,10 +46,9 @@ function App() {
             path="/buy-advertisements/create"
             Component={CreateBuyAdvertisement}
           />
-          <Route
-            path="/statistics"
-            Component={Statistics}
-          />
+          <Route path="/statistics" Component={Statistics} />
+          <Route path="/allcategories" element={<CatList />} />
+          <Route path="/edit-categories/:id" element={<EditCategory />} />
           <Route path="/categories/create" Component={CreateCategory} />
           <Route path="/my-advertisements" Component={MyAdvertisements} />
           <Route path="/profile" Component={Profile} />

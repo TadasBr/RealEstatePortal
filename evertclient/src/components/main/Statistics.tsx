@@ -77,7 +77,7 @@ const Statistics = () => {
         (ad) => ({
           firstNumber: ad.price as number,
           secondNumber: ad.roomsCount as number,
-        }) 
+        })
       );
       setPriceRoomsData(scatterPlotDataPriceRooms);
     };
@@ -96,6 +96,8 @@ const Statistics = () => {
       </div>
     );
   }
+
+  console.log(advertisements);
 
   return (
     <div className="flex justify-center bg-[#f1f1f1] min-h-screen py-10">
@@ -119,15 +121,15 @@ const Statistics = () => {
               barChartData={showCitiesData ? citiesData : districtsData}
             />
           </div>
-          <div className="flex-1"/>
+          <div className="flex-1" />
           {scatterPlotData === "priceAndTime" ? (
             <div className="flex justify-center mt-8 mb-4 flex-col place-items-center float-left">
               <button
-              className="outline-none border-none bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
-              onClick={() => setScatterPlotData("priceAndRoomsCount")}
-            >
-              Price and rooms count
-            </button>
+                className="outline-none border-none bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
+                onClick={() => setScatterPlotData("priceAndRoomsCount")}
+              >
+                Price and rooms count
+              </button>
               <h1 className="text-themeColor font-semibold text-center text-[22px]">
                 Price and sell time
               </h1>
@@ -136,11 +138,11 @@ const Statistics = () => {
           ) : (
             <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
               <button
-              className="outline-none border-none bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
-              onClick={() => setScatterPlotData("priceAndTime")}
-            >
-              Price and sell time
-            </button>
+                className="outline-none border-none bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
+                onClick={() => setScatterPlotData("priceAndTime")}
+              >
+                Price and sell time
+              </button>
               <h1 className="text-themeColor font-semibold text-center text-[22px]">
                 Price and rooms count
               </h1>

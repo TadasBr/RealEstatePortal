@@ -55,9 +55,14 @@ const HamburgerMenu: React.FC = () => {
           <ListItemText primary="Create advertisement" />
         </ListItem>
       )}
-      {sessionStorage.getItem("username") === "admin" && (
+      {sessionStorage.getItem("userName") === "admin" && (
         <ListItem button onClick={() => navigate("/categories/create")}>
           <ListItemText primary="Create category" />
+        </ListItem>
+      )}
+      {sessionStorage.getItem("userName") === "admin" && (
+        <ListItem button onClick={() => navigate("/allcategories")}>
+          <ListItemText primary="All Categories" />
         </ListItem>
       )}
       {sessionStorage.getItem("userName") && (
