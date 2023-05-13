@@ -40,8 +40,6 @@ interface Category {
 
 const Statistics = () => {
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
-  const [scatterPlotData, setScatterPlotData] =
-    useState<string>("priceAndTime");
   const [barChartData, setBarChartData] = useState<string>("cities");
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
 
@@ -51,6 +49,8 @@ const Statistics = () => {
 
   const [cityBarChart, setCityBarChart] = useState<string>(uniqueCities[0]);
   const [cityBarChartNull, setcityBarChartNull] = useState<string>("");
+  const [cityScatterPlotNull, setcityScatterPlotNull] = useState<string>("");
+
 
   const getUniqueDistricts = (city?: string): string[] => {
     const dataToFilter = city
@@ -72,10 +72,20 @@ const Statistics = () => {
     })
   );
 
-  const [districtBarChart, setDistrictBarChart] = useState<string>(
-    uniqueCities[0]
-  );
+  const getUniqueRoomCounts = () => {
+    const roomCounts = new Set<number>();
+  
+    advertisements.forEach((ad) => {
+      roomCounts.add(ad.roomsCount);
+    });
+  
+    return Array.from(roomCounts);
+  };
+
   const [districtBarChartNull, setDistrictBarChartNull] = useState<string>("");
+  const [districtScatterPlotNull, setDistrictScatterPlotChartNull] = useState<string>("");
+  const [roomsScatterPlotNull, setRoomsScatterPlotNull] = useState<number>();
+  const [categoryScatterPlotNull, setCategoryScatterPlotNull] = useState<number>();
 
   const averagePriceByCity: BarChartDataPrice[] = uniqueCities.map((city) => {
     const filteredAds: Advertisement[] = advertisements.filter(
@@ -95,19 +105,19 @@ const Statistics = () => {
       .length as number,
   }));
 
-  const scatterPlotDataPriceTime: ScatterPlotData[] = advertisements.map(
-    (ad: Advertisement) => ({
-      firstNumber: ad.price as number,
-      secondNumber: ad.sellTime as number,
-    })
-  );
-
-  const scatterPlotDataPriceRooms: ScatterPlotData[] = advertisements.map(
-    (ad: Advertisement) => ({
-      firstNumber: ad.price as number,
-      secondNumber: ad.roomsCount as number,
-    })
-  );
+  const scatterPlotDataPriceTime = () => {
+    return advertisements
+      .filter((ad: Advertisement) =>
+        (!cityScatterPlotNull || ad.city === cityScatterPlotNull) &&
+        (!districtScatterPlotNull || ad.district === districtScatterPlotNull) &&
+        (!roomsScatterPlotNull || ad.roomsCount === roomsScatterPlotNull) &&
+        (!categoryScatterPlotNull || ad.categoryId === categoryScatterPlotNull)
+      )
+      .map((ad: Advertisement) => ({
+        firstNumber: ad.price as number,
+        secondNumber: ad.sellTime as number,
+      }));
+  };
 
   const categories: number[] = Array.from(
     new Set(advertisements.map((ad: Advertisement) => ad.categoryId))
@@ -198,7 +208,7 @@ const Statistics = () => {
         <div className="flex flex-col">
           <div className="flex justify-center mt-4 mb-4 flex-col place-items-center">
             <select
-              className="outline-none border-none w-3/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
+              className="outline-none border-none w-4/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
               onChange={(event) => {
                 const selectedOption = event.target.value;
                 setBarChartData(selectedOption);
@@ -207,9 +217,9 @@ const Statistics = () => {
               <option value="cities">Advertisements by cities</option>
               <option value="districts">Advertisements by districts</option>
               <option value="category">Advertisements by category</option>
-              <option value="builtYear">Price by built year</option>
-              <option value="priceByDistrict">Price by district</option>
-              <option value="priceByCity">Price by city</option>
+              <option value="builtYear">Average price by built year</option>
+              <option value="priceByDistrict">Average price by district</option>
+              <option value="priceByCity">Average price by city</option>
             </select>
             {barChartData === "cities" && (
               <div>
@@ -349,36 +359,66 @@ const Statistics = () => {
             )}
           </div>
           <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
-            <select
-              className="outline-none border-none w-3/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
-              onChange={(event) => {
-                const selectedOption = event.target.value;
-                setScatterPlotData(selectedOption);
-              }}
-            >
-              <option value="priceAndTime">Price and time</option>
-              <option value="priceAndRoomsCount">Price and rooms</option>
-              <option value="button3">Button 3</option>
-              <option value="button4">Button 4</option>
-            </select>
-            {scatterPlotData === "priceAndTime" && (
-              <div>
+              <div className="flex flex-col place-items-center justify-center">
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
                   Price and sell time
                 </h1>
-                <ScatterPlotGraph scatterPlotData={scatterPlotDataPriceTime} />
+                <select
+                  value={cityScatterPlotNull ? cityScatterPlotNull : ""}
+                  className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                  onChange={(event) => {
+                    const selectedOption = event.target.value;
+                    setcityScatterPlotNull(selectedOption);
+                    setDistrictScatterPlotChartNull("");
+                    if (selectedOption === "") {
+                      setcityScatterPlotNull("");
+                    }
+                  }}
+                >
+                  <option value="">All cities</option>;
+                  {uniqueCities.map((city) => {
+                    return <option value={city}> {city}</option>;
+                  })}
+                </select>
+                {cityScatterPlotNull && (
+                  <select
+                    className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                    onChange={(event) => {
+                      const selectedOption = event.target.value;
+                      setDistrictScatterPlotChartNull(selectedOption);
+                    }}
+                  >
+                    <option value="">All districts</option>;
+                    {getUniqueDistricts(cityScatterPlotNull).map((district) => {
+                      return <option value={district}> {district}</option>;
+                    })}
+                  </select>)}
+                  <select
+                    className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                    onChange={(event) => {
+                      const selectedOption = event.target.value;
+                      setRoomsScatterPlotNull(parseInt(selectedOption));
+                    }}
+                  >
+                    <option value="">All room counts</option>;
+                    {getUniqueRoomCounts().sort((a, b) => a - b).map((roomsCount) => {
+                      return <option value={roomsCount}> {roomsCount}</option>;
+                    })}
+                  </select>
+                  <select
+                    className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                    onChange={(event) => {
+                      const selectedOption = event.target.value;
+                      setCategoryScatterPlotNull(parseInt(selectedOption));
+                    }}
+                  >
+                    <option value="">All categories</option>;
+                    {categoriesList.map((category) => {
+                      return <option value={category.id}> {category.name}</option>;
+                    })}
+                  </select>
+                <ScatterPlotGraph scatterPlotData={scatterPlotDataPriceTime()} />
               </div>
-            )}
-            {scatterPlotData === "priceAndRoomsCount" && (
-              <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
-                <h1 className="text-themeColor font-semibold text-center text-[22px]">
-                  Price and rooms count
-                </h1>
-                <ScatterPlotGraphRoomsPrice
-                  scatterPlotData={scatterPlotDataPriceRooms}
-                />
-              </div>
-            )}
           </div>
         </div>
       </div>

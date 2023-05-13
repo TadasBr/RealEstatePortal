@@ -68,7 +68,6 @@ export default function EditSellAdvertisement() {
       HasParking: getData.get("HasParking") === "true",
       CategoryId: getData.get("CategoryId"),
     };
-    debugger;
     fetch(Api_Url + "/buy-advertisements/" + id, {
       method: "PUT",
       headers: {

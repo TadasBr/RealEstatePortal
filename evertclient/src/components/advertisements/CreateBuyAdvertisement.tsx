@@ -9,7 +9,13 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
-import { Checkbox, FormControlLabel, Slider } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,6 +23,7 @@ const theme = createTheme();
 
 export default function CreateBuyAdvertisement() {
   const navigate = useNavigate();
+  const [categoryId, setCategoryId] = React.useState<string>();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
@@ -34,7 +41,7 @@ export default function CreateBuyAdvertisement() {
       !getData.get("MaxArea") ||
       !getData.get("CategoryId")
     ) {
-      toast.error("Plase fill in all required fields.")
+      toast.error("Plase fill in all required fields.");
       return;
     }
 
@@ -60,19 +67,18 @@ export default function CreateBuyAdvertisement() {
         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if(response.status === 201){
-          navigate("/");
-        }else{
-          toast.error("Failed to create advertisement please check fields!");
-        }
-      })
+    }).then((response) => {
+      if (response.status === 201) {
+        navigate("/");
+      } else {
+        toast.error("Failed to create advertisement please check fields!");
+      }
+    });
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContainer/>
+      <ToastContainer />
       <Header />
       <div className="w-full min-h-screen flex justify-center items-center mt-[13vh] mb-20">
         <div className="bg-white w-max p-6 pt-0 rounded-lg shadow-2xl border-2 border-themeColor">
@@ -194,16 +200,21 @@ export default function CreateBuyAdvertisement() {
                   label="Has Parking"
                   style={{ color: "#022d3d" }}
                 />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="CategoryId"
-                  label="Category Id"
-                  type="number"
-                  id="CategoryId"
-                  defaultValue="1"
-                />
+                  <InputLabel id="CategoryId">Category</InputLabel>
+                  <Select
+                    defaultValue="1"
+                    labelId="CategoryId"
+                    id="CategoryId"
+                    name="CategoryId"
+                    value={categoryId}
+                    onChange={(event) => setCategoryId(event.target.value)}
+                    fullWidth
+                  >
+                    <MenuItem value={1}>Apartment</MenuItem>
+                    <MenuItem value={2}>House</MenuItem>
+                    <MenuItem value={3}>Loft</MenuItem>
+                    <MenuItem value={4}>Cottage</MenuItem>
+                  </Select>
                 <Button
                   type="submit"
                   fullWidth

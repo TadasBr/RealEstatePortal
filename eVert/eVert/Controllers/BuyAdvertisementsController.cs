@@ -10,6 +10,8 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace eVert.Controllers
 {
@@ -184,7 +186,49 @@ namespace eVert.Controllers
         [Route("scrape-kampas")]
         public List<GetSimpleAdvertisementDto> ScrapeAruodas(BuyAdvertisementForKampasScrapeDto buyAdvertisement)
         {
-            string url = $"https://www.kampas.lt/butai-vilniuje?priceFrom={buyAdvertisement.MinPrice}&priceTo={buyAdvertisement.MaxPrice}&area_m2From={buyAdvertisement.MinArea}" +
+            string city = buyAdvertisement.City.ToLower();
+            string normalized = city.Normalize(NormalizationForm.FormD);
+            city = Regex.Replace(normalized, @"[\p{Mn}\p{Me}]", string.Empty);
+
+
+            if(city.Substring(city.Length - 3) == "iai")
+            {
+                city = city.Substring(0, city.Length - 3) + "iuose";
+            }
+            else if (city.Substring(city.Length - 3) == "ius")
+            {
+                city = city.Substring(0, city.Length - 1) + "je";
+            }
+            else if (city.Substring(city.Length - 2) == "us")
+            {
+                city = city.Substring(0, city.Length - 1) + "je";
+            }
+            else if (city.Substring(city.Length - 2) == "as")
+            {
+                city = city.Substring(0, city.Length - 1) + "e";
+            }
+            else if (city.Substring(city.Length - 2) == "ai")
+            {
+                city = city.Substring(0, city.Length - 2) + "uose";
+            }
+            else if (city.Substring(city.Length - 2) == "is")
+            {
+                city = city.Substring(0, city.Length - 2) + "yje";
+            }
+            else if (city.Substring(city.Length - 2) == "ys")
+            {
+                city = city.Substring(0, city.Length - 2) + "yje";
+            }
+            else if (city.Substring(city.Length - 1) == "e")
+            {
+                city = city + "je";
+            }
+            else
+            {
+                city = city.Substring(0, city.Length - 1) + "oje";
+            }
+
+            string url = $"https://www.kampas.lt/butai-{city}?priceFrom={buyAdvertisement.MinPrice}&priceTo={buyAdvertisement.MaxPrice}&area_m2From={buyAdvertisement.MinArea}" +
                 $"&area_m2To={buyAdvertisement.MaxArea}&roomsFrom={buyAdvertisement.MinRoomsCount}&roomsTo={buyAdvertisement.MaxRoomsCount}";
 
             var client = new WebClient();
