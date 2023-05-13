@@ -25,12 +25,16 @@ const Header: React.FC = () => {
         {isLoggedIn() ? (
           <>
             <div className="flex items-center gap-2">
-              <AccountCircle sx={{ fontSize: 28 }} />
-              <Typography variant="h6" component="div">
-                <Link to="/profile" className="mr-10">
-                  {sessionStorage.getItem("userName")}
-                </Link>
-              </Typography>
+              {sessionStorage.getItem("userName") !== "admin" && (
+                <>
+                  <AccountCircle sx={{ fontSize: 28 }} />
+                  <Typography variant="h6" component="div">
+                    <Link to="/profile" className="mr-10">
+                      {sessionStorage.getItem("userName")}
+                    </Link>
+                  </Typography>
+                </>
+              )}
               <Typography>
                 <Logout
                   sx={{ fontSize: 28 }}

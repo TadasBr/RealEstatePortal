@@ -79,7 +79,7 @@ export default function CreateAdvertisement() {
             navigate("/");
             return response.json();
           } else {
-            toast.error("Failed to create advertisement check fields");
+            toast.error("Failed to create advertisement please check fields!");
           }
         })
     });

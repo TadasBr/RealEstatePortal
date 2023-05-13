@@ -1,9 +1,10 @@
-﻿using eVert.Data.Dtos.Categories;
+﻿using eVert.Auth.Model;
+using eVert.Data.Dtos.Categories;
 using eVert.Data.Entities;
+using eVert.Data.Repositories.Advertisements;
 using eVert.Data.Repositories.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
 
 namespace eVert.Controllers
 {
@@ -12,10 +13,12 @@ namespace eVert.Controllers
     public class CategoriesController : ControllerBase
     {
         private ICategoriesRepository _categoriesRepository;
+        private IAdvertisementsRepository _advertisementsRepository;
 
-        public CategoriesController(ICategoriesRepository categoriesRepository)
+        public CategoriesController(ICategoriesRepository categoriesRepository, IAdvertisementsRepository advertisementsRepository)
         {
             _categoriesRepository = categoriesRepository;
+            _advertisementsRepository = advertisementsRepository;
         }
 
         [HttpGet]
@@ -51,14 +54,21 @@ namespace eVert.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = eVertRoles.Admin)]
         [Route("{categoryId}")]
         public async Task<ActionResult<UpdateCategoryDto>> Update(UpdateCategoryDto updateCategoryDto, int categoryId)
         {
             var category = await _categoriesRepository.GetAsync(categoryId);
+            var advertisements = await _advertisementsRepository.GetAsync(categoryId);
 
             if (category == null)
             {
                 return new NotFoundResult();
+            }
+
+            if (advertisements != null)
+            {
+                return new BadRequestResult();
             }
 
             category.Name = updateCategoryDto.Name;
@@ -68,14 +78,21 @@ namespace eVert.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = eVertRoles.Admin)]
         [Route("{categoryId}")]
         public async Task<IActionResult> Delete(int categoryId)
         {
             var category = await _categoriesRepository.GetAsync(categoryId);
+            var advertisements = await _advertisementsRepository.GetAsync(categoryId);
 
             if (category == null)
             {
                 return new NotFoundResult();
+            }
+
+            if(advertisements != null)
+            {
+                return new BadRequestResult();
             }
 
             await _categoriesRepository.DeleteAsync(category);

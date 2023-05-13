@@ -42,13 +42,12 @@ export default function SignIn() {
       body: JSON.stringify(data),
     })
       .then((response) => {
-        if (!response.ok) {
+        if (response.status) {
           toast.error("Login failed. Check your credentials and try again.");
         }
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         sessionStorage.setItem("accessToken", data.accessToken);
         sessionStorage.setItem("userName", data.userName);
         sessionStorage.setItem("isSeller", data.isSeller);

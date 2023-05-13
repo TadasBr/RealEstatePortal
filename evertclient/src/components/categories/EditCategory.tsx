@@ -33,8 +33,6 @@ export default function EditSellAdvertisement() {
       });
   }, [id]);
 
-  console.log(category);
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
@@ -58,8 +56,14 @@ export default function EditSellAdvertisement() {
       },
       body: JSON.stringify(data),
     }).then((response) => {
-      navigate("/");
-      console.log(response.json());
+      if(response.status === 200){
+        navigate("/allcategories");
+      }
+      if(response.status === 400){
+        toast.error("Failed to edit category, category has advertisements!")
+      } else {
+        toast.error("Failed to edit, please check name field!")
+      }
     });
   };
 

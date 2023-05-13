@@ -56,13 +56,13 @@ const Home: React.FC = () => {
                     {myAdvertisements.map((ad) => (
                       <div key={ad.city}>
                         <div className="flex gap-4 items-center justify-center mb-4 text-center mt-5">
-                          <span className="text-white font-semibold bg-themeColor px-8 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
+                          <span className="text-white font-semibold bg-themeColor px-4 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
                             City: {ad.city}
                           </span>
-                          <span className="text-white font-semibold bg-themeColor px-8 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
+                          <span className="text-white font-semibold bg-themeColor px-4 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
                             Price: {ad.minPrice}€ - {ad.maxPrice}€
                           </span>
-                          <span className="text-white font-semibold bg-themeColor px-8 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
+                          <span className="text-white font-semibold bg-themeColor px-4 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
                             Rooms: {ad.minRoomsCount} - {ad.maxRoomsCount}
                           </span>
                         </div>
@@ -81,13 +81,13 @@ const Home: React.FC = () => {
                     {myAdvertisements.map((ad) => (
                       <div key={ad.city}>
                         <div className="flex gap-4 items-center justify-center mb-4 text-center mt-5">
-                          <span className="text-white font-semibold bg-themeColor px-8 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
+                          <span className="text-white font-semibold bg-themeColor px-4 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
                             City: {ad.city}
                           </span>
-                          <span className="text-white font-semibold bg-themeColor px-8 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
+                          <span className="text-white font-semibold bg-themeColor px-4 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
                             Price: {ad.minPrice}€ - {ad.maxPrice}€
                           </span>
-                          <span className="text-white font-semibold bg-themeColor px-8 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
+                          <span className="text-white font-semibold bg-themeColor px-4 py-2 flex gap-1 items-center justify-center w-max shadow-lg rounded">
                             Rooms: {ad.minRoomsCount} - {ad.maxRoomsCount}
                           </span>
                         </div>

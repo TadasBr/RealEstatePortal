@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Api_Url } from "../Constants";
 import Header from "../main/Header";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CatList = () => {
   const navigate = useNavigate();
@@ -19,8 +21,13 @@ const CatList = () => {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       },
-    }).then(() => {
-      setItems(items.filter((item) => item.id !== id));
+    }).then((response) => {
+      if(response.status === 204){
+        setItems(items.filter((item) => item.id !== id));
+        navigate("/allcategories");
+      } else{
+        toast.error("Failed to delete category, category has advertisements!")
+      }  
     });
   };
 
@@ -31,6 +38,7 @@ const CatList = () => {
   return (
     <div>
       <Header />
+      <ToastContainer/>
       <div className="w-full mt-40">
         <h2 className="font-bold text-themeColor my-2 text-4xl text-center capitalize">
           All Categories

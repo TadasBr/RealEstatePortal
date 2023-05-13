@@ -9,6 +9,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const theme = createTheme();
 
@@ -17,29 +19,33 @@ export default function CreateCategory() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
+
+    if(!getData.get("Name")){
+      toast.error("Failed to create category please fill in name field!")
+      return;
+    }
+
     const data = {
       Name: getData.get("Name"),
     };
-    debugger;
     fetch(Api_Url + "/categories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
       .then((response) => {
-        navigate("/");
-        console.log(response.json());
+        if(response.status === 201){
+          navigate("/");
+        }
+        if(response.status === 400){
+          toast.error("Failed to create category, please check name field!")
+        }
       })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer/>
       <Header />
       <div className="w-full min-h-screen flex justify-center items-center">
         <div className="bg-white w-max p-10 pt-0 rounded-lg shadow-2xl border-2 border-themeColor">

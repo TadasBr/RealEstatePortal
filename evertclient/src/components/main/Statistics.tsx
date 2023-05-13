@@ -4,6 +4,7 @@ import Header from "./Header";
 import BarchartGraph from "./Charts/BarchartGraph";
 import ScatterPlotGraph from "./Charts/ScatterPlotGraph";
 import ScatterPlotGraphRoomsPrice from "./Charts/ScatterPlotGraphRoomsPrice";
+import BarchartGraphPrice from "./Charts/BarchartGraphPrice";
 
 type Advertisement = {
   city: string;
@@ -22,6 +23,11 @@ interface BarChartData {
   count: number;
 }
 
+interface BarChartDataPrice {
+  uniqueText: string;
+  price: number;
+}
+
 interface ScatterPlotData {
   firstNumber: number;
   secondNumber: number;
@@ -34,10 +40,23 @@ const Statistics = () => {
   const [showCitiesData, setShowCitiesData] = useState<boolean>(false);
   const [scatterPlotData, setScatterPlotData] =
     useState<string>("priceAndTime");
+  const [barChartData, setBarChartData] = useState<string>("cities");
   const [priceSellTimeData, setPriceSellTimeData] = useState<ScatterPlotData[]>(
     []
   );
   const [priceRoomsData, setPriceRoomsData] = useState<ScatterPlotData[]>([]);
+  const [advertisementsByCategory, setAdvertisementsByCategory] = useState<
+    BarChartData[]
+  >([]);
+  const [averagePricePerBuiltYear, setAveragePricePerBuiltYear] = useState<
+    BarChartDataPrice[]
+  >([]);
+  const [averagePriceByDistrict, setAveragePriceByDistrict] = useState<
+    BarChartDataPrice[]
+  >([]);
+  const [averagePriceByCity, setAveragePriceByCity] = useState<
+    BarChartDataPrice[]
+  >([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,10 +99,67 @@ const Statistics = () => {
         })
       );
       setPriceRoomsData(scatterPlotDataPriceRooms);
+
+      const categories = Array.from(
+        new Set(advertisements.map((ad) => ad.categoryId))
+      );
+      const advertisementsByCategory: BarChartData[] = categories.map(
+        (categoryId) => ({
+          uniqueText: categoryId.toString(),
+          count: advertisements.filter((ad) => ad.categoryId === categoryId)
+            .length,
+        })
+      );
+      setAdvertisementsByCategory(advertisementsByCategory);
+
+      const uniqueBuiltYears = Array.from(
+        new Set(advertisements.map((ad) => ad.builtYear))
+      );
+      const averagePricePerBuiltYear: BarChartDataPrice[] =
+        uniqueBuiltYears.map((builtYear) => {
+          const filteredAds = advertisements.filter(
+            (ad) => ad.builtYear === builtYear
+          );
+          const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
+          const averagePrice = totalPrice / filteredAds.length;
+          return {
+            uniqueText: builtYear.toString() as string,
+            price: averagePrice,
+          };
+        });
+      setAveragePricePerBuiltYear(averagePricePerBuiltYear);
+
+      const averagePriceByDistrict: BarChartDataPrice[] = uniqueDistricts.map(
+        (district) => {
+          const filteredAds = advertisements.filter(
+            (ad) => ad.district === district
+          );
+          const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
+          const averagePrice = totalPrice / filteredAds.length;
+          return {
+            uniqueText: district as string,
+            price: averagePrice,
+          };
+        }
+      );
+      setAveragePriceByDistrict(averagePriceByDistrict);
+
+      const averagePriceByCity: BarChartDataPrice[] = uniqueCities.map(
+        (city) => {
+          const filteredAds = advertisements.filter((ad) => ad.city === city);
+          const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
+          const averagePrice = totalPrice / filteredAds.length;
+          return {
+            uniqueText: city as string,
+            price: averagePrice,
+          };
+        }
+      );
+      setAveragePriceByCity(averagePriceByCity);
     };
 
     fetchData();
-  }, []);
+  }, [priceRoomsData]);
 
   const handleToggleData = () => {
     setShowCitiesData(!showCitiesData);
@@ -100,82 +176,113 @@ const Statistics = () => {
   console.log(advertisements);
 
   return (
-    <div className="flex justify-center bg-[#f1f1f1] min-h-screen py-10">
+    <div className="flex justify-center bg-[#f1f1f1] min-h-screen py-10 whitespace-nowrap overflow-auto scrollbar-hide" >
       <Header />
-      <div className="w-10/12 h-full flex flex-col mt-32 mb-16">
+      <div className="w-11/12 h-full flex flex-col mt-32 mb-16">
         <h1 className="text-4xl font-bold text-themeColor relative text-center">
           Statistics
         </h1>
-        <div className="flex flex-row mx-5">
-          <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
-            <button
-              className="outline-none border-none w-4/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
-              onClick={handleToggleData}
+        <div className="flex flex-row">
+          <div className="flex justify-center mt-4 mb-4 flex-col place-items-center">
+            <select
+              className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
+              onChange={(event) => {
+                const selectedOption = event.target.value;
+                setBarChartData(selectedOption);
+              }}
             >
-              {showCitiesData ? "Show Districts Data" : "Show Cities Data"}
-            </button>
-            <h1 className="text-themeColor font-semibold text-center text-[22px]">
-              Number of Advertisements by {showCitiesData ? "City" : "District"}
-            </h1>
-            <BarchartGraph
-              barChartData={showCitiesData ? citiesData : districtsData}
-            />
+              <option value="cities">Advertisements by cities</option>
+              <option value="districts">Advertisements by districts</option>
+              <option value="category">Advertisements by category</option>
+              <option value="builtYear">Price by built year</option>
+              <option value="priceByDistrict">Price by district</option>
+              <option value="priceByCity">Price by city</option>
+            </select>
+            {barChartData === "cities" && (
+              <div>
+                <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                  Advertisements by cities
+                </h1>
+                <BarchartGraph barChartData={citiesData} />
+              </div>
+            )}
+            {barChartData === "districts" && (
+              <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
+                <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                  Advertisements by districts
+                </h1>
+                <BarchartGraph barChartData={districtsData} />
+              </div>
+            )}
+            {barChartData === "category" && (
+              <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
+                <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                  Advertisements by category
+                </h1>
+                <BarchartGraph barChartData={advertisementsByCategory} />
+              </div>
+            )}
+            {barChartData === "builtYear" && (
+              <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
+                <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                  Average price by built yearx``
+                </h1>
+                <BarchartGraphPrice barChartData={averagePricePerBuiltYear} />
+              </div>
+            )}
+            {barChartData === "priceByDistrict" && (
+              <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
+                <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                  Average price by district
+                </h1>
+                <BarchartGraphPrice barChartData={averagePriceByDistrict} />
+              </div>
+            )}
+            {barChartData === "priceByCity" && (
+              <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
+                <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                  Average price by city
+                </h1>
+                <BarchartGraphPrice barChartData={averagePriceByCity} />
+              </div>
+            )}
           </div>
           <div className="flex-1" />
-          {scatterPlotData === "priceAndTime" ? (
-            <div className="flex justify-center mt-8 mb-4 flex-col place-items-center float-left">
-              <button
-                className="outline-none border-none bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
-                onClick={() => setScatterPlotData("priceAndRoomsCount")}
-              >
-                Price and rooms count
-              </button>
-              <h1 className="text-themeColor font-semibold text-center text-[22px]">
-                Price and sell time
-              </h1>
-              <ScatterPlotGraph scatterPlotData={priceSellTimeData} />
-            </div>
-          ) : (
-            <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
-              <button
-                className="outline-none border-none bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
-                onClick={() => setScatterPlotData("priceAndTime")}
-              >
-                Price and sell time
-              </button>
-              <h1 className="text-themeColor font-semibold text-center text-[22px]">
-                Price and rooms count
-              </h1>
-              <ScatterPlotGraphRoomsPrice scatterPlotData={priceRoomsData} />
-            </div>
-          )}
-        </div>
-        <div className="flex flex-row mx-5">
           <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
-            <button
-              className="outline-none border-none w-4/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
-              onClick={handleToggleData}
+            <select
+              className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
+              onChange={(event) => {
+                const selectedOption = event.target.value;
+                if (selectedOption === "priceAndRoomsCount") {
+                  setScatterPlotData("priceAndRoomsCount");
+                } else if (selectedOption === "priceAndTime") {
+                  setScatterPlotData("priceAndTime");
+                } else {
+                  // Handle other options
+                }
+              }}
             >
-              {showCitiesData ? "Show Districts Data" : "Show Cities Data"}
-            </button>
-            <h1 className="text-themeColor font-semibold text-center text-[22px]">
-              Number of Advertisements by {showCitiesData ? "City" : "District"}
-            </h1>
-            <BarchartGraph
-              barChartData={showCitiesData ? citiesData : districtsData}
-            />
-          </div>
-          <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
-            {/* <button
-              className="outline-none border-none w-4/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:-translate-x-3 duration-300"
-              onClick={handleToggleData}
-            >
-              {showCitiesData ? "Show Districts Data" : "Show Cities Data"}
-            </button> */}
-            <h1 className="text-themeColor font-semibold text-center text-[22px]">
-              Price and sell time
-            </h1>
-            <ScatterPlotGraph scatterPlotData={priceRoomsData} />
+              <option value="priceAndTime">Price and time</option>
+              <option value="priceAndRoomsCount">Price and rooms</option>
+              <option value="button3">Button 3</option>
+              <option value="button4">Button 4</option>
+            </select>
+            {scatterPlotData === "priceAndTime" && (
+              <div>
+                <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                  Price and sell time
+                </h1>
+                <ScatterPlotGraph scatterPlotData={priceSellTimeData} />
+              </div>
+            )}
+            {scatterPlotData === "priceAndRoomsCount" && (
+              <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
+                <h1 className="text-themeColor font-semibold text-center text-[22px]">
+                  Price and rooms count
+                </h1>
+                <ScatterPlotGraphRoomsPrice scatterPlotData={priceRoomsData} />
+              </div>
+            )}
           </div>
         </div>
       </div>

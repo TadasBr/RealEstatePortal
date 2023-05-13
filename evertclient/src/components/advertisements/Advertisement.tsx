@@ -101,8 +101,6 @@ const Advertisement: React.FC = () => {
               <p className="text-[17px] text-gray-600 leading-[1.5] mb-3">
                 {data.description}
               </p>
-
-              {/* tags */}
               <div className="flex items-center gap-4 mb-6 mt-1">
                 <div className="text-themeColor font-semibold bg-[#f1f1f1] px-3 py-[2px] flex gap-1 items-center justify-center w-max shadow-lg rounded">
                   <span className="text-gray-600 font-medium">Rooms: </span>{" "}
@@ -122,9 +120,7 @@ const Advertisement: React.FC = () => {
                   {data.hasParking ? "Has Parking" : "No Parking spot"}
                 </div>
               </div>
-
               <Map address={data.city + data.address} />
-
               <div className="text-themeColor font-semibold mt-3 mb-1">
                 <span className="text-gray-600 font-medium">Created: </span>{" "}
                 {new Date(data.createdDate).toLocaleDateString("en-US", {

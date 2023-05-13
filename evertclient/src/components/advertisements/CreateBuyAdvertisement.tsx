@@ -53,7 +53,6 @@ export default function CreateBuyAdvertisement() {
       CategoryId: getData.get("CategoryId"),
       PhoneNumber: sessionStorage.getItem("phoneNumber"),
     };
-    debugger;
     fetch(Api_Url + "/buy-advertisements", {
       method: "POST",
       headers: {
@@ -63,8 +62,11 @@ export default function CreateBuyAdvertisement() {
       body: JSON.stringify(data),
     })
       .then((response) => {
-        navigate("/");
-        console.log(response.json());
+        if(response.status === 201){
+          navigate("/");
+        }else{
+          toast.error("Failed to create advertisement please check fields!");
+        }
       })
   };
 

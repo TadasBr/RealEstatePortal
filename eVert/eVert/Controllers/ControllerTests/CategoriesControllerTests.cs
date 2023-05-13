@@ -19,7 +19,7 @@ namespace eVert.Controllers.ControllerTests
         public void Setup()
         {
             _mockRepo = new Mock<ICategoriesRepository>();
-            _controller = new CategoriesController(_mockRepo.Object);
+            _controller = new CategoriesController(_mockRepo.Object, null);
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace eVert.Controllers.ControllerTests
             var mockRepo = new Mock<ICategoriesRepository>();
             mockRepo.Setup(repo => repo.GetManyAsync()).ReturnsAsync(categories);
 
-            var controller = new CategoriesController(mockRepo.Object);
+            var controller = _controller;
 
             // Act
             var result = await controller.GetMany();
@@ -61,7 +61,7 @@ namespace eVert.Controllers.ControllerTests
 
             _mockRepo.Setup(repo => repo.GetAsync(categoryId)).ReturnsAsync(category);
 
-            var controller = new CategoriesController(_mockRepo.Object);
+            var controller = _controller;
 
             // Act
             var result = await controller.GetById(categoryId);
@@ -84,7 +84,7 @@ namespace eVert.Controllers.ControllerTests
             var mockRepo = new Mock<ICategoriesRepository>();
             mockRepo.Setup(repo => repo.GetAsync(categoryId)).ReturnsAsync((Category)null);
 
-            var controller = new CategoriesController(mockRepo.Object);
+            var controller = _controller;
 
             // Act
             var result = await controller.GetById(categoryId);
@@ -104,7 +104,7 @@ namespace eVert.Controllers.ControllerTests
                     .Callback<Category>(c => c.Id = 1)
                     .Returns(Task.CompletedTask);
 
-            var controller = new CategoriesController(mockRepo.Object);
+            var controller = _controller;
 
             // Act
             var result = await controller.Create(createCategoryDto);
