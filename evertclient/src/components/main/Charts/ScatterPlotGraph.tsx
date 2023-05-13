@@ -21,7 +21,7 @@ interface Props {
 
 const ScatterPlotGraph: React.FC<Props> = ({ scatterPlotData }) => {
   return (
-    <ScatterChart margin={{ left: 30 }} width={700} height={600}>
+    <ScatterChart margin={{ left: 30 }} width={1200} height={600}>
       <CartesianGrid />
       <XAxis type="number" dataKey="firstNumber" name="Price" unit="€" />
       <YAxis

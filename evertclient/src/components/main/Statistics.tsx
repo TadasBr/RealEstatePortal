@@ -33,137 +33,152 @@ interface ScatterPlotData {
   secondNumber: number;
 }
 
+interface Category {
+  name: string;
+  id: number;
+}
+
 const Statistics = () => {
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
-  const [districtsData, setDistrictsData] = useState<BarChartData[]>([]);
-  const [citiesData, setCitiesData] = useState<BarChartData[]>([]);
-  const [showCitiesData, setShowCitiesData] = useState<boolean>(false);
   const [scatterPlotData, setScatterPlotData] =
     useState<string>("priceAndTime");
   const [barChartData, setBarChartData] = useState<string>("cities");
-  const [priceSellTimeData, setPriceSellTimeData] = useState<ScatterPlotData[]>(
-    []
+  const [categoriesList, setCategoriesList] = useState<Category[]>([]);
+
+  const uniqueCities = Array.from(
+    new Set(advertisements.map((ad: Advertisement) => ad.city))
   );
-  const [priceRoomsData, setPriceRoomsData] = useState<ScatterPlotData[]>([]);
-  const [advertisementsByCategory, setAdvertisementsByCategory] = useState<
-    BarChartData[]
-  >([]);
-  const [averagePricePerBuiltYear, setAveragePricePerBuiltYear] = useState<
-    BarChartDataPrice[]
-  >([]);
-  const [averagePriceByDistrict, setAveragePriceByDistrict] = useState<
-    BarChartDataPrice[]
-  >([]);
-  const [averagePriceByCity, setAveragePriceByCity] = useState<
-    BarChartDataPrice[]
-  >([]);
+
+  const [cityBarChart, setCityBarChart] = useState<string>(uniqueCities[0]);
+  const [cityBarChartNull, setcityBarChartNull] = useState<string>("");
+
+  const getUniqueDistricts = (city?: string): string[] => {
+    const dataToFilter = city
+      ? advertisements.filter((ad) => ad.city === city)
+      : advertisements;
+    const uniqueDistricts = Array.from(
+      new Set(dataToFilter.map((ad) => ad.district))
+    );
+    return uniqueDistricts;
+  };
+
+  const districtsData: BarChartData[] = getUniqueDistricts(cityBarChart).map(
+    (district) => ({
+      uniqueText: district as string,
+      count: advertisements
+        .filter((ad: Advertisement) => ad.city === cityBarChart)
+        .filter((ad: Advertisement) => ad.district === district)
+        .length as number,
+    })
+  );
+
+  const [districtBarChart, setDistrictBarChart] = useState<string>(
+    uniqueCities[0]
+  );
+  const [districtBarChartNull, setDistrictBarChartNull] = useState<string>("");
+
+  const averagePriceByCity: BarChartDataPrice[] = uniqueCities.map((city) => {
+    const filteredAds: Advertisement[] = advertisements.filter(
+      (ad: Advertisement) => ad.city === city
+    );
+    const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
+    const averagePrice = Math.round(totalPrice / filteredAds.length);
+    return {
+      uniqueText: city as string,
+      price: averagePrice,
+    };
+  });
+
+  const citiesData: BarChartData[] = uniqueCities.map((city) => ({
+    uniqueText: city as string,
+    count: advertisements.filter((ad: Advertisement) => ad.city === city)
+      .length as number,
+  }));
+
+  const scatterPlotDataPriceTime: ScatterPlotData[] = advertisements.map(
+    (ad: Advertisement) => ({
+      firstNumber: ad.price as number,
+      secondNumber: ad.sellTime as number,
+    })
+  );
+
+  const scatterPlotDataPriceRooms: ScatterPlotData[] = advertisements.map(
+    (ad: Advertisement) => ({
+      firstNumber: ad.price as number,
+      secondNumber: ad.roomsCount as number,
+    })
+  );
+
+  const categories: number[] = Array.from(
+    new Set(advertisements.map((ad: Advertisement) => ad.categoryId))
+  );
+
+  const advertisementsByCategory: BarChartData[] = categories.map(
+    (categoryId: number) => {
+      const category = categoriesList.find((c) => c.id === categoryId);
+      return {
+        uniqueText: category ? category.name : categoryId.toString(),
+        count: advertisements.filter(
+          (ad: Advertisement) =>
+            ad.categoryId === categoryId &&
+            (!cityBarChartNull || ad.city === cityBarChartNull) &&
+            (!districtBarChartNull || ad.district === districtBarChartNull)
+        ).length,
+      };
+    }
+  );
+
+  const uniqueBuiltYears: number[] = Array.from(
+    new Set(advertisements.map((ad: Advertisement) => ad.builtYear))
+  );
+
+  const averagePricePerBuiltYear: BarChartDataPrice[] = uniqueBuiltYears.map(
+    (builtYear) => {
+      const filteredAds: Advertisement[] = advertisements
+        .sort((a: Advertisement, b: Advertisement) => a.builtYear - b.builtYear)
+        .filter(
+          (ad: Advertisement) =>
+            ad.builtYear === builtYear &&
+            (!cityBarChartNull || ad.city === cityBarChartNull) &&
+            (!districtBarChartNull || ad.district === districtBarChartNull)
+        );
+
+      const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
+      const averagePrice = Math.round(totalPrice / filteredAds.length);
+      return {
+        uniqueText: builtYear.toString() as string,
+        price: averagePrice,
+      };
+    }
+  );
+
+  const averagePriceByDistrict: BarChartDataPrice[] = getUniqueDistricts(cityBarChart).map(
+    (district) => {
+      const filteredAds: Advertisement[] = advertisements.filter(
+        (ad: Advertisement) => ad.district === district
+      );
+      const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
+      const averagePrice = Math.round(totalPrice / filteredAds.length);
+      return {
+        uniqueText: district as string,
+        price: averagePrice,
+      };
+    }
+  );
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`${Api_Url}/sold-advertisements`);
       const data = await response.json().then();
+
+      fetch(`${Api_Url}/categories`)
+        .then((response) => response.json())
+        .then((data) => setCategoriesList(data));
       setAdvertisements(data);
-
-      const uniqueDistricts = Array.from(
-        new Set(data.map((ad: Advertisement) => ad.district))
-      );
-      const districtsData: BarChartData[] = uniqueDistricts.map((district) => ({
-        uniqueText: district as string,
-        count: data.filter((ad: Advertisement) => ad.district === district)
-          .length as number,
-      }));
-      setDistrictsData(districtsData);
-
-      const uniqueCities = Array.from(
-        new Set(data.map((ad: Advertisement) => ad.city))
-      );
-      const citiesData: BarChartData[] = uniqueCities.map((city) => ({
-        uniqueText: city as string,
-        count: data.filter((ad: Advertisement) => ad.city === city)
-          .length as number,
-      }));
-      setCitiesData(citiesData);
-
-      const scatterPlotDataPriceTime: ScatterPlotData[] = advertisements.map(
-        (ad) => ({
-          firstNumber: ad.price as number,
-          secondNumber: ad.sellTime as number,
-        })
-      );
-      setPriceSellTimeData(scatterPlotDataPriceTime);
-
-      const scatterPlotDataPriceRooms: ScatterPlotData[] = advertisements.map(
-        (ad) => ({
-          firstNumber: ad.price as number,
-          secondNumber: ad.roomsCount as number,
-        })
-      );
-      setPriceRoomsData(scatterPlotDataPriceRooms);
-
-      const categories = Array.from(
-        new Set(advertisements.map((ad) => ad.categoryId))
-      );
-      const advertisementsByCategory: BarChartData[] = categories.map(
-        (categoryId) => ({
-          uniqueText: categoryId.toString(),
-          count: advertisements.filter((ad) => ad.categoryId === categoryId)
-            .length,
-        })
-      );
-      setAdvertisementsByCategory(advertisementsByCategory);
-
-      const uniqueBuiltYears = Array.from(
-        new Set(advertisements.map((ad) => ad.builtYear))
-      );
-      const averagePricePerBuiltYear: BarChartDataPrice[] =
-        uniqueBuiltYears.map((builtYear) => {
-          const filteredAds = advertisements.filter(
-            (ad) => ad.builtYear === builtYear
-          );
-          const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
-          const averagePrice = totalPrice / filteredAds.length;
-          return {
-            uniqueText: builtYear.toString() as string,
-            price: averagePrice,
-          };
-        });
-      setAveragePricePerBuiltYear(averagePricePerBuiltYear);
-
-      const averagePriceByDistrict: BarChartDataPrice[] = uniqueDistricts.map(
-        (district) => {
-          const filteredAds = advertisements.filter(
-            (ad) => ad.district === district
-          );
-          const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
-          const averagePrice = totalPrice / filteredAds.length;
-          return {
-            uniqueText: district as string,
-            price: averagePrice,
-          };
-        }
-      );
-      setAveragePriceByDistrict(averagePriceByDistrict);
-
-      const averagePriceByCity: BarChartDataPrice[] = uniqueCities.map(
-        (city) => {
-          const filteredAds = advertisements.filter((ad) => ad.city === city);
-          const totalPrice = filteredAds.reduce((sum, ad) => sum + ad.price, 0);
-          const averagePrice = totalPrice / filteredAds.length;
-          return {
-            uniqueText: city as string,
-            price: averagePrice,
-          };
-        }
-      );
-      setAveragePriceByCity(averagePriceByCity);
     };
 
     fetchData();
-  }, [priceRoomsData]);
-
-  const handleToggleData = () => {
-    setShowCitiesData(!showCitiesData);
-  };
+  }, []);
 
   if (!advertisements.length) {
     return (
@@ -173,19 +188,17 @@ const Statistics = () => {
     );
   }
 
-  console.log(advertisements);
-
   return (
-    <div className="flex justify-center bg-[#f1f1f1] min-h-screen py-10 whitespace-nowrap overflow-auto scrollbar-hide" >
+    <div className="flex justify-center bg-[#f1f1f1] min-h-screen py-10 whitespace-nowrap overflow-auto scrollbar-hide">
       <Header />
       <div className="w-11/12 h-full flex flex-col mt-32 mb-16">
         <h1 className="text-4xl font-bold text-themeColor relative text-center">
           Statistics
         </h1>
-        <div className="flex flex-row">
+        <div className="flex flex-col">
           <div className="flex justify-center mt-4 mb-4 flex-col place-items-center">
             <select
-              className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
+              className="outline-none border-none w-3/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
               onChange={(event) => {
                 const selectedOption = event.target.value;
                 setBarChartData(selectedOption);
@@ -211,6 +224,17 @@ const Statistics = () => {
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
                   Advertisements by districts
                 </h1>
+                <select
+                  className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                  onChange={(event) => {
+                    const selectedOption = event.target.value;
+                    setCityBarChart(selectedOption);
+                  }}
+                >
+                  {uniqueCities.map((city) => {
+                    return <option value={city}> {city}</option>;
+                  })}
+                </select>
                 <BarchartGraph barChartData={districtsData} />
               </div>
             )}
@@ -219,14 +243,80 @@ const Statistics = () => {
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
                   Advertisements by category
                 </h1>
-                <BarchartGraph barChartData={advertisementsByCategory} />
+                <select
+                  value={cityBarChartNull ? cityBarChartNull : ""}
+                  className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                  onChange={(event) => {
+                    const selectedOption = event.target.value;
+                    setcityBarChartNull(selectedOption);
+                    setDistrictBarChartNull("");
+                    if (selectedOption === "") {
+                      setcityBarChartNull("");
+                    }
+                  }}
+                >
+                  <option value="">All cities</option>;
+                  {uniqueCities.map((city) => {
+                    return <option value={city}> {city}</option>;
+                  })}
+                </select>
+                {cityBarChartNull && (
+                  <select
+                    className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                    onChange={(event) => {
+                      const selectedOption = event.target.value;
+                      setDistrictBarChartNull(selectedOption);
+                    }}
+                  >
+                    <option value="">All districts</option>;
+                    {getUniqueDistricts(cityBarChartNull).map((district) => {
+                      return <option value={district}> {district}</option>;
+                    })}
+                  </select>
+                )}
+                <BarchartGraph
+                  barChartData={advertisementsByCategory.sort(
+                    (a, b) => b.count - a.count
+                  )}
+                />
               </div>
             )}
             {barChartData === "builtYear" && (
               <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
-                  Average price by built yearx``
+                  Average price by built year
                 </h1>
+                <select
+                  value={cityBarChartNull ? cityBarChartNull : ""}
+                  className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                  onChange={(event) => {
+                    const selectedOption = event.target.value;
+                    setcityBarChartNull(selectedOption);
+                    setDistrictBarChartNull("");
+                    if (selectedOption === "") {
+                      setcityBarChartNull("");
+                    }
+                  }}
+                >
+                  <option value="">All cities</option>;
+                  {uniqueCities.map((city) => {
+                    return <option value={city}> {city}</option>;
+                  })}
+                </select>
+                {cityBarChartNull && (
+                  <select
+                    className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                    onChange={(event) => {
+                      const selectedOption = event.target.value;
+                      setDistrictBarChartNull(selectedOption);
+                    }}
+                  >
+                    <option value="">All districts</option>;
+                    {getUniqueDistricts(cityBarChartNull).map((district) => {
+                      return <option value={district}> {district}</option>;
+                    })}
+                  </select>
+                )}
                 <BarchartGraphPrice barChartData={averagePricePerBuiltYear} />
               </div>
             )}
@@ -235,6 +325,17 @@ const Statistics = () => {
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
                   Average price by district
                 </h1>
+                <select
+                  className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale my-2"
+                  onChange={(event) => {
+                    const selectedOption = event.target.value;
+                    setCityBarChart(selectedOption);
+                  }}
+                >
+                  {uniqueCities.map((city) => {
+                    return <option value={city}> {city}</option>;
+                  })}
+                </select>
                 <BarchartGraphPrice barChartData={averagePriceByDistrict} />
               </div>
             )}
@@ -247,19 +348,12 @@ const Statistics = () => {
               </div>
             )}
           </div>
-          <div className="flex-1" />
           <div className="flex justify-center mt-8 mb-4 flex-col place-items-center">
             <select
-              className="outline-none border-none w-5/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
+              className="outline-none border-none w-3/12 bg-themeColor py-2 font-semibold px-6 text-white rounded-md hover:scale"
               onChange={(event) => {
                 const selectedOption = event.target.value;
-                if (selectedOption === "priceAndRoomsCount") {
-                  setScatterPlotData("priceAndRoomsCount");
-                } else if (selectedOption === "priceAndTime") {
-                  setScatterPlotData("priceAndTime");
-                } else {
-                  // Handle other options
-                }
+                setScatterPlotData(selectedOption);
               }}
             >
               <option value="priceAndTime">Price and time</option>
@@ -272,7 +366,7 @@ const Statistics = () => {
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
                   Price and sell time
                 </h1>
-                <ScatterPlotGraph scatterPlotData={priceSellTimeData} />
+                <ScatterPlotGraph scatterPlotData={scatterPlotDataPriceTime} />
               </div>
             )}
             {scatterPlotData === "priceAndRoomsCount" && (
@@ -280,7 +374,9 @@ const Statistics = () => {
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
                   Price and rooms count
                 </h1>
-                <ScatterPlotGraphRoomsPrice scatterPlotData={priceRoomsData} />
+                <ScatterPlotGraphRoomsPrice
+                  scatterPlotData={scatterPlotDataPriceRooms}
+                />
               </div>
             )}
           </div>
