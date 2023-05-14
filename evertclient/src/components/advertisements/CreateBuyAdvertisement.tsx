@@ -142,7 +142,8 @@ export default function CreateBuyAdvertisement() {
                   required
                   fullWidth
                   name="MinPrice"
-                  label="Min Price"
+                  type="number"
+                  label="Minimum price (€)"
                   id="MinPrice"
                   defaultValue="130000"
                 />
@@ -151,7 +152,8 @@ export default function CreateBuyAdvertisement() {
                   required
                   fullWidth
                   name="MaxPrice"
-                  label="Max price"
+                  type="number"
+                  label="Maximum price (€)"
                   id="MaxPrice"
                   defaultValue="150000"
                 />

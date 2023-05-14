@@ -226,7 +226,7 @@ const Statistics = () => {
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
                   Advertisements by cities
                 </h1>
-                <BarchartGraph barChartData={citiesData} />
+                <BarchartGraph barChartData={citiesData.sort((a, b) => b.count - a.count)} />
               </div>
             )}
             {barChartData === "districts" && (
@@ -245,7 +245,7 @@ const Statistics = () => {
                     return <option value={city}> {city}</option>;
                   })}
                 </select>
-                <BarchartGraph barChartData={districtsData} />
+                <BarchartGraph barChartData={districtsData.sort((a, b) => b.count - a.count)} />
               </div>
             )}
             {barChartData === "category" && (
@@ -346,7 +346,7 @@ const Statistics = () => {
                     return <option value={city}> {city}</option>;
                   })}
                 </select>
-                <BarchartGraphPrice barChartData={averagePriceByDistrict} />
+                <BarchartGraphPrice barChartData={averagePriceByDistrict.sort((a, b) => b.price - a.price)} />
               </div>
             )}
             {barChartData === "priceByCity" && (
@@ -354,7 +354,7 @@ const Statistics = () => {
                 <h1 className="text-themeColor font-semibold text-center text-[22px]">
                   Average price by city
                 </h1>
-                <BarchartGraphPrice barChartData={averagePriceByCity} />
+                <BarchartGraphPrice barChartData={averagePriceByCity.sort((a, b) => b.price - a.price)} />
               </div>
             )}
           </div>

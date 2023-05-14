@@ -15,7 +15,7 @@ const Maps: React.FC<Props> = ({ addressList }) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
   useEffect(() => {
-    const configValue = "AIzaSyB6iGoQrkXf1pI5xS6Hn3vxkra8UXjaqfI"; // Replace with your own API key
+    const configValue = "AIzaSyB6iGoQrkXf1pI5xS6Hn3vxkra8UXjaqfI";
     const loader = new Loader({
       apiKey: configValue,
       version: "weekly",

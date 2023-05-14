@@ -70,6 +70,8 @@ const MyAdvertisements: React.FC = () => {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       },
+    }).then(() => {
+      setItems(items.filter((item) => item.id !== id));
     });
   };
 

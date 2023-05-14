@@ -9,34 +9,40 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate } from "react-router-dom";
-import { Checkbox, FormControlLabel } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const theme = createTheme();
 
 export default function CreateAdvertisement() {
+  const [categoryId, setCategoryId] = React.useState<string>();
   const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const getData = new FormData(event.currentTarget);
 
-    // if (
-    //   !getData.get("Title") ||
-    //   !getData.get("Description") ||
-    //   !getData.get("City") ||
-    //   !getData.get("Address") ||
-    //   !getData.get("District") ||
-    //   !getData.get("Price") ||
-    //   !getData.get("RoomsCount") ||
-    //   !getData.get("Area") ||
-    //   !getData.get("CategoryId") ||
-    //   !getData.get("phoneNumber") ||
-    //   !getData.get("YearBuilt")
-    // ) {
-    //   toast.error("Plase fill in all required fields.")
-    //   return;
-    // }
+    if (
+      !getData.get("Title") ||
+      !getData.get("Description") ||
+      !getData.get("City") ||
+      !getData.get("Address") ||
+      !getData.get("District") ||
+      !getData.get("Price") ||
+      !getData.get("RoomsCount") ||
+      !getData.get("Area") ||
+      !getData.get("CategoryId") ||
+      !getData.get("YearBuilt")
+    ) {
+      toast.error("Plase fill in all required fields.")
+      return;
+    }
 
     const photos = Array.from(getData.getAll("Photo"));
     Promise.all(
@@ -73,15 +79,14 @@ export default function CreateAdvertisement() {
           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify(data),
-      })
-        .then((response) => {
-          if (response.status === 201) {
-            navigate("/");
-            return response.json();
-          } else {
-            toast.error("Failed to create advertisement please check fields!");
-          }
-        })
+      }).then((response) => {
+        if (response.status === 201) {
+          navigate("/");
+          return response.json();
+        } else {
+          toast.error("Failed to create advertisement please check fields!");
+        }
+      });
     });
   };
 
@@ -154,14 +159,16 @@ export default function CreateAdvertisement() {
                   margin="normal"
                   required
                   fullWidth
-                  name="Price"
-                  label="Price"
+                  type="number"
+                  label="Price (€)"
+                  name="Price"             
                   id="Price"
                 />
                 <TextField
                   margin="normal"
                   required
                   fullWidth
+                  type="number"
                   name="YearBuilt"
                   label="Year built"
                   id="YearBuilt"
@@ -170,12 +177,14 @@ export default function CreateAdvertisement() {
                   margin="normal"
                   required
                   fullWidth
+                  type="number"
                   name="RoomsCount"
                   label="Rooms Count"
                   id="RoomsCount"
                 />
                 <TextField
                   margin="normal"
+                  type="number"
                   required
                   fullWidth
                   name="Area"
@@ -186,14 +195,21 @@ export default function CreateAdvertisement() {
                   control={<Checkbox id="HasParking" />}
                   label="Has Parking"
                 />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="CategoryId"
-                  label="Category"
+                <InputLabel id="CategoryId">Category</InputLabel>
+                <Select
+                  defaultValue="1"
+                  labelId="CategoryId"
                   id="CategoryId"
-                />
+                  name="CategoryId"
+                  value={categoryId}
+                  onChange={(event) => setCategoryId(event.target.value)}
+                  fullWidth
+                >
+                  <MenuItem value={1}>Apartment</MenuItem>
+                  <MenuItem value={2}>House</MenuItem>
+                  <MenuItem value={3}>Loft</MenuItem>
+                  <MenuItem value={4}>Cottage</MenuItem>
+                </Select>
                 <div className="flex justify-center items-center">
                   <Button
                     variant="contained"
