@@ -3,31 +3,6 @@ import Header from "../main/Header";
 import { useNavigate } from "react-router-dom";
 import { Api_Url, isSeller } from "../Constants";
 
-interface Advertisement {
-  id: number;
-  title: string;
-  city: string;
-  district: string;
-  address: string;
-  price: number;
-  categoryId: number;
-}
-
-interface BuyAdvertisement {
-  id: number;
-  title: string;
-  description: string;
-  city: string;
-  district: string;
-  minPrice: number;
-  maxPrice: number;
-  minArea: number;
-  maxArea: number;
-  minRoomsCount: number;
-  maxRoomsCount: number;
-  hasParking: boolean;
-}
-
 const MyAdvertisements: React.FC = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState<any[]>([]);
@@ -45,6 +20,14 @@ const MyAdvertisements: React.FC = () => {
         setItems(data);
       });
   }, [endpoint]);
+
+  if (!items) {
+    return (
+      <div className="text-3xl font-bold text-themeColor flex justify-center items-center h-screen w-full">
+        Loading data...
+      </div>
+    );
+  }
 
   const handleEdit = (id: number) => {
     const editUrl = isSeller()

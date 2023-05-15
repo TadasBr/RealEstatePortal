@@ -1,7 +1,6 @@
 ﻿using eVert.Auth;
 using eVert.Auth.Model;
-using eVert.Auth.Model.Dtos;
-using eVert.Data.Dtos.Advertisements;
+using eVert.Data.Dtos.Auth;
 using eVert.Data.Repositories.Advertisements;
 using eVert.Data.Repositories.BuyAdvertisiments;
 using Microsoft.AspNetCore.Authorization;

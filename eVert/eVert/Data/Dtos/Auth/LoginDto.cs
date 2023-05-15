@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace eVert.Auth.Model.Dtos
+namespace eVert.Data.Dtos.Auth
 {
     public class LoginDto
     {

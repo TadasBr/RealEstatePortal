@@ -1,4 +1,4 @@
-﻿namespace eVert.Auth.Model.Dtos
+﻿namespace eVert.Data.Dtos.Auth
 {
     public class UserDto
     {

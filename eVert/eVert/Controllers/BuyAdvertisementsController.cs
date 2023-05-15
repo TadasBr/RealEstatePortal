@@ -211,7 +211,7 @@ namespace eVert.Controllers
             {
                 city = city.Substring(0, city.Length - 2) + "uose";
             }
-            else if (city.Substring(city.Length - 2) == "is")
+            else if (city.Substring(city.Length - 2) == "is")   
             {
                 city = city.Substring(0, city.Length - 2) + "yje";
             }

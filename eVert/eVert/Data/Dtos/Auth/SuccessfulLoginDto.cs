@@ -1,10 +1,10 @@
-﻿namespace eVert.Auth.Model.Dtos
+﻿namespace eVert.Data.Dtos.Auth
 {
     public class SuccessfulLoginDto
     {
         public string AccessToken { get; set; }
         public string UserName { get; set; }
-        public bool IsSeller { get; set; }  
+        public bool IsSeller { get; set; }
         public string PhoneNumber { get; set; }
 
         public SuccessfulLoginDto(string accessToken, string userName, bool isSeller, string phoneNumber)

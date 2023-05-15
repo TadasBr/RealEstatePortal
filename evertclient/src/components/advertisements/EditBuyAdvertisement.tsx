@@ -10,7 +10,7 @@ import Header from "../main/Header";
 import { Api_Url } from "../Constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Checkbox, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -20,6 +20,7 @@ export default function EditSellAdvertisement() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [advertisement, setAdvertisement] = useState<any>();
+  const [categoryId, setCategoryId] = React.useState<string>();
 
   React.useEffect(() => {
     fetch(Api_Url + "/buy-advertisements/" + id, {
@@ -218,16 +219,21 @@ export default function EditSellAdvertisement() {
                   label="Has Parking"
                   defaultChecked={advertisement.hasParking}
                 />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="CategoryId"
-                  label="Category Id"
-                  id="CategoryId"
-                  type="number"
-                  defaultValue="1"
-                />
+                <InputLabel id="CategoryId">Category</InputLabel>
+                  <Select
+                    defaultValue={advertisement.CategoryId}
+                    labelId="CategoryId"
+                    id="CategoryId"
+                    name="CategoryId"
+                    value={categoryId}
+                    onChange={(event) => setCategoryId(event.target.value)}
+                    fullWidth
+                  >
+                    <MenuItem value={1}>Apartment</MenuItem>
+                    <MenuItem value={2}>House</MenuItem>
+                    <MenuItem value={3}>Loft</MenuItem>
+                    <MenuItem value={4}>Cottage</MenuItem>
+                  </Select>
                 <Button
                   type="submit"
                   fullWidth

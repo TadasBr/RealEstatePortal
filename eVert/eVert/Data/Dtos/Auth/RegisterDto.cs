@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace eVert.Auth.Model.Dtos
+namespace eVert.Data.Dtos.Auth
 {
     public class RegisterDto
     {
         [Required]
         public string UserName { get; set; }
 
-        [EmailAddress][Required]
+        [EmailAddress]
+        [Required]
         public string EmailAddress { get; set; }
 
         [Required]

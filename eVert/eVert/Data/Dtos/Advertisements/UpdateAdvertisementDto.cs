@@ -10,9 +10,11 @@
         public int Price { get; set; }
         public int RoomsCount { get; set; }
         public int Area { get; set; }
+        public int BuiltYear { get; set; }
         public bool HasParking { get; set; }
+        public int CategoryId { get; set; }
 
-        public UpdateAdvertisementDto(string title, string description, string city, string address, string district, int price, int roomsCount, int area, bool hasParking)
+        public UpdateAdvertisementDto(string title, string description, string city, string address, string district, int price, int roomsCount, int area, bool hasParking, int builtYear, int categoryId)
         {
             Title = title;
             Description = description;
@@ -23,6 +25,8 @@
             RoomsCount = roomsCount;
             Area = area;
             HasParking = hasParking;
+            BuiltYear = builtYear;
+            CategoryId = categoryId;
         }
     }
 }

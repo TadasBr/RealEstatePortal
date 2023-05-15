@@ -306,11 +306,16 @@ namespace eVert.Controllers
             advertisement.Address = updateAdvertisementDto.Address;
             advertisement.District = updateAdvertisementDto.District;
             advertisement.Price = updateAdvertisementDto.Price;
+            advertisement.RoomsCount = updateAdvertisementDto.RoomsCount;
+            advertisement.Area = updateAdvertisementDto.Area;
+            advertisement.CategoryId = updateAdvertisementDto.CategoryId;
             advertisement.UpdatedDate = DateTime.Now;
+            advertisement.BuiltYear = updateAdvertisementDto.BuiltYear;
             await _advertisementsRepository.UpdateAsync(advertisement);
 
             return new OkObjectResult(new UpdateAdvertisementDto(advertisement.Title, advertisement.Description, advertisement.City, advertisement.Address,
-                advertisement.District, advertisement.Price, advertisement.RoomsCount, advertisement.Area, advertisement.HasParking));
+                advertisement.District, advertisement.Price, advertisement.RoomsCount, advertisement.Area, advertisement.HasParking, advertisement.BuiltYear,
+                advertisement.CategoryId));
         }
 
         [HttpDelete]

@@ -12,6 +12,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { InputLabel, MenuItem, Select } from "@mui/material";
 
 const theme = createTheme();
 
@@ -19,6 +20,7 @@ export default function EditSellAdvertisement() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [advertisement, setAdvertisement] = useState<any>();
+  const [categoryId, setCategoryId] = React.useState<string>();
 
   React.useEffect(() => {
     fetch(Api_Url + "/sell-advertisements/" + id, {
@@ -43,14 +45,13 @@ export default function EditSellAdvertisement() {
       !getData.get("City") ||
       !getData.get("Address") ||
       !getData.get("District") ||
-      !getData.get("Price")
-      // !getData.get("RoomsCount") ||
-      // !getData.get("Area") ||
-      // !getData.get("CategoryId") ||
-      // !getData.get("phoneNumber") ||
-      // !getData.get("YearBuilt")
+      !getData.get("Price") ||
+      !getData.get("RoomsCount") ||
+      !getData.get("Area") ||
+      !getData.get("CategoryId") ||
+      !getData.get("BuiltYear")
     ) {
-      toast.error("Plase fill in all required fields.")
+      toast.error("Plase fill in all required fields.");
       return;
     }
 
@@ -61,6 +62,10 @@ export default function EditSellAdvertisement() {
       Address: getData.get("Address"),
       District: getData.get("District"),
       Price: getData.get("Price"),
+      RoomsCount: getData.get("RoomsCount"),
+      Area: getData.get("Area"),
+      CategoryId: getData.get("CategoryId"),
+      BuiltYear: getData.get("BuiltYear")
     };
     debugger;
     fetch(Api_Url + "/sell-advertisements/" + id, {
@@ -70,11 +75,10 @@ export default function EditSellAdvertisement() {
         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(data),
-    })
-      .then((response) => {
-        navigate("/");
-        console.log(response.json());
-      })
+    }).then((response) => {
+      navigate("/");
+      console.log(response.json());
+    });
   };
 
   if (!advertisement) {
@@ -87,9 +91,9 @@ export default function EditSellAdvertisement() {
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContainer/>
+      <ToastContainer />
       <Header />
-      <div className="w-full min-h-screen flex justify-center items-center my-14">
+      <div className="w-full min-h-screen max-h-full flex justify-center items-center mt-20">
         <div className="bg-white w-max p-6 pt-0 rounded-lg shadow-2xl border-2 border-themeColor">
           <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -155,6 +159,7 @@ export default function EditSellAdvertisement() {
                   id="District"
                   defaultValue={advertisement.district}
                 />
+
                 <TextField
                   margin="normal"
                   required
@@ -164,6 +169,48 @@ export default function EditSellAdvertisement() {
                   id="Price"
                   defaultValue={advertisement.price}
                 />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="RoomsCount"
+                  label="Rooms count"
+                  id="RoomsCount"
+                  defaultValue={advertisement.roomsCount}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="Area"
+                  label="Area"
+                  id="Area"
+                  defaultValue={advertisement.area}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="BuiltYear"
+                  label="Built year"
+                  id="BuiltYear"
+                  defaultValue={advertisement.builtYear}
+                />
+                <InputLabel id="CategoryId">Category</InputLabel>
+                <Select
+                  defaultValue={advertisement.CategoryId}
+                  labelId="CategoryId"
+                  id="CategoryId"
+                  name="CategoryId"
+                  value={categoryId}
+                  onChange={(event) => setCategoryId(event.target.value)}
+                  fullWidth
+                >
+                  <MenuItem value={1}>Apartment</MenuItem>
+                  <MenuItem value={2}>House</MenuItem>
+                  <MenuItem value={3}>Loft</MenuItem>
+                  <MenuItem value={4}>Cottage</MenuItem>
+                </Select>
                 <Button
                   type="submit"
                   fullWidth

@@ -13,6 +13,7 @@ interface BuyAdvertisementItem {
   minRoomsCount: number;
   maxRoomsCount: number;
   hasParking: boolean;
+  phoneNumber: string;
 }
 
 interface BuyAdvertisementListItemProps {

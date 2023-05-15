@@ -39,6 +39,7 @@ interface BuyAdvertisement {
   minRoomsCount: number;
   maxRoomsCount: number;
   hasParking: boolean;
+  phoneNumber: string;
 }
 
 const AdvertisementList: React.FC = () => {

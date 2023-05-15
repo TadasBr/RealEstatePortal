@@ -16,6 +16,7 @@ interface BuyAdvertisementItem {
   minRoomsCount: number;
   maxRoomsCount: number;
   hasParking: boolean;
+  phoneNumber: string;
 }
 
 const BuyAdvertisement: React.FC = () => {
@@ -39,7 +40,7 @@ const BuyAdvertisement: React.FC = () => {
   return (
     <div className="flex justify-center items-center min-h-screen my-0 mx-auto bg-[#f1f1f1]">
       <Header />
-      <div className="bg-white w-max p-10 pt-6 rounded-lg shadow-xl">
+      <div className="bg-white w-max max-w-l p-10 pt-6 rounded-lg shadow-xl">
         <div className="">
           <h1 className="font-semibold text-themeColor my-2 text-2xl capitalize">
             {data.title}
@@ -49,7 +50,7 @@ const BuyAdvertisement: React.FC = () => {
             {data.city}, {data.district}
           </div>
           <h3 className="text-xl font-semibold text-themeColor mb-2">
-            <span className="text-gray-600 font-medium">Price (approx): </span>
+            <span className="text-gray-600 font-medium">Price: </span>
             {data.minPrice}-{data.maxPrice}€
           </h3>
           <div className="text-[17px] text-gray-600 leading-[1.5] mb-3">
@@ -70,6 +71,13 @@ const BuyAdvertisement: React.FC = () => {
               <i className="fas fa-expand"></i>
               {data.minArea}-{data.maxArea} m²
             </div>
+          </div>
+          <div className="text-themeColor font-semibold mt-5">
+            {" "}
+            <span className="text-gray-600 font-medium">
+              Phone number:{" "}
+            </span>{" "}
+            {data.phoneNumber}
           </div>
         </div>
       </div>
