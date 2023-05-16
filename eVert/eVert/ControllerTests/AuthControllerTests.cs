@@ -2,12 +2,15 @@
 using eVert.Auth.Model;
 using eVert.Controllers;
 using eVert.Data.Dtos.Auth;
+using eVert.Data.Entities;
 using eVert.Data.Repositories.Advertisements;
 using eVert.Data.Repositories.BuyAdvertisiments;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace eVert.ControllerTests
 {
@@ -21,82 +24,105 @@ namespace eVert.ControllerTests
         private AuthController _authController;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
-            _userManagerMock = new Mock<UserManager<eVertUser>>();
+            var userStoreMock = new Mock<IUserStore<eVertUser>>();
+            _userManagerMock = new Mock<UserManager<eVertUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
             _jwtTokenServiceMock = new Mock<IJwtTokenService>();
             _advertisementsRepositoryMock = new Mock<IAdvertisementsRepository>();
             _buyAdvertisementsRepositoryMock = new Mock<IBuyAdvertisementsRepository>();
 
-            _authController = new AuthController(
-                _userManagerMock.Object,
-                _jwtTokenServiceMock.Object,
-                _advertisementsRepositoryMock.Object,
-                _buyAdvertisementsRepositoryMock.Object);
+            _authController = new AuthController(_userManagerMock.Object, _jwtTokenServiceMock.Object, _advertisementsRepositoryMock.Object, _buyAdvertisementsRepositoryMock.Object);
         }
 
-        //[Test]
-        //public async Task Register_WhenCalledWithValidModel_ReturnsCreatedResultWithUserDto()
-        //{
-        //    // Arrange
-        //    var registerDto = new RegisterDto
-        //    {
-        //        UserName = "johndoe",
-        //        EmailAddress = "johndoe@example.com",
-        //        Password = "123456",
-        //        IsSeller = true,
-        //        PhoneNumber = "555-555-5555"
-        //    };
-        //    var newUser = new eVertUser
-        //    {
-        //        Id = "1",
-        //        UserName = registerDto.UserName,
-        //        Email = registerDto.EmailAddress,
-        //        IsSeller = registerDto.IsSeller,
-        //        PhoneNumber = registerDto.PhoneNumber
-        //    };
-        //    _userManagerMock.Setup(x => x.FindByNameAsync(registerDto.UserName)).ReturnsAsync((eVertUser)null);
-        //    _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<eVertUser>(), registerDto.Password)).ReturnsAsync(IdentityResult.Success);
-        //    _userManagerMock.Setup(x => x.AddToRoleAsync(It.IsAny<eVertUser>(), eVertRoles.eVertUser)).Returns(Task.FromResult(0));
-        //    _jwtTokenServiceMock.Setup(x => x.CreateAccessToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<System.Collections.Generic.IEnumerable<string>>()))
-        //        .Returns("access_token");
-
-        //    // Act
-        //    var result = await _authController.Register(registerDto) as CreatedAtActionResult;
-        //    var userDto = result.Value as UserDto;
-
-        //    // Assert
-        //    Assert.IsNotNull(result);
-        //    Assert.AreEqual(nameof(AuthController.Register), result.ActionName);
-        //    Assert.AreEqual(newUser.Id, userDto.Id);
-        //    Assert.AreEqual(newUser.UserName, userDto.UserName);
-        //    Assert.AreEqual(newUser.Email, userDto.EmailAddress);
-        //    Assert.AreEqual(newUser.IsSeller, userDto.IsSeller);
-        //    Assert.AreEqual(newUser.PhoneNumber, userDto.PhoneNumber);
-        //}
-
         [Test]
-        public async Task Register_ExistingUserName_ReturnsBadRequest()
+        public async Task Register_UserAlreadyExists_ReturnsBadRequest()
         {
             // Arrange
-            var registerUserDto = new RegisterDto
-            {
-                UserName = "testuser",
-                EmailAddress = "testuser@example.com",
-                Password = "password",
-                IsSeller = true,
-                PhoneNumber = "123456789"
-            };
-            var existingUser = new eVertUser();
-
-            _userManagerMock.Setup(m => m.FindByNameAsync(registerUserDto.UserName))
-                .ReturnsAsync(existingUser);
+            var registerUserDto = new RegisterDto { UserName = "test", EmailAddress = "test@test.com", Password = "password", IsSeller = false, PhoneNumber = "1234567890" };
+            _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new eVertUser());
 
             // Act
             var result = await _authController.Register(registerUserDto);
 
             // Assert
             Assert.IsInstanceOf<BadRequestObjectResult>(result);
+        }
+
+        [Test]
+        public async Task Login_UserNotFound_ReturnsBadRequest()
+        {
+            // Arrange
+            var loginDto = new LoginDto("test", "password");
+            _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((eVertUser)null);
+
+            // Act
+            var result = await _authController.Login(loginDto);
+
+            // Assert
+            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+        }
+
+        [Test]
+        public async Task ChangeRole_UserNotFound_ReturnsBadRequest()
+        {
+            // Arrange
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, "test") };
+            var identity = new ClaimsIdentity(claims);
+            var principal = new ClaimsPrincipal(identity);
+            _authController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = principal }
+            };
+            _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((eVertUser)null);
+
+            // Act
+            var result = await _authController.ChangeRole();
+
+            // Assert
+            Assert.IsInstanceOf<BadRequestResult>(result);
+        }
+
+        [Test]
+        public async Task Login_InvalidPassword_ReturnsBadRequest()
+        {
+            // Arrange
+            var loginDto = new LoginDto("test", "password");
+            var user = new eVertUser { UserName = loginDto.UserName };
+            _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
+            _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<eVertUser>(), It.IsAny<string>())).ReturnsAsync(false);
+
+            // Act
+            var result = await _authController.Login(loginDto);
+
+            // Assert
+            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+        }
+
+        [Test]
+        public async Task Login_ValidUser_ReturnsOkResultWithToken()
+        {
+            // Arrange
+            var loginDto = new LoginDto("test", "password");
+            var user = new eVertUser { UserName = loginDto.UserName, IsSeller = true, PhoneNumber = "1234567890", Id = "1" };
+            var roles = new List<string> { "User" };
+            _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
+            _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<eVertUser>(), It.IsAny<string>())).ReturnsAsync(true);
+            _userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<eVertUser>())).ReturnsAsync(roles);
+            _jwtTokenServiceMock.Setup(x => x.CreateAccessToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns("token");
+
+            // Act
+            var result = await _authController.Login(loginDto);
+
+            // Assert
+            var okResult = result as OkObjectResult;
+            Assert.IsNotNull(okResult);
+            var successfulLoginDto = okResult.Value as SuccessfulLoginDto;
+            Assert.IsNotNull(successfulLoginDto);
+            Assert.AreEqual(successfulLoginDto.AccessToken, "token");
+            Assert.AreEqual(successfulLoginDto.UserName, user.UserName);
+            Assert.AreEqual(successfulLoginDto.IsSeller, user.IsSeller);
+            Assert.AreEqual(successfulLoginDto.PhoneNumber, user.PhoneNumber);
         }
     }
 }

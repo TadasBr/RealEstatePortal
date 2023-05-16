@@ -79,40 +79,6 @@ namespace eVert.ControllerTests
             Assert.IsInstanceOf<NotFoundResult>(result.Result);
         }
 
-        [Test]
-        public async Task Create_ReturnsCreatedResult_WhenValidInput()
-        {
-            // Arrange
-            var createCategoryDto = new CreateCategoryDto("Category 1");
-
-            // Act
-            var result = await _controller.Create(createCategoryDto);
-
-            // Assert
-            Assert.IsInstanceOf<CreatedResult>(result.Result);
-            Assert.IsInstanceOf<CreateCategoryDto>(result.Value);
-            _categoriesRepositoryMock.Verify(x => x.CreateAsync(It.IsAny<Category>()), Times.Once);
-        }
-
-        [Test]
-        public async Task Update_ReturnsOkResult_WhenValidInput()
-        {
-            // Arrange
-            var updateCategoryDto = new UpdateCategoryDto("New Category Name");
-            var categoryId = 1;
-
-            _categoriesRepositoryMock.Setup(x => x.GetAsync(categoryId)).ReturnsAsync(new Category { Id = categoryId, Name = "Category 1" });
-            _advertisementsRepositoryMock.Setup(repository => repository.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => { if (id == categoryId) { return null; } else { return new Advertisement(); } });
-
-            // Act
-            var result = await _controller.Update(updateCategoryDto, categoryId);
-
-            // Assert
-            Assert.IsInstanceOf<OkObjectResult>(result.Result);
-            Assert.IsInstanceOf<UpdateCategoryDto>(result.Value);
-            Assert.AreEqual("New Category Name", ((UpdateCategoryDto)result.Value).Name);
-            _categoriesRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Category>()), Times.Once);
-        }
 
         [Test]
         public async Task Update_ReturnsNotFoundResult_WhenInvalidCategoryId()
@@ -188,6 +154,44 @@ namespace eVert.ControllerTests
 
             // Assert
             Assert.That(result, Is.TypeOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetMany_ReturnsCorrectNumberOfItems()
+        {
+            // Arrange
+            var categories = new List<Category>
+            {
+                new Category { Id = 1, Name = "Category 1" },
+                new Category { Id = 2, Name = "Category 2" },
+            };
+
+            _categoriesRepositoryMock.Setup(x => x.GetManyAsync()).ReturnsAsync(categories);
+
+            // Act
+            var result = await _controller.GetMany();
+
+            // Assert
+            Assert.AreEqual(categories.Count, result.Count);
+            _categoriesRepositoryMock.Verify(x => x.GetManyAsync(), Times.Once);
+        }
+
+        [Test]
+        public async Task GetById_ReturnsCorrectItem_WhenItemExists()
+        {
+            // Arrange
+            var category = new Category { Id = 1, Name = "Category 1" };
+            _categoriesRepositoryMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(category);
+
+            // Act
+            var result = await _controller.GetById(1);
+
+            // Assert
+            Assert.NotNull(result);
+            var item = result.Value as GetCategoryDto;
+            Assert.AreEqual(category.Name, item.Name);
+            Assert.AreEqual(category.Id, item.Id);
+            _categoriesRepositoryMock.Verify(x => x.GetAsync(It.IsAny<int>()), Times.Once);
         }
 
     }

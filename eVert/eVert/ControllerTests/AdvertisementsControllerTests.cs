@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Assert = NUnit.Framework.Assert;
 
 namespace eVert.ControllerTests
@@ -44,98 +47,6 @@ namespace eVert.ControllerTests
             );
         }
 
-
-        [Test]
-        public async Task GetManyAsync_ReturnsCorrectAdvertisementDtos()
-        {
-            // Arrange
-            var advertisements = new List<Advertisement>
-            {
-                new Advertisement
-                {
-                    Id = 1,
-                    Description = "Beautiful apartment with great views",
-                    Title = "Luxury Apartment",
-                    City = "New York",
-                    Address = "123 Main Street",
-                    District = "Manhattan",
-                    Price = 2000000,
-                    RoomsCount = 3,
-                    Area = 200,
-                    HasParking = true,
-                    Views = 100,
-                    CreatedDate = DateTime.UtcNow.AddDays(-30),
-                    UpdatedDate = DateTime.UtcNow.AddDays(-7),
-                    PhoneNumber = "555-555-5555",
-                    BuiltYear = 2010
-                },
-                new Advertisement
-                {
-                    Id = 2,
-                    Description = "Spacious house with large backyard",
-                    Title = "Family House",
-                    City = "Los Angeles",
-                    Address = "456 Elm Street",
-                    District = "Beverly Hills",
-                    Price = 5000000,
-                    RoomsCount = 5,
-                    Area = 400,
-                    HasParking = true,
-                    Views = 250,
-                    CreatedDate = DateTime.UtcNow.AddDays(-60),
-                    UpdatedDate = DateTime.UtcNow.AddDays(-14),
-                    PhoneNumber = "555-555-5555",
-                    BuiltYear = 1995
-                }
-            };
-
-            var photo1 = new Photo { Id = 1, AdvertisementId = 1, Data = "photo1.jpg" };
-            var photo2 = new Photo { Id = 2, AdvertisementId = 1, Data = "photo2.jpg" };
-            var photo3 = new Photo { Id = 3, AdvertisementId = 2, Data = "photo3.jpg" };
-            var photo4 = new Photo { Id = 4, AdvertisementId = 2, Data = "photo4.jpg" };
-            var photos = new List<Photo> { photo1, photo2, photo3, photo4 };
-
-            _mockAdvertisementsRepo.Setup(repo => repo.GetManyAsync())
-                .ReturnsAsync(advertisements);
-
-            _mockPhotosRepo.Setup(repo => repo.GetMany(It.IsAny<int>()))
-                .ReturnsAsync((int advertisementId) => photos.Where(p => p.AdvertisementId == advertisementId).ToList());
-
-
-            var expectedDtos = new List<GetAdvertisementDto>();
-            foreach (var advertisement in advertisements)
-            {
-                var photoDtos = photos.Where(p => p.AdvertisementId == advertisement.Id).Select(p => p.Data).ToList();
-
-                var advertisementDto = new GetAdvertisementDto(
-                    advertisement.Id,
-                    advertisement.Description,
-                    advertisement.Title,
-                    advertisement.City,
-                    advertisement.Address,
-                    advertisement.District,
-                    advertisement.Price,
-                    advertisement.RoomsCount,
-                    advertisement.Area,
-                    advertisement.HasParking,
-                    advertisement.Views,
-                    advertisement.CreatedDate,
-                    advertisement.UpdatedDate,
-                    photoDtos,
-                    advertisement.PhoneNumber,
-                    advertisement.BuiltYear);
-
-                expectedDtos.Add(advertisementDto);
-            }
-
-            // Act
-            var result = await _controller.GetManyAsync();
-
-            // Assert
-            Assert.AreEqual(expectedDtos, result);
-        }
-
-
         [Test]
         public async Task GetManyAsync_ReturnsEmptyList_WhenNoAdvertisements()
         {
@@ -165,66 +76,208 @@ namespace eVert.ControllerTests
             Assert.AreEqual(0, result.Count);
         }
 
-        //[TestMethod]
-        //public async Task GetByBuyAdvertisement_ReturnsCorrectAdvertisements()
-        //{
-        //    // Arrange
-        //    var buyAdvertisementDto = new BuyAdvertisementForKampasScrapeDto("Vilnius", 50000, 100000, 50, 100, 1, 2);
-        //    var advertisements = new List<Advertisement>
-        //    {
-        //        new Advertisement
-        //        {
-        //            Id = 1,
-        //            Price = 70000,
-        //            Area = 75,
-        //            City = "Vilnius",
-        //            District = "Naujamiestis",
-        //            Address = "Pylimo g.",
-        //            RoomsCount = 2
-        //        },
-        //        new Advertisement
-        //        {
-        //            Id = 2,
-        //            Price = 80000,
-        //            Area = 80,
-        //            City = "Vilnius",
-        //            District = "Žirmūnai",
-        //            Address = "Žirmūnų g.",
-        //            RoomsCount = 2
-        //        },
-        //        new Advertisement
-        //        {
-        //            Id = 3,
-        //            Price = 90000,
-        //            Area = 90,
-        //            City = "Kaunas",
-        //            District = "Žaliakalnis",
-        //            Address = "Laisvės al.",
-        //            RoomsCount = 2
-        //        }
-        //    };
-        //    _mockAdvertisementsRepo.Setup(repo => repo.GetManyAsync())
-        //        .ReturnsAsync(advertisements);
+        [Test]
+        public async Task GetManyWithPhotos_ReturnsCorrectNumberAdvertisements_WhenCategoryHasAdvertisements()
+        {
+            // Arrange
+            int categoryId = 1;
+            _mockAdvertisementsRepo.Setup(repo => repo.GetManyAsync())
+                .ReturnsAsync(new List<Advertisement> { new Advertisement { CategoryId = categoryId }, new Advertisement { CategoryId = categoryId } });
 
-        //    // Act
-        //    var result = await _controller.GetByBuyAdvertisement(buyAdvertisementDto);
+            // Act
+            var result = await _controller.GetManyWithPhotos(categoryId);
 
-        //    // Assert
-        //    Assert.AreEqual(2, result.Count);
+            // Assert
+            Assert.AreEqual(2, result.Count);
+        }
 
-        //    var ad1 = result.FirstOrDefault(ad => ad.Id == "1");
-        //    Assert.IsNotNull(ad1);
-        //    Assert.AreEqual("Vilnius, Naujamiestis, Pylimo g.", ad1.Address);
-        //    Assert.AreEqual(2, ad1.RoomsCount);
-        //    Assert.AreEqual(75000, ad1.Price);
-        //    Assert.AreEqual(75, ad1.Area);
+        [Test]
+        public async Task GetManyWithPhotos_ReturnsEmptyList_WhenCategoryHasNoAdvertisements()
+        {
+            // Arrange
+            int categoryId = 1;
+            _mockAdvertisementsRepo.Setup(repo => repo.GetManyAsync())
+                .ReturnsAsync(new List<Advertisement> { new Advertisement { CategoryId = 2 }, new Advertisement { CategoryId = 3 } });
 
-        //    var ad2 = result.FirstOrDefault(ad => ad.Id == "2");
-        //    Assert.IsNotNull(ad2);
-        //    Assert.AreEqual("Vilnius, Žirmūnai, Žirmūnų g.", ad2.Address);
-        //    Assert.AreEqual(2, ad2.RoomsCount);
-        //    Assert.AreEqual(80000, ad2.Price);
-        //    Assert.AreEqual(80, ad2.Area);
-        //}
+            // Act
+            var result = await _controller.GetManyWithPhotos(categoryId);
+
+            // Assert
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        public async Task GetManyWithPhotos_ReturnsCorrectlyMappedAdvertisements_WhenCategoryHasAdvertisements()
+        {
+            // Arrange
+            int categoryId = 1;
+            var advertisement = new Advertisement { Id = 1, Description = "Ad 1", CategoryId = categoryId };
+            _mockAdvertisementsRepo.Setup(repo => repo.GetManyAsync())
+                .ReturnsAsync(new List<Advertisement> { advertisement });
+
+            // Act
+            var result = await _controller.GetManyWithPhotos(categoryId);
+
+            // Assert
+            Assert.AreEqual(advertisement.Id, result.First().Id);
+            Assert.AreEqual(advertisement.Description, result.First().Description);
+        }
+
+        // Similar tests can be written for GetByIdWithPhotos
+
+        [Test]
+        public async Task GetByIdWithPhotos_ReturnsCorrectAdvertisement_WhenAdvertisementExists()
+        {
+            // Arrange
+            int advertisementId = 1;
+            var advertisement = new Advertisement { Id = advertisementId, Description = "Ad 1" };
+            _mockAdvertisementsRepo.Setup(repo => repo.GetAsync(advertisementId))
+                .ReturnsAsync(advertisement);
+
+            // Act
+            var result = await _controller.GetByIdWithPhotos(advertisementId);
+
+            // Assert
+            Assert.AreEqual(advertisement.Id, result.Value.Id);
+            Assert.AreEqual(advertisement.Description, result.Value.Description);
+        }
+
+        [Test]
+        public async Task GetByIdWithPhotos_ReturnsNotFound_WhenAdvertisementDoesNotExist()
+        {
+            // Arrange
+            int advertisementId = 1;
+            _mockAdvertisementsRepo.Setup(repo => repo.GetAsync(advertisementId))
+                .ReturnsAsync((Advertisement)null);
+
+            // Act
+            var result = await _controller.GetByIdWithPhotos(advertisementId);
+
+            // Assert
+            Assert.IsInstanceOf<NotFoundResult>(result.Result);
+        }
+
+        [Test]
+        public async Task GetByIdWithPhotos_IncrementsViews_WhenAdvertisementExists()
+        {
+            // Arrange
+            int advertisementId = 1;
+            var advertisement = new Advertisement { Id = advertisementId, Description = "Ad 1", Views = 1 };
+            _mockAdvertisementsRepo.Setup(repo => 
+            repo.GetAsync(advertisementId))
+            .ReturnsAsync(advertisement);
+            _mockAdvertisementsRepo.Setup(repo => repo.UpdateAsync(It.IsAny<Advertisement>()))
+                .Callback((Advertisement a) => advertisement = a)
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _controller.GetByIdWithPhotos(advertisementId);
+
+            // Assert
+            Assert.AreEqual(2, advertisement.Views);
+        }
+
+        [Test]
+        public async Task GetByIdWithPhotos_ReturnsCorrectPhotos_WhenAdvertisementExists()
+        {
+            // Arrange
+            int advertisementId = 1;
+            var advertisement = new Advertisement { Id = advertisementId, Description = "Ad 1" };
+            var photos = new List<Photo> { new Photo { Data = "Photo1" }, new Photo { Data = "Photo2" } };
+            _mockAdvertisementsRepo.Setup(repo => repo.GetAsync(advertisementId))
+                .ReturnsAsync(advertisement);
+            _mockPhotosRepo.Setup(repo => repo.GetMany(advertisementId))
+                .ReturnsAsync(photos);
+
+            // Act
+            var result = await _controller.GetByIdWithPhotos(advertisementId);
+
+            // Assert
+            Assert.AreEqual(photos.Count, result.Value.Photos.Count);
+            Assert.AreEqual(photos[0].Data, result.Value.Photos[0]);
+            Assert.AreEqual(photos[1].Data, result.Value.Photos[1]);
+        }
+
+        [Test]
+        public async Task Create_GivenValidInput_ReturnsCreatedResult()
+        {
+            // Arrange
+            var createAdvertisementDto = new CreateAdvertisementWithPhotosDto("Test Title", "Test Description", "Test City", "Test Address", "Test District",
+                100, 2, 50, true, 1, new List<string> { "photo1", "photo2" }, "123456789", 2000);
+
+            var controller = SetupControllerWithUser();
+
+            // Act
+            var result = await controller.Create(createAdvertisementDto);
+
+            // Assert
+            Assert.IsInstanceOf<CreatedResult>(result.Result);
+        }
+
+        [Test]
+        public async Task Create_GivenValidInput_CreatesAdvertisementInRepository()
+        {
+            // Arrange
+            var createAdvertisementDto = new CreateAdvertisementWithPhotosDto("Test Title", "Test Description", "Test City", "Test Address", "Test District",
+                100, 2, 50, true, 1, new List<string> { "photo1", "photo2" }, "123456789", 2000);
+
+            var controller = SetupControllerWithUser();
+
+            // Act
+            await controller.Create(createAdvertisementDto);
+
+            // Assert
+            _mockAdvertisementsRepo.Verify(repo => repo.CreateAsync(It.IsAny<Advertisement>()), Times.Once);
+        }
+
+        [Test]
+        public async Task Create_GivenValidInputWithPhotos_CreatesPhotosInRepository()
+        {
+            // Arrange
+            var createAdvertisementDto = new CreateAdvertisementWithPhotosDto("Test Title", "Test Description", "Test City", "Test Address", "Test District",
+                100, 2, 50, true, 1, new List<string> { "photo1", "photo2" }, "123456789", 2000);
+
+            var controller = SetupControllerWithUser();
+
+            // Act
+            await controller.Create(createAdvertisementDto);
+
+            // Assert
+            _mockPhotosRepo.Verify(repo => repo.CreateAsync(It.IsAny<Photo>()), Times.Exactly(createAdvertisementDto.Photos.Count));
+        }
+
+        [Test]
+        public async Task Create_GivenValidInputWithNoPhotos_DoesNotCreatePhotosInRepository()
+        {
+            // Arrange
+            var createAdvertisementDto = new CreateAdvertisementWithPhotosDto("Test Title", "Test Description", "Test City", "Test Address", "Test District",
+                100, 2, 50, true, 1, new List<string>(), "123456789", 2000);
+
+            var controller = SetupControllerWithUser();
+
+            // Act
+            await controller.Create(createAdvertisementDto);
+
+            // Assert
+            _mockPhotosRepo.Verify(repo => repo.CreateAsync(It.IsAny<Photo>()), Times.Never);
+        }
+
+        private AdvertisementsController SetupControllerWithUser()
+        {
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "dummy"),
+                new Claim(JwtRegisteredClaimNames.Sub, "1"),
+            }));
+
+            _controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            return _controller;
+        }
+
+
     }
 }

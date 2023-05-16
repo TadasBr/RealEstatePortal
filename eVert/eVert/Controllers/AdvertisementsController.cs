@@ -147,9 +147,12 @@ namespace eVert.Controllers
                 var photos = await _photosRepository.GetMany(advertisement.Id);
                 List<string> photoDtos = new();
 
-                foreach (var photo in photos)
+                if(photos != null)
                 {
-                    photoDtos.Add(photo.Data);
+                    foreach (var photo in photos)
+                    {
+                        photoDtos.Add(photo.Data);
+                    }
                 }
 
                 var advertisementDto = new GetAdvertisementDto(
@@ -193,10 +196,12 @@ namespace eVert.Controllers
 
             var photos = await _photosRepository.GetMany(advertisementId);
             List<string> photoDtos = new();
-
-            foreach (var photo in photos)
+            if (photos != null)
             {
-                photoDtos.Add(photo.Data);
+                foreach (var photo in photos)
+                {
+                    photoDtos.Add(photo.Data);
+                }
             }
 
             var advertisementDto = new GetAdvertisementDto(

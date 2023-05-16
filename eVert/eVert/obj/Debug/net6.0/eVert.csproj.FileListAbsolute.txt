@@ -197,3 +197,4 @@ C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\zh
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\Microsoft.AspNet.Http.Features.dll
+C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.InMemory.dll
