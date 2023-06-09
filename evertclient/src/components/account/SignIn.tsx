@@ -97,6 +97,7 @@ export default function SignIn() {
                   name="userName"
                   autoComplete="username"
                   autoFocus
+                  defaultValue="presentation"
                 />
                 <TextField
                   margin="normal"
@@ -107,6 +108,7 @@ export default function SignIn() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  defaultValue="Tadas123!"
                 />
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}

@@ -123,8 +123,6 @@ namespace eVert.ControllerTests
             Assert.AreEqual(advertisement.Description, result.First().Description);
         }
 
-        // Similar tests can be written for GetByIdWithPhotos
-
         [Test]
         public async Task GetByIdWithPhotos_ReturnsCorrectAdvertisement_WhenAdvertisementExists()
         {

@@ -205,7 +205,7 @@ namespace eVert.Controllers
             }
             else if (city.Substring(city.Length - 2) == "as")
             {
-                city = city.Substring(0, city.Length - 1) + "e";
+                city = city.Substring(0, city.Length - 2) + "e";
             }
             else if (city.Substring(city.Length - 2) == "ai")
             {

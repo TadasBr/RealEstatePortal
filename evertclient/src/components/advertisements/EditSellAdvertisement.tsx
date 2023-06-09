@@ -198,7 +198,7 @@ export default function EditSellAdvertisement() {
                 />
                 <InputLabel id="CategoryId">Category</InputLabel>
                 <Select
-                  defaultValue={advertisement.CategoryId}
+                  defaultValue="1"
                   labelId="CategoryId"
                   id="CategoryId"
                   name="CategoryId"
@@ -207,9 +207,9 @@ export default function EditSellAdvertisement() {
                   fullWidth
                 >
                   <MenuItem value={1}>Apartment</MenuItem>
-                  <MenuItem value={2}>House</MenuItem>
                   <MenuItem value={3}>Loft</MenuItem>
                   <MenuItem value={4}>Cottage</MenuItem>
+                  <MenuItem value={5}>House</MenuItem>
                 </Select>
                 <Button
                   type="submit"

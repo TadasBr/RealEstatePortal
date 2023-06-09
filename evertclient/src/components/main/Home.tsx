@@ -3,6 +3,7 @@ import Header from "./Header";
 import { Api_Url, isSeller } from "../Constants";
 import KampasRecommendations from "./KampasRecommendations";
 import EvertRecommendations from "./EvertRecommendations";
+import MyAdvertisements from "../advertisements/MyAdvertisiments";
 
 interface MyAdvertisement {
   city: string;
@@ -31,6 +32,14 @@ const Home: React.FC = () => {
         setMyAdvertisements(data);
       });
   }, []);
+
+  if (!MyAdvertisements) {
+    return (
+      <div className="text-3xl font-bold text-themeColor flex justify-center items-center h-screen w-full">
+        Loading data...
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen my-0 mx-auto bg-[#f1f1f1]">

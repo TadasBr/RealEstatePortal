@@ -56,10 +56,24 @@ export default function CreateBuyAdvertisement() {
       MaxArea: getData.get("MaxArea"),
       MinRoomsCount: getData.get("MinRoomsCount"),
       MaxRoomsCount: getData.get("MaxRoomsCount"),
-      HasParking: getData.get("HasParking") === "true",
+      HasParking: getData.get("HasParking") === "on",
       CategoryId: getData.get("CategoryId"),
       PhoneNumber: sessionStorage.getItem("phoneNumber"),
     };
+
+    if(data.MinPrice! > data.MaxPrice!){
+      toast.error("Min price cannot be greater than max price.");
+      return;
+    }
+    if(data.MinArea! > data.MaxArea!){
+      toast.error("Min area cannot be greater than max area.");
+      return;
+    }
+    if(data.MinRoomsCount! > data.MaxRoomsCount!){
+      toast.error("Min rooms count cannot be greater than max rooms count.");
+      return;
+    }
+
     fetch(Api_Url + "/buy-advertisements", {
       method: "POST",
       headers: {
@@ -108,7 +122,7 @@ export default function CreateBuyAdvertisement() {
                   id="Title"
                   label="Title"
                   name="Title"
-                  defaultValue="Modern apartament"
+                  defaultValue="Test for presentation"
                 />
                 <TextField
                   margin="normal"
@@ -117,7 +131,7 @@ export default function CreateBuyAdvertisement() {
                   name="Description"
                   label="Description"
                   id="Description"
-                  defaultValue="Modern apartament"
+                  defaultValue="Test for presentation"
                 />
                 <TextField
                   margin="normal"
@@ -126,7 +140,7 @@ export default function CreateBuyAdvertisement() {
                   name="City"
                   label="City"
                   id="City"
-                  defaultValue="Vilnius"
+                  defaultValue="Kaunas"
                 />
                 <TextField
                   margin="normal"
@@ -135,7 +149,7 @@ export default function CreateBuyAdvertisement() {
                   name="District"
                   label="District"
                   id="District"
-                  defaultValue="antakalnis"
+                  defaultValue="Centras"
                 />
                 <TextField
                   margin="normal"
@@ -185,7 +199,7 @@ export default function CreateBuyAdvertisement() {
                   label="Min Rooms Count"
                   type="number"
                   id="MinRoomsCount"
-                  defaultValue="3"
+                  defaultValue="2"
                 />
                 <TextField
                   margin="normal"
@@ -195,28 +209,28 @@ export default function CreateBuyAdvertisement() {
                   label="Max Rooms Count"
                   type="number"
                   id="MaxRoomsCount"
-                  defaultValue="3"
+                  defaultValue="2"
                 />
                 <FormControlLabel
-                  control={<Checkbox id="HasParking" />}
+                  control={<Checkbox id="HasParking" name="HasParking"/>}
                   label="Has Parking"
                   style={{ color: "#022d3d" }}
                 />
-                  <InputLabel id="CategoryId">Category</InputLabel>
-                  <Select
-                    defaultValue="1"
-                    labelId="CategoryId"
-                    id="CategoryId"
-                    name="CategoryId"
-                    value={categoryId}
-                    onChange={(event) => setCategoryId(event.target.value)}
-                    fullWidth
-                  >
-                    <MenuItem value={1}>Apartment</MenuItem>
-                    <MenuItem value={2}>House</MenuItem>
-                    <MenuItem value={3}>Loft</MenuItem>
-                    <MenuItem value={4}>Cottage</MenuItem>
-                  </Select>
+                <InputLabel id="CategoryId">Category</InputLabel>
+                <Select
+                  defaultValue="1"
+                  labelId="CategoryId"
+                  id="CategoryId"
+                  name="CategoryId"
+                  value={categoryId}
+                  onChange={(event) => setCategoryId(event.target.value)}
+                  fullWidth
+                >
+                  <MenuItem value={1}>Apartment</MenuItem>
+                  <MenuItem value={3}>Loft</MenuItem>
+                  <MenuItem value={4}>Cottage</MenuItem>
+                  <MenuItem value={5}>House</MenuItem>
+                </Select>
                 <Button
                   type="submit"
                   fullWidth

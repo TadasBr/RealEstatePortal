@@ -2,6 +2,7 @@
 using eVert.Data.Dtos.Categories;
 using eVert.Data.Entities;
 using eVert.Data.Repositories.Advertisements;
+using eVert.Data.Repositories.BuyAdvertisiments;
 using eVert.Data.Repositories.Categories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ namespace eVert.Controllers
     {
         private ICategoriesRepository _categoriesRepository;
         private IAdvertisementsRepository _advertisementsRepository;
+        private IBuyAdvertisementsRepository _buyAdvertisementsRepository;
 
-        public CategoriesController(ICategoriesRepository categoriesRepository, IAdvertisementsRepository advertisementsRepository)
+        public CategoriesController(ICategoriesRepository categoriesRepository, IAdvertisementsRepository advertisementsRepository, IBuyAdvertisementsRepository buyAdvertisementsRepository)
         {
             _categoriesRepository = categoriesRepository;
             _advertisementsRepository = advertisementsRepository;
+            _buyAdvertisementsRepository = buyAdvertisementsRepository;
         }
 
         [HttpGet]
@@ -59,16 +62,24 @@ namespace eVert.Controllers
         public async Task<ActionResult<UpdateCategoryDto>> Update(UpdateCategoryDto updateCategoryDto, int categoryId)
         {
             var category = await _categoriesRepository.GetAsync(categoryId);
-            var advertisements = await _advertisementsRepository.GetAsync(categoryId);
+
+            var advertisements = await _advertisementsRepository.GetManyAsync();
+            advertisements = advertisements.Where(advertisements => advertisements.CategoryId == categoryId).ToList();
+
+            var buyAdvertisements = await _buyAdvertisementsRepository.GetManyAsync();
+            buyAdvertisements = buyAdvertisements.Where(buyAdvertisements => buyAdvertisements.CategoryId == categoryId).ToList();
 
             if (category == null)
             {
                 return new NotFoundResult();
             }
 
-            if (advertisements != null)
+            if (advertisements != null || buyAdvertisements != null)
             {
-                return new BadRequestResult();
+                if (advertisements.Count() > 0 || buyAdvertisements.Count() > 0)
+                {
+                    return new BadRequestResult();
+                }
             }
 
             category.Name = updateCategoryDto.Name;
@@ -83,16 +94,24 @@ namespace eVert.Controllers
         public async Task<IActionResult> Delete(int categoryId)
         {
             var category = await _categoriesRepository.GetAsync(categoryId);
-            var advertisements = await _advertisementsRepository.GetAsync(categoryId);
+
+            var advertisements = await _advertisementsRepository.GetManyAsync();
+            advertisements = advertisements.Where(advertisements => advertisements.CategoryId == categoryId).ToList();
+
+            var buyAdvertisements = await _buyAdvertisementsRepository.GetManyAsync();
+            buyAdvertisements = buyAdvertisements.Where(buyAdvertisements => buyAdvertisements.CategoryId == categoryId).ToList();
 
             if (category == null)
             {
                 return new NotFoundResult();
             }
 
-            if(advertisements != null)
+            if(advertisements != null || buyAdvertisements != null)
             {
-                return new BadRequestResult();
+                if(advertisements.Count() > 0 || buyAdvertisements.Count() > 0)
+                {
+                    return new BadRequestResult();
+                }
             }
 
             await _categoriesRepository.DeleteAsync(category);

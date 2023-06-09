@@ -33,17 +33,17 @@ const HamburgerMenu: React.FC = () => {
       <ListItem button onClick={() => navigate("/")}>
         <ListItemText primary="Home" />
       </ListItem>
-      {!isSeller() && sessionStorage.getItem("userName") && (
+      {!isSeller() && sessionStorage.getItem("userName") && sessionStorage.getItem("userName") !== "admin" && (
         <ListItem button onClick={() => navigate("/recommendations")}>
           <ListItemText primary="Recommendations" />
         </ListItem>
       )}
-      {sessionStorage.getItem("userName") && (
+      {sessionStorage.getItem("userName") && sessionStorage.getItem("userName") !== "admin" &&(
         <ListItem button onClick={() => navigate("/my-advertisements")}>
           <ListItemText primary="My advertisements" />
         </ListItem>
       )}
-      {sessionStorage.getItem("userName") && (
+      {sessionStorage.getItem("userName") && sessionStorage.getItem("userName") !== "admin" && (
         <ListItem
           button
           onClick={() => {

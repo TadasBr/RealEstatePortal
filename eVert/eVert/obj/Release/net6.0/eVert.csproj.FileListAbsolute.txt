@@ -197,3 +197,4 @@ C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\obj\Release\net6.0\
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\obj\Release\net6.0\eVert.pdb
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\obj\Release\net6.0\eVert.genruntimeconfig.cache
 C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\obj\Release\net6.0\ref\eVert.dll
+C:\Users\TadasBrazaitis\Desktop\RealEstatePortal\eVert\eVert\bin\Release\net6.0\Microsoft.EntityFrameworkCore.InMemory.dll

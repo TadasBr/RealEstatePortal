@@ -66,9 +66,23 @@ export default function EditSellAdvertisement() {
       MaxArea: getData.get("MaxArea"),
       MinRoomsCount: getData.get("MinRoomsCount"),
       MaxRoomsCount: getData.get("MaxRoomsCount"),
-      HasParking: getData.get("HasParking") === "true",
+      HasParking: getData.get("HasParking") === "on",
       CategoryId: getData.get("CategoryId"),
     };
+
+    if(data.MinPrice! > data.MaxPrice!){
+      toast.error("Min price cannot be greater than max price.");
+      return;
+    }
+    if(data.MinArea! > data.MaxArea!){
+      toast.error("Min area cannot be greater than max area.");
+      return;
+    }
+    if(data.MinRoomsCount! > data.MaxRoomsCount!){
+      toast.error("Min rooms count cannot be greater than max rooms count.");
+      return;
+    }
+    
     fetch(Api_Url + "/buy-advertisements/" + id, {
       method: "PUT",
       headers: {
@@ -215,13 +229,13 @@ export default function EditSellAdvertisement() {
                   style={{
                     color: "#022d3d",
                   }}
-                  control={<Checkbox id="HasParking" />}
+                  control={<Checkbox id="HasParking" name="HasParking"/>}
                   label="Has Parking"
                   defaultChecked={advertisement.hasParking}
                 />
                 <InputLabel id="CategoryId">Category</InputLabel>
                   <Select
-                    defaultValue={advertisement.CategoryId}
+                    defaultValue="1"
                     labelId="CategoryId"
                     id="CategoryId"
                     name="CategoryId"
@@ -230,9 +244,9 @@ export default function EditSellAdvertisement() {
                     fullWidth
                   >
                     <MenuItem value={1}>Apartment</MenuItem>
-                    <MenuItem value={2}>House</MenuItem>
-                    <MenuItem value={3}>Loft</MenuItem>
-                    <MenuItem value={4}>Cottage</MenuItem>
+                  <MenuItem value={3}>Loft</MenuItem>
+                  <MenuItem value={4}>Cottage</MenuItem>
+                  <MenuItem value={5}>House</MenuItem>
                   </Select>
                 <Button
                   type="submit"

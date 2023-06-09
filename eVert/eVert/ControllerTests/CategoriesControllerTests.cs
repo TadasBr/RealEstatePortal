@@ -23,7 +23,7 @@ namespace eVert.ControllerTests
         {
             _categoriesRepositoryMock = new Mock<ICategoriesRepository>();
             _advertisementsRepositoryMock = new Mock<IAdvertisementsRepository>();
-            _controller = new CategoriesController(_categoriesRepositoryMock.Object, _advertisementsRepositoryMock.Object);
+            _controller = new CategoriesController(_categoriesRepositoryMock.Object, _advertisementsRepositoryMock.Object, null);
         }
 
         [Test]

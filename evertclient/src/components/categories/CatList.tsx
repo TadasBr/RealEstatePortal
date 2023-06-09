@@ -24,7 +24,7 @@ const CatList = () => {
     }).then((response) => {
       if(response.status === 204){
         setItems(items.filter((item) => item.id !== id));
-        navigate("/allcategories");
+        toast.success("Category deleted successfully.");
       } else{
         toast.error("Failed to delete category, category has advertisements!")
       }  

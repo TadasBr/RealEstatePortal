@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Header from "../main/Header";
 import { useNavigate } from "react-router-dom";
 import { Api_Url, isSeller } from "../Constants";
+import { ToastContainer, toast } from "react-toastify";
+import { Toast } from "react-toastify/dist/components";
 
 const MyAdvertisements: React.FC = () => {
   const navigate = useNavigate();
@@ -44,6 +46,7 @@ const MyAdvertisements: React.FC = () => {
       },
     }).then(() => {
       setItems(items.filter((item) => item.id !== id));
+      toast.success("Advertisement deleted successfully.");
     });
   };
 
@@ -55,12 +58,22 @@ const MyAdvertisements: React.FC = () => {
       },
     }).then(() => {
       setItems(items.filter((item) => item.id !== id));
+      toast.success("Advertisement sold successfully.");
     });
   };
+
+  if (!items) {
+    return (
+      <div className="text-3xl font-bold text-themeColor flex justify-center items-center h-screen w-full">
+        Loading data...
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen my-0 mx-auto bg-[#f1f1f1]">
       <Header />
+      <ToastContainer />
       <div className="w-full">
         <h1 className="font-bold text-themeColor my-2 text-4xl text-center capitalize">
           My advertisements

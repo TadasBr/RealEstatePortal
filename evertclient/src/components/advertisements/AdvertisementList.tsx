@@ -22,7 +22,7 @@ interface Advertisement {
   views: number;
   createdDate: Date;
   updatedDate: Date;
-  phoneNumber: string;
+  phoneNumber: string; 
   builtYear: number;
 }
 
@@ -82,6 +82,7 @@ const AdvertisementList: React.FC = () => {
         <h1 className="text-4xl font-bold text-themeColor relative text-center">
           Advertisements
         </h1>
+        
         <div className="mt-10 rounded-lg bg-white shadow-xl w-full h-full p-8 pb-0">
           <div className="w-full flex justify-between items-center mb-6">
             <div
@@ -104,6 +105,7 @@ const AdvertisementList: React.FC = () => {
           <CategoryList
             setCategory={(category: number) => setCategory(category)}
           />
+          {adType === "sell" && (
           <div className="mb-8">
             <h1 className="text-themeColor text-xl font-semibold">Sort by:</h1>
             <div className="mt-2 flex items-center gap-4">
@@ -134,7 +136,7 @@ const AdvertisementList: React.FC = () => {
                 Room Count
               </button>
             </div>
-          </div>
+          </div>)}
           {adType === "sell"
             ? sellItems.map((item) => (
                 <AdvertisementSellListItem

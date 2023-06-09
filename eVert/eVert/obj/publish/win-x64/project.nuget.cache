@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "F+HfCINDyTDzRXYc7rfIlVIqvr2ABxHAF52hKVya3xaAIRm/qQE5S/T0la02osYw5kdiD9Sb+ZHtLWjKxQh6+w==",
+  "dgSpecHash": "8LkQaLfNJ0UNsmIbUTd1IiLXHqjiAQg76fkcsUaz7dU95s8vYhpu1dGckADuNJvRmgrePCP4vopHJGub1CUGsQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\TadasBrazaitis\\Desktop\\RealEstatePortal\\eVert\\eVert\\eVert.csproj",
   "expectedPackageFiles": [
@@ -37,6 +37,7 @@
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.4\\microsoft.entityframeworkcore.abstractions.7.0.4.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.4\\microsoft.entityframeworkcore.analyzers.7.0.4.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.entityframeworkcore.design\\7.0.4\\microsoft.entityframeworkcore.design.7.0.4.nupkg.sha512",
+    "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\7.0.4\\microsoft.entityframeworkcore.inmemory.7.0.4.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.4\\microsoft.entityframeworkcore.relational.7.0.4.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\7.0.4\\microsoft.entityframeworkcore.sqlserver.7.0.4.nupkg.sha512",
     "C:\\Users\\TadasBrazaitis\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\7.0.4\\microsoft.entityframeworkcore.tools.7.0.4.nupkg.sha512",

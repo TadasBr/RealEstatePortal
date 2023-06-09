@@ -18,11 +18,21 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { get } from "http";
 
 const theme = createTheme();
 
 export default function CreateAdvertisement() {
   const [categoryId, setCategoryId] = React.useState<string>();
+  const [selectedFiles, setSelectedFiles] = React.useState<string[]>([]);
+
+  const handleFileChange = (event: any) => {
+    const files = Array.from(event.target.files);
+    const fileNames = files.map((file: any) => file.name);
+
+    setSelectedFiles((prevFiles) => [...prevFiles, ...fileNames]);
+  };
+
   const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,7 +50,7 @@ export default function CreateAdvertisement() {
       !getData.get("CategoryId") ||
       !getData.get("YearBuilt")
     ) {
-      toast.error("Plase fill in all required fields.")
+      toast.error("Plase fill in all required fields.");
       return;
     }
 
@@ -65,7 +75,7 @@ export default function CreateAdvertisement() {
         Price: getData.get("Price"),
         RoomsCount: getData.get("RoomsCount"),
         Area: getData.get("Area"),
-        HasParking: getData.get("HasParking") === "true",
+        HasParking: getData.get("HasParking") === "on",
         CategoryId: getData.get("CategoryId"),
         Photos: photoBase64s,
         PhoneNumber: sessionStorage.getItem("phoneNumber"),
@@ -122,6 +132,7 @@ export default function CreateAdvertisement() {
                   id="Title"
                   label="Title"
                   name="Title"
+                  defaultValue="Test for presentation"
                 />
                 <TextField
                   margin="normal"
@@ -130,6 +141,7 @@ export default function CreateAdvertisement() {
                   name="Description"
                   label="Description"
                   id="Description"
+                  defaultValue="Test for presentation"
                 />
                 <TextField
                   margin="normal"
@@ -138,6 +150,7 @@ export default function CreateAdvertisement() {
                   name="City"
                   label="City"
                   id="City"
+                  defaultValue="Kaunas"
                 />
                 <TextField
                   margin="normal"
@@ -146,6 +159,7 @@ export default function CreateAdvertisement() {
                   name="Address"
                   label="Address"
                   id="Address"
+                  defaultValue="Studentu g. 50"
                 />
                 <TextField
                   margin="normal"
@@ -154,6 +168,7 @@ export default function CreateAdvertisement() {
                   name="District"
                   label="District"
                   id="District"
+                  defaultValue="KTU"
                 />
                 <TextField
                   margin="normal"
@@ -161,8 +176,9 @@ export default function CreateAdvertisement() {
                   fullWidth
                   type="number"
                   label="Price (€)"
-                  name="Price"             
+                  name="Price"
                   id="Price"
+                  defaultValue="80000"
                 />
                 <TextField
                   margin="normal"
@@ -172,6 +188,7 @@ export default function CreateAdvertisement() {
                   name="YearBuilt"
                   label="Year built"
                   id="YearBuilt"
+                  defaultValue="2000"
                 />
                 <TextField
                   margin="normal"
@@ -181,6 +198,7 @@ export default function CreateAdvertisement() {
                   name="RoomsCount"
                   label="Rooms Count"
                   id="RoomsCount"
+                  defaultValue="2"
                 />
                 <TextField
                   margin="normal"
@@ -190,9 +208,10 @@ export default function CreateAdvertisement() {
                   name="Area"
                   label="Area"
                   id="Area"
+                  defaultValue="34"
                 />
                 <FormControlLabel
-                  control={<Checkbox id="HasParking" />}
+                  control={<Checkbox id="HasParking" name="HasParking"/>}
                   label="Has Parking"
                 />
                 <InputLabel id="CategoryId">Category</InputLabel>
@@ -206,9 +225,9 @@ export default function CreateAdvertisement() {
                   fullWidth
                 >
                   <MenuItem value={1}>Apartment</MenuItem>
-                  <MenuItem value={2}>House</MenuItem>
                   <MenuItem value={3}>Loft</MenuItem>
                   <MenuItem value={4}>Cottage</MenuItem>
+                  <MenuItem value={5}>House</MenuItem>
                 </Select>
                 <div className="flex justify-center items-center">
                   <Button
@@ -228,8 +247,16 @@ export default function CreateAdvertisement() {
                       name="Photo"
                       multiple
                       hidden
+                      onChange={handleFileChange}
                     />
                   </Button>
+                </div>
+                <div>
+                  {selectedFiles.map((file, index) => (
+                    <div key={index}>
+                      <p>{file}</p>
+                    </div>
+                  ))}
                 </div>
                 <Button
                   type="submit"

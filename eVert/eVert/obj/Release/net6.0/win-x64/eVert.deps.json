@@ -16,6 +16,7 @@
           "Microsoft.AspNetCore.Identity": "2.2.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.15",
           "Microsoft.EntityFrameworkCore": "7.0.4",
+          "Microsoft.EntityFrameworkCore.InMemory": "7.0.4",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.4",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.4",
           "Microsoft.NET.Test.Sdk": "17.5.0",
@@ -316,6 +317,17 @@
           "Microsoft.EntityFrameworkCore.Relational": "7.0.4",
           "Microsoft.Extensions.DependencyModel": "7.0.0",
           "Mono.TextTemplating": "2.2.1"
+        }
+      },
+      "Microsoft.EntityFrameworkCore.InMemory/7.0.4": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "7.0.4"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
+            "assemblyVersion": "7.0.4.0",
+            "fileVersion": "7.0.423.11504"
+          }
         }
       },
       "Microsoft.EntityFrameworkCore.Relational/7.0.4": {
@@ -1478,6 +1490,13 @@
       "sha512": "sha512-LI/ML3w17ap5IUmEKOPVnGJYi/XSDJW3Rf42utNF0e1tidmKtSkjwoTqIKLt2hE+jQJrlzeaqu5YiqdoFWVuZw==",
       "path": "microsoft.entityframeworkcore.design/7.0.4",
       "hashPath": "microsoft.entityframeworkcore.design.7.0.4.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.InMemory/7.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-enWK5KFD21mq6z1qs5i2PsGQbfud5hLF9erQvPCSC0HCSTQUuOqIxccUEbxu4QRrdqpjwVofZs+yNSM5qoe6bg==",
+      "path": "microsoft.entityframeworkcore.inmemory/7.0.4",
+      "hashPath": "microsoft.entityframeworkcore.inmemory.7.0.4.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.Relational/7.0.4": {
       "type": "package",
